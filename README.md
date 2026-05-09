@@ -1,39 +1,156 @@
 # Tur İzim
 
-Boş **ulaşım dahil** tur koltukları olan yerel tur acenteleri ile genç **UGC içerik üreticileri** ve mikro influencer’ları buluşturan **B2B/B2C güven ve operasyon** platformu. Tur İzim bir seyahat acentesi, sosyal ağ veya otel/uçuş satıcısı değildir.
+Tur İzim, boş **ulaşım dahil tur koltuklarına** sahip yerel tur acenteleri ile üniversite öğrencisi genç **UGC içerik üreticileri** ve mikro influencer’ları güvenli şekilde buluşturan bir **B2B/B2C güven ve operasyon platformudur**.
 
-## Depo yapısı
+Platform; tarafların güvenli şekilde anlaşmasını, içerik teslimini ve operasyonel sürecin yönetimini kolaylaştırır.
 
-| Dizin | Rol |
-|--------|-----|
-| `backend/` | Java Spring Boot REST API (PostgreSQL) |
-| `frontend/` | Flutter / Dart, mobil öncelikli uygulama |
-| `docs/` | Türkçe PRD, kapsam, iş kuralları, akışlar, API şeması, veri modeli, tasarım sistemi; Cursor için İngilizce şablonlar |
+> Tur İzim bir seyahat acentesi değildir.  
+> Sosyal medya platformu değildir.  
+> Otel veya uçak bileti satışı yapmaz.
 
-## Pilot kapsamı
+---
 
-- Çıkış: yalnızca **Adana / Mersin**  
-- İlk varışlar: **Kapadokya**, **Güney** turları  
-- Tur tipi: yalnızca **ulaşım dahil acente turları**
+# Target Users
 
-## MVP sınırları
+## Agencies
+- Yerel tur acenteleri
+- Boş ulaşım dahil tur koltuklarını değerlendirmek isteyen işletmeler
 
-- Otomatik eşleştirme yok: yalnızca **uygunluk skoru ve sıralama**; içerik üreticisini **acente elle seçer**.  
-- **Mock depozito** (gerçek ödeme yok).  
-- **Bağlantı tabanlı** içerik (uygulama içi video yükleme yok).  
-- **Manuel** yayın URL’si ve ihlal bildirimi (otomatik sosyal izleme yok).  
-- Sosyal akış, sohbet, otel ve uçuş rezervasyonu yok.
+## Creators
+- Üniversite öğrencileri
+- UGC içerik üreticileri
+- Mikro influencer’lar
+- Seyahat içerikleri üretebilen genç kullanıcılar
 
-## Yerel veritabanı (isteğe bağlı)
+---
 
-Depo kökünden:
+# MVP Scope
+
+## Included
+
+- Ulaşım dahil tur ilanları
+- Creator başvuru sistemi
+- Suitability score (aday uygunluk skoru)
+- Manuel creator seçimi
+- Mock deposit sistemi
+- Teknik içerik checklist yapısı
+- Link tabanlı içerik teslimi
+- Yayın URL doğrulama akışı
+- İhlal bildirim sistemi
+- Üniversite ve öğrenci bilgisi doğrulama alanları
+
+## Excluded
+
+- Otomatik eşleştirme
+- Gerçek ödeme sistemi
+- Uygulama içi video upload
+- Sosyal medya feed sistemi
+- Chat / mesajlaşma
+- Otel rezervasyonu
+- Uçak bileti satışı
+- Otomatik sosyal medya takibi
+
+---
+
+# Pilot Region
+
+İlk MVP operasyonu:
+
+## Departure Cities
+- Adana
+- Mersin
+
+## Initial Tour Categories
+- Kapadokya turları
+- Güneydoğu turları
+
+## Tour Type
+- Sadece ulaşım dahil acente turları
+
+---
+
+# Repository Structure
+
+| Directory | Description |
+|---|---|
+| `backend/` | Java Spring Boot REST API + PostgreSQL |
+| `frontend/` | Flutter / Dart mobile application |
+| `docs/` | PRD, business rules, flows, API contracts, database schema, design system |
+
+---
+
+# Tech Stack
+
+## Frontend
+- Flutter
+- Dart
+
+## Backend
+- Java
+- Spring Boot
+
+## Database
+- PostgreSQL
+
+---
+
+# Local Development
+
+## PostgreSQL
+
+Development database can be started with:
 
 ```bash
 docker compose up -d
 ```
 
-PostgreSQL geliştirme için yayınlanır; Spring Boot yapılandırması aynı kimlik bilgileriyle eşleştirilir (`docs/database-schema.md` ve ileride `backend` ayarları).
+Spring Boot configuration should match the credentials defined in:
 
-## Dokümantasyon
+```text
+docs/database-schema.md
+```
 
-Ana referans: `docs/prd.md`. Özet kapsam `docs/product-scope.md`, kurallar `docs/business-rules.md`, akışlar `docs/user-flows.md`. API ve veri modeli: `docs/api-contract.md`, `docs/database-schema.md`. Geliştirme komut şablonları: `docs/cursor-prompts.md` (İngilizce).
+---
+
+# Core Business Rules
+
+- Creator selection is always manual.
+- System only provides scoring and ranking support.
+- Content requirements are objective and checkbox-based.
+- No artistic evaluation exists in the system.
+- Content delivery is link-based.
+- Mock deposit protects agencies against no-show risk.
+- Publication visibility minimum is 30 days.
+- Creator users are university students only.
+- International tours may require passport/visa eligibility.
+- Agencies define technical content requirements during listing creation.
+
+---
+
+# Documentation
+
+| Document | Description |
+|---|---|
+| `docs/prd.md` | Product requirements document |
+| `docs/product-scope.md` | MVP scope and exclusions |
+| `docs/business-rules.md` | Core business rules |
+| `docs/user-flows.md` | User flows |
+| `docs/api-contract.md` | API contracts |
+| `docs/database-schema.md` | PostgreSQL schema |
+| `docs/design-system.md` | UI design system |
+| `docs/suitability-score.md` | Scoring algorithm details |
+| `docs/cursor-prompts.md` | Cursor AI development prompts |
+
+---
+
+# Important Notes
+
+Tur İzim focuses on operational simplicity and scalable architecture.
+
+The MVP intentionally avoids:
+- social platform complexity,
+- real-time systems,
+- heavy media infrastructure,
+- automatic moderation systems.
+
+The primary goal is validating the marketplace and operational workflow between local tour agencies and university student creators.
