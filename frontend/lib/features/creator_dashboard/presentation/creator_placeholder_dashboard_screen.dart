@@ -34,7 +34,9 @@ class CreatorPlaceholderDashboardScreen extends StatelessWidget {
       body: Center(
         child: Text(
           'Bu MVP diliminde içerik üreticisi akışı oluşturulmadı. '
-          '${AppConstants.appName} pilotu yakında bağlanır.',
+                  'İlanları ve görevleri açılış ekranındaki bağlantılarla '
+                  'inceleyebilirsiniz (${AppConstants.appName} şehir bazlı '
+                  'demo).',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyLarge,
         ),

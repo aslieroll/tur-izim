@@ -97,7 +97,7 @@ Korunacak görsel yön:
 - premium tur kartları,
 - fiyat/depozito bilgisi,
 - ulaşım dahil etiketi,
-- rota/tarih bilgisi,
+- **çıkış şehri** ve **tur rotası** (kısa rota özeti) ile tarih bilgisi — coğrafya beyana dayalıdır; harita/GPS yok,
 - soft chip’ler.
 
 Business düzeltmeleri:

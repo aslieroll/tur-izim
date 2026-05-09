@@ -138,6 +138,17 @@ Pasaport/vize uygunluğu acente kartında gerekiyorsa ayrı “uygunluk kapısı
 
 ---
 
+## Öğrenci profili ve skor ayrımı
+
+Öğrenci profili bilgileri (üniversite, bölüm, sınıf, kampüs, doğrulama durumu) **Aday Uygunluk Endeksi** hesabına dahil edilmez.
+
+- `student_verification_status` skoru artırmaz veya düşürmez.
+- `university_name`, `department_name`, `class_year`, `campus_city` T veya Y bileşenine girmez.
+- Bu bilgiler yalnızca görünürlük/güven katmanıdır; başvuru kapısı değildir.
+- AUE = %75 Teknik Fit + %25 Yayın Platform Fit formülü değişmez.
+
+---
+
 ## Kritik sınır
 
 **Skor tek başına atama oluşturmaz.**

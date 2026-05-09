@@ -1,5 +1,17 @@
 # İş kuralları (MVP)
 
+## Hedef kullanıcı — creator tarafı
+
+Creator tarafı hedef kullanıcı **üniversite öğrencisi içerik üreticisi**dir. Önceki "mikro-influencer" konumlandırması terk edilmiştir.
+
+- Öğrenci profili (`university_name`, `department_name`, `class_year`, `campus_city`, `student_verification_status`) creator profilinde tutulur.
+- Öğrenci bilgisi **Aday Uygunluk Endeksi** hesabına **dahil edilmez**.
+- Öğrenci profili doğrulaması MVP'de manueldir; otomatik belge/OCR/e-Devlet yoktur.
+- `student_verification_status`: `UNVERIFIED` | `PENDING_REVIEW` | `VERIFIED` | `REJECTED`
+- Öğrenci bilgisi başvuru oluşturmayı bloke etmez; yalnızca görünürlük/güven katmanıdır.
+
+---
+
 ## Varlıklar ve kavramlar (`Match` yok)
 
 - **`Application`**: İçerik üreticisi bir **tura başvurdu**.
@@ -106,6 +118,15 @@ Formül ve bileşen ayrımı: **`docs/suitability-score.md`**.
 - Acenteler **admin onayı** olmadan **yayımlanan tur** oluşturmaz (**onay bekleyen** durum **`PENDING_APPROVAL`** ile uyumludur).
 - Üreticide **otomatik güvenilirlik yapay zeka analizi veya görüntü analizi** yoktur.
 - Yurt dışı tur yayımlayan acenteler, pasaport/vize gerekliliklerini ilanda açıkça belirtmek zorundadır. Eksik gereklilik bilgisiyle yurt dışı tur yayımlanmamalıdır.
+
+## Öğrenci profili skor dışı kapı (hatırlatma)
+
+| Alan | MVP |
+| ---- | --- |
+| Öğrenci verifikasyonu AUE'ye dahil | Hayır |
+| Otomatik öğrenci belge doğrulama / OCR | Hayır |
+| Öğrenci ID yükleme | Hayır |
+| Öğrenci bilgisi başvuru kapısı olarak | Hayır (AUE dışı, pasif bilgi) |
 
 ## Kesin olarak yoktur
 

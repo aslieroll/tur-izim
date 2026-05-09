@@ -156,8 +156,14 @@ class _CreatorAssignmentHubScreenState
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    '${hub.tour.departureCity} → '
-                    '${destinationClusterLabelTurkish(hub.tour.destinationCluster)}',
+                    'Çıkış şehri: ${hub.tour.departureCity}',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Tur rotası: ${tourRouteOverviewLineTurkish(hub.tour)}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 6),
@@ -172,7 +178,7 @@ class _CreatorAssignmentHubScreenState
                   if (hub.tour.agencyLegalName != null) ...[
                     const SizedBox(height: 6),
                     Text(
-                      'Acente: ${hub.tour.agencyLegalName}',
+                      'Acente: ${agencyDisplayLineWithCityTurkish(hub.tour)}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: scheme.onSurfaceVariant,
                       ),
@@ -219,9 +225,9 @@ class _CreatorAssignmentHubScreenState
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Tur İzim gerçek ödeme veya kart bilgisi '
-                              'toplamaz. Bu tutar yalnızca mock blokaj '
-                              'senaryosu içindir.',
+                              'Tur İzim gerçek para hareketini sürdürmez ve '
+                              'kart doğrulama verisi toplamaz. Bu tutar yalnızca '
+                              'mock depozito senaryosu içindir.',
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             const SizedBox(height: 8),

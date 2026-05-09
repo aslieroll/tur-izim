@@ -19,8 +19,61 @@ abstract final class TurIzimPalette {
   static const Color errorRed = Color(0xFFEF4444);
 }
 
+/// Premium Travel Pass spacing, radius and elevation tokens.
+///
+/// These are presentation-only helpers. They do not encode route, repository,
+/// score, assignment or deposit business rules.
+abstract final class TurIzimDesignTokens {
+  TurIzimDesignTokens._();
+
+  static const double grid = 8;
+  static const double pageMargin = 24;
+  static const double stackSmall = 8;
+  static const double stackMedium = 16;
+  static const double stackLarge = 32;
+  static const double sectionGap = 48;
+
+  static const double cardPadding = 20;
+  static const double cardPaddingLarge = 24;
+  static const double radiusSmall = 8;
+  static const double radiusMedium = 12;
+  static const double radiusLarge = 20;
+  static const double radiusExtraLarge = 24;
+  static const double radiusPill = 999;
+
+  static const double minTouchTarget = 48;
+  static const double maxReadableWidth = 720;
+  static const double maxWideContentWidth = 1120;
+
+  static List<BoxShadow> softShadow({double opacity = 0.06}) {
+    return [
+      BoxShadow(
+        color: TurIzimPalette.deepNavy.withValues(alpha: opacity),
+        blurRadius: 20,
+        offset: const Offset(0, 8),
+      ),
+    ];
+  }
+
+  static List<BoxShadow> premiumShadow() {
+    return [
+      BoxShadow(
+        color: TurIzimPalette.deepNavy.withValues(alpha: 0.06),
+        blurRadius: 20,
+        offset: const Offset(0, 6),
+      ),
+      BoxShadow(
+        color: TurIzimPalette.royalIndigo.withValues(alpha: 0.04),
+        blurRadius: 48,
+        offset: const Offset(0, 18),
+      ),
+    ];
+  }
+}
+
 /// Material `ColorScheme` dışında kalan semantik renkler (başarı / uyarı / vurgu).
-final class TurIzimSemanticColors extends ThemeExtension<TurIzimSemanticColors> {
+final class TurIzimSemanticColors
+    extends ThemeExtension<TurIzimSemanticColors> {
   const TurIzimSemanticColors({
     required this.success,
     required this.warning,

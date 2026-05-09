@@ -40,10 +40,26 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    // Liste Sliver olarak tembel oluşturulur; başlık blokları yüzünden aday kartları
+    // ilk görünür alanda düşmeyebilir — kaydırarak metin bekleriz.
+    await tester.drag(
+      find.descendant(
+        of: find.byType(AgencyTourApplicantsScreen),
+        matching: find.byType(CustomScrollView),
+      ),
+      const Offset(0, -1000),
+    );
+    await tester.pumpAndSettle();
+
     expect(find.textContaining('Aday Uygunluk Endeksi'), findsWidgets);
     expect(find.textContaining('Ayşe'), findsWidgets);
     expect(find.textContaining('Kapadokya'), findsWidgets);
-    expect(find.text('Seçim bu dilimde kapalı'), findsWidgets);
+    expect(
+      find.text('Başvuran Öğrenci İçerik Üreticileri'),
+      findsOneWidget,
+    );
+    expect(find.text('Adayı İncele'), findsWidgets);
+    expect(find.text('Seçimi Onayla'), findsWidgets);
   });
 
   testWidgets('Başvurusuz ilanda boş durum', (tester) async {

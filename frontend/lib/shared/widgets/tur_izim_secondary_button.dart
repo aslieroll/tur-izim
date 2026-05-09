@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:tur_izim/shared/theme/tur_izim_design_tokens.dart';
 
-/// Birincil CTA — tema `ElevatedButton` stillerini kullanır; iş mantığı yok.
-class TurIzimPrimaryButton extends StatelessWidget {
-  const TurIzimPrimaryButton({
+/// İkincil CTA — görünür ama birincil aksiyonla rekabet etmez.
+class TurIzimSecondaryButton extends StatelessWidget {
+  const TurIzimSecondaryButton({
     required this.label,
     required this.onPressed,
     super.key,
@@ -19,13 +19,15 @@ class TurIzimPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final button = ElevatedButton(
+    final theme = Theme.of(context);
+    final button = OutlinedButton(
       onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        elevation: 3,
-        shadowColor: TurIzimPalette.royalIndigo.withValues(alpha: 0.24),
-        backgroundColor: TurIzimPalette.royalIndigo,
-        foregroundColor: Colors.white,
+      style: OutlinedButton.styleFrom(
+        backgroundColor: Colors.white.withValues(alpha: 0.72),
+        foregroundColor: TurIzimPalette.deepNavy,
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.85),
+        ),
       ),
       child: _ButtonContent(label: label, icon: icon),
     );
@@ -50,9 +52,9 @@ class _ButtonContent extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Flexible(child: Text(label, textAlign: TextAlign.center)),
-        const SizedBox(width: 8),
         Icon(icon, size: 18),
+        const SizedBox(width: 8),
+        Flexible(child: Text(label, textAlign: TextAlign.center)),
       ],
     );
   }

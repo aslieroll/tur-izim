@@ -1,6 +1,6 @@
 # Tur İzim — Ürün Gereksinimleri Dokümanı (PRD)
 
-Versiyon: MVP (pilota odaklı)  
+Versiyon: MVP (şehir bazlı, genel kullanım taslağı)  
 Okuyucu: Türkçe konuşan kurucu / ürün sahibi  
 Teknik adlar (tablo, API, kod): İngilizce
 
@@ -8,7 +8,9 @@ Teknik adlar (tablo, API, kod): İngilizce
 
 ## 1. Ürün Özeti
 
-**Tur İzim**, yerel **tur acenteleri** ile boş kontenjanı olan **ulaşım dahil** turlarda koltuk doldurmak isteyen genç **UGC içerik üreticileri** ve **mikro influencer**ları bir araya getiren **B2B/B2C güven ve operasyon** platformudur.
+**Tur İzim**, yerel tur acentelerinin boş koltuklarını; üniversite öğrencilerinin teknik şartları belirlenmiş fotoğraf/video içerikleri ve 30 günlük yayın taahhüdü karşılığında değerlendirmesini sağlayan **şehir bazlı güvenli görev ve içerik teslim** platformudur.
+
+> Önceki konumlandırma notu: Platform artık "mikro-influencer" veya sosyal medya etkisi odaklı değil; **üniversite öğrencisi içerik üreticisi** odaklıdır. Sosyal medya paylaşım platformu değildir.
 
 Süreç; **manuel başvuru**, **sıralama** (**Aday Uygunluk Endeksi**), **acentenin elle seçimi**, **taslak teslim bağlantısı**, **tek teknik revizyon hakkı**, **yayındaki bağlantının bildirilmesi** ve **mock depozito** ile yönetilir.
 
@@ -26,7 +28,7 @@ Acentelerde boş kontenjan ve görünürlük ihtiyacı; üreticilerde ise **şef
 
 | Rol         | Kim                            | Ne yapar?                                                                                                                                                                                |
 | ----------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Creator** | Genç UGC veya mikro influencer | İçerik üretir/düzenler; onaylı içeriği **kendi** sosyal hesabında yayınlar; gönderiyi **en az 30 gün** herkese açık tutar.                                                               |
+| **Creator** | **Üniversite öğrencisi içerik üreticisi** | İçerik üretir/düzenler; onaylı içeriği **kendi** sosyal hesabında yayınlar; gönderiyi **en az 30 gün** herkese açık tutar. Öğrenci profili (üniversite, bölüm, sınıf) platformda opsiyonel beyan olarak tutulur. |
 | **Agency**  | Yerel tur acentesi             | İlan açar, teknik gereksinim seçer, başvuranları skora göre inceler, **elle** seçer, taslağı onaylar veya **bir kez** teknik revizyon ister, yayın bağlantısını inceler, ihlal bildirir. |
 | **Admin**   | Platform yöneticisi            | Acente hesabını onaylar; ihlal raporlarını inceler; MVP’de güven katmanını yönetir (ileride hesap askısı vb. genişleyebilir).                                                            |
 
@@ -34,7 +36,7 @@ Acentelerde boş kontenjan ve görünürlük ihtiyacı; üreticilerde ise **şef
 
 ## 4. MVP Kapsamı
 
-**Pilot coğrafya:** İlk fazda yalnızca **Adana / Mersin çıkışlı** ve **ulaşım dahil** acente turları önceliklidir. Başlangıç varış kümeleri **Kapadokya** ve **Güney** turlarıdır.
+**Coğrafya ve şehirler:** MVP, belirli bir pilot bölgeye bağlı **değildir**. Çıkış şehirleri ve kampüs şehirleri **beyana dayalıdır**; otomatik konum doğrulaması, harita seçimi veya GPS doğrulaması yoktur. Acente kayıtta ve tur ilanında **çıkış şehri** ile **tur rotası / varış özeti** alanlarını manuel girer; üretici öğrenci profili için **üniversite, bölüm, sınıf, kampüs/şehir** beyanını kullanabilir.
 
 **Tur tipi:** MVP’de sistem yalnızca **tur şirketlerinin ulaşım dahil turlarını** kapsar. Otel pazaryeri, uçak bileti, tekil konaklama veya uçuş rezervasyonu yoktur.
 
@@ -114,6 +116,17 @@ Taslak yalnızca **taslak bağlantı (URL)** ile gönderilir. **`MIN_5_PHOTOS`**
 
 ---
 
+## 11a. Öğrenci Profili (MVP)
+
+Creator tarafı hedef kullanıcı **üniversite öğrencisi içerik üreticisi**dir.
+
+- Öğrenci profil bilgileri (`university_name`, `department_name`, `class_year`, `campus_city`) opsiyonel beyan olarak tutulur.
+- Öğrenci doğrulaması MVP'de **otomatik değildir**; belge yükleme, OCR, e-Devlet veya öğrenci kimliği yükleme yoktur.
+- `student_verification_status` enum değerleri: `UNVERIFIED`, `PENDING_REVIEW`, `VERIFIED`, `REJECTED`.
+- Öğrenci bilgileri **Aday Uygunluk Endeksi skorunun parçası değildir**; skor formülü değişmez.
+- Öğrenci profili başvuru kapısı veya engelleyici kural **değildir** — yalnızca görünürlük ve güven katmanıdır.
+- Pasaport/vize uygunluğu ve başvuru checkbox üçlüsü gibi, öğrenci bilgisi de AUE hesabına girmez.
+
 ## 12. Aday Uygunluk Endeksi
 
 Ürün adıyla **Türkçe: Aday Uygunluk Endeksi.** **Teknik Kriter Uyumu** ve **Yayın Platform Uyumu**, başvuru onay kutucuklarıyla **birleştirilmez** (**onlar kapıdır**). Bilgi kümesinin tamamı: **`docs/suitability-score.md`**.
@@ -129,13 +142,13 @@ Proje MVP’de **önce Flutter** ile ilerleyecektir. İlk fazda **`mock`** veril
 
 ## 14. Google Stitch Kullanım Sınırı
 
-Google **Stitch** yalnızca **tasarım referansı** için kullanılır; **backend mimarisi**, **iş kuralları** veya **veri şeması** için **tek doğruluk kaynağı olamaz**. Stitch tabanlı ekranlar **Flutter’da özellik bazlı temiz mimari** ile uyumlu taşınır; **sosyal akış, sohbet, otel/uçuş rezervasyonu, uygulama içi video akış mimarisi** eklenmez.
+Google **Stitch** yalnızca **tasarım referansı** için kullanılır; **backend mimarisi**, **iş kuralları** veya **veri şeması** için **tek doğruluk kaynağı olamaz**. Stitch tabanlı ekranlar **Flutter’da özellik bazlı temiz mimari** ile uyumlu taşınır; **sosyal akış, sohbet, otel/uçuş çıkışı, uygulama içi video akış mimarisi** eklenmez.
 
 ---
 
 ## 15. Başarı Kriterleri
 
-- Pilot parametreleriyle bir **tur** yayınlanır; başvurular **endekse göre** sıralanır; kota dahilinde **elle** seçim ve **Assignment** oluşur.
+- Şehir ve rota parametreleriyle bir **tur** yayınlanır; başvurular **endekse göre** sıralanır; kota dahilinde **elle** seçim ve **Assignment** oluşur.
 - **URL ile taslak** ve **teknik revizyon** kuralına uygun uçtan uca teslim ve yayın.
 - Yayın bağlantısı sonrası **mock depozito serbest**, ardından 30 günlük izlemeye geçiş.
 - Dokümantasyon ile **PostgreSQL taslağı** ve **REST sözleşmesi tutarlı** kalır.
@@ -147,7 +160,7 @@ Google **Stitch** yalnızca **tasarım referansı** için kullanılır; **backen
 - Elle doğrulama ve manuel bildirimlere dayalı **güven** modeli (**otomatik crawler yok**).
 - Teknik ve hukuki şartların kullanıcıya net gösterimi ihtiyacı.
 - Önden Flutter + mock yaklaşımında **iş mantığının tekrarsızlığı**: UI’ya mock oran yazılmamalıdır (çift doğrulama riski).
-- Pilotta **dar coğrafya** operasyon geri bildirimini sınırlar.
+- Şehir beyanı doğruluğunun operasyon ekibi tarafından manuel izlenmesi gerekir.
 
 ---
 

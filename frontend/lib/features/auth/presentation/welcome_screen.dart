@@ -18,12 +18,15 @@ class WelcomeScreen extends StatelessWidget {
       'Boş koltukları güvenli içerik iş birliklerine dönüştür.';
 
   static const String _description =
-      'Yerel tur acenteleriyle içerik üreticilerini güvenli görev akışıyla '
-      'buluşturan operasyon platformu.';
+      'Tur İzim, yerel tur acentelerinin boş koltuklarını; üniversite öğrencilerinin '
+      'teknik şartları belirlenmiş fotoğraf/video içerikleri ve 30 günlük yayın '
+      'taahhüdü karşılığında değerlendirmesini sağlayan şehir bazlı güvenli görev ve '
+      'içerik teslim platformudur.';
 
   static const String _mvpNote =
-      'MVP\u2019de sosyal akış, sohbet, otel/uçuş rezervasyonu, '
-      'video yükleme ve gerçek ödeme yoktur.';
+      'MVP\u2019de sosyal akış, sohbet, konaklama veya uçuş ürün sunumu yoktur; '
+      'uygulama içi video yükleme ve gerçek para hareketleri yoktur. Çıkış ve '
+      'kampüs şehirleri beyana dayalıdır; otomatik konum doğrulaması yoktur.';
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +176,8 @@ class _HeaderSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Column(
+    return SingleChildScrollView(
+      child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -220,6 +224,7 @@ class _HeaderSection extends StatelessWidget {
           ),
         ),
       ],
+    ),
     );
   }
 }

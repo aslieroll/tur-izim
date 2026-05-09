@@ -50,7 +50,7 @@ Tur İzim şu değildir:
 
 Tur İzim şudur:
 
-> Yerel tur acenteleriyle içerik üreticilerini güvenli başvuru, manuel seçim, mock depozito, URL ile içerik teslimi ve 30 günlük yayın takibi süreciyle buluşturan operasyon platformudur.
+> Tur İzim, yerel tur acentelerinin boş koltuklarını; üniversite öğrencilerinin teknik şartları belirlenmiş fotoğraf/video içerikleri ve 30 günlük yayın taahhüdü karşılığında değerlendirmesini sağlayan şehir bazlı güvenli görev ve içerik teslim platformudur. Süreç; manuel başvuru, Aday Uygunluk Endeksi ile sıralama, acentenin elle seçimi, mock depozito, yalnızca URL ile içerik teslimi ve 30 günlük yayın takibidir.
 
 Bu nedenle UI premium seyahat atmosferinden ilham alabilir; ancak “tatil satın alma / rezervasyon / sosyal keşif” algısı yaratmamalıdır.
 
@@ -66,7 +66,7 @@ Arayüz şu hissi vermelidir:
 - modern,
 - sakin,
 - operasyon odaklı,
-- genç creator kitlesine yakın,
+- üniversite öğrencisi içerik üreticisi kitlesine yakın; abartılı “sosyal etki / takipçi gücü” dili yok,
 - acente tarafında profesyonel.
 
 Yanlış hisler:

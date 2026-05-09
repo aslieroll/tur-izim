@@ -12,11 +12,15 @@ final class MockCreatorDashboardRepository
   @override
   Future<CreatorHomePeek> loadHomePeek(String creatorId) async {
     await Future<void>.delayed(const Duration(milliseconds: 35));
+    final profile = _store.creators[creatorId];
+    final name = profile?.displayName.trim() ?? '';
     return CreatorHomePeek(
       pendingApplicationsCount: _store.pendingApplicationsForCreator(creatorId),
       openAssignmentsNeedingAttentionCount: _store.creatorActionableAssignments(
         creatorId,
       ),
+      creatorDisplayName: name.isEmpty ? 'Üretici' : name,
+      studentProfilePreviewLine: profile?.studentProfileLine,
     );
   }
 }

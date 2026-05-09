@@ -23,7 +23,7 @@ Gerçek yol yapısı uygulanırken güvenlik şeması (Spring Security vb.) ile 
 
 | Metot       | Örnek yol                                            | Açıklama                                            |
 | ----------- | ---------------------------------------------------- | --------------------------------------------------- |
-| `POST`      | `/agencies/register` veya `/agencies/me` oluşturma   | Acente profil kaydı (**`PENDING_APPROVAL`** başlar) |
+| `POST`      | `/agencies/register` veya `/agencies/me` oluşturma   | Acente profil kaydı (**`PENDING_APPROVAL`** başlar); gövdede **`city`** (işletilen şehir beyanı — MVP’de tek şehir yeterli) |
 | `GET/PATCH` | `/agencies/me`                                       | Güncellenmiş profil                                 |
 | `POST`      | `/admin/agencies/{id}/approve`                       | Admin onayı                                         |
 | `POST`      | `/admin/agencies/{id}/reject` veya süspansiyon sonra | Red / **ileride suspend** uyumlu şema ile           |
@@ -35,7 +35,7 @@ Gerçek yol yapısı uygulanırken güvenlik şeması (Spring Security vb.) ile 
 | Metot       | Yol                                                | Açıklama                                                                                                                                                                                                                                                                                                                                                                                           |
 | ----------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `POST`      | `/creators/register` veya kombine `/auth/register` | İçerik üreticisi                                                                                                                                                                                                                                                                                                                                                                                   |
-| `GET/PATCH` | `/creators/me`                                     | Creator profil bilgileri: sosyal URL’ler, yayın platformu uygunluk booleanları, içerik üretim yetkinlikleri (`can_record_1080p_video`, `can_create_vertical_video`, `can_deliver_raw_files`, `has_basic_editing_skill`, `has_travel_vlog_experience`, `has_public_instagram`, `has_public_tiktok`) ve yurt dışı tur uygunluğu için `passport_type`, `has_valid_passport`, `visa_eligibility_notes` |
+| `GET/PATCH` | `/creators/me`                                     | Creator profil bilgileri: sosyal URL’ler, yayın platformu uygunluk booleanları, içerik üretim yetkinlikleri (`can_record_1080p_video`, `can_create_vertical_video`, `can_deliver_raw_files`, `has_basic_editing_skill`, `has_travel_vlog_experience`, `has_public_instagram`, `has_public_tiktok`) ve yurt dışı tur uygunluğu için `passport_type`, `has_valid_passport`, `visa_eligibility_notes`, **öğrenci profili** için `university_name`, `department_name`, `class_year`, `campus_city`, `student_verification_status` (AUE hesabına dahil değildir) |
 
 ---
 
@@ -43,7 +43,7 @@ Gerçek yol yapısı uygulanırken güvenlik şeması (Spring Security vb.) ile 
 
 | Metot  | Yol                                | Açıklama                                                                                                                                                                                           |
 | ------ | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `POST` | `/tours`                           | Tur oluştur — yalnızca **onaylı** acente; pilot + `estimated_tour_price`, **`creator_quota`**, **`deposit_amount`**, `tour_scope`, pasaport/vize alanları ve `tour_requirement_type` satırları ile |
+| `POST` | `/tours`                           | Tur oluştur — yalnızca **onaylı** acente; **`departure_city`**, **`destination_city`** (veya eşdeğer varış/rota metni) ve isteğe bağlı **`route_summary`**, ayrıca `estimated_tour_price`, **`creator_quota`**, **`deposit_amount`**, `tour_scope`, pasaport/vize alanları ve `tour_requirement_type` satırları ile |
 | `GET`  | `/tours/public` veya `/tours/open` | **Yayımlanmış**, creator profiline göre başvuruya uygun liste. Yurt dışı turda pasaport/vize uygunluğu yoksa creator’a gösterilmeyebilir veya başvuru engellenir                                   |
 | `GET`  | `/tours/{id}`                      | Tekil tur detayı; yurt dışı tur ise pasaport/vize gereksinim bilgileri görünür                                                                                                                     |
 

@@ -14,7 +14,7 @@ Reusable prompts. Paste and adjust when starting a task.
 
 ## Backend (Spring Boot)
 
-> Implement REST slice per `docs/api-contract.md` and entities/migrations aligned to `docs/database-schema.md`. Layered Controller → Service → Repository. Rules in **service layer**: no Match entity; Assignment created only after agency manually accepts Application; creator quota enforced; mock deposit statuses `PENDING`/`HELD`/`RELEASED_AFTER_PUBLICATION`/`FORFEITED`; single revision tied to technical checklist; no Stripe/Iyzico. Pilot: Adana/Mersin departures only in tour validation unless task scope says otherwise.
+> Implement REST slice per `docs/api-contract.md` and entities/migrations aligned to `docs/database-schema.md`. Layered Controller → Service → Repository. Rules in **service layer**: no Match entity; Assignment created only after agency manually accepts Application; creator quota enforced; mock deposit statuses `PENDING`/`HELD`/`RELEASED_AFTER_PUBLICATION`/`FORFEITED`; single revision tied to technical checklist; no Stripe/Iyzico. City-based MVP: agencies provide city and tour departure city manually; student creators provide university, department, class year, and campus/city. No GPS, maps, or automatic location verification.
 
 ## Scoring endpoint
 

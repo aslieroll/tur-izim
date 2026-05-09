@@ -19,7 +19,7 @@ Durum kodları İngilizce olabilir; açıklamalar Türkçedir.
 
 ### Tur ve gereksinimler
 
-2. Tur parametreleri: pilot çıkış, `deposit_amount`, `estimated_tour_price`, `creator_quota`, `transportation_included` (varsayılan `true`, MVP iş kuralı), `tour_scope` (`DOMESTIC` / `INTERNATIONAL`), varsa pasaport/vize gereksinimleri.
+2. Tur parametreleri: **çıkış şehri** (`departure_city`), **tur rotası / varış özeti** (`destination_city` ve isteğe bağlı `route_summary`), `deposit_amount`, `estimated_tour_price`, `creator_quota`, `transportation_included` (varsayılan `true`, MVP iş kuralı), `tour_scope` (`DOMESTIC` / `INTERNATIONAL`), varsa pasaport/vize gereksinimleri. Konum doğrulaması yoktur; değerler beyana dayalı girilir.
 3. **`tour_content_requirements`** satırları: hem **uygunluk endeksinde kullanılan** türleri hem **yalnızca teslim / yayında doğrulanan** gereksinimleri içerebilir; ikinci grup **profilde saklanmaz** ve **Teknik uyum paydasına (T) dahil edilmez** (`suitability-score.md`). Tur **`PUBLISHED`** ise **`INSTAGRAM_PUBLICATION`** veya **`TIKTOK_PUBLICATION`** seçimlerinden **en az biri zorunludur**; yoksa tur MVP kapsamında **yayımlanamaz** (`business-rules.md`).
 
 ### Yurt dışı tur uygunluğu
@@ -29,8 +29,6 @@ Durum kodları İngilizce olabilir; açıklamalar Türkçedir.
 6. Creator profilindeki pasaport/vize uygunluğu, yurt dışı tur için başvuru öncesi kontrol edilir.
 7. Creator gerekli pasaport/vize uygunluğunu karşılamıyorsa ilan creator karşısına çıkarılmayabilir veya başvuru sunucuda reddedilir.
 8. Bu kontrol **Aday Uygunluk Endeksi** hesabına dahil değildir; yalnızca **must-have başvuru kapısıdır**.
-
-### Başvurular ve sıralama
 
 ### Başvurular ve sıralama
 
@@ -63,7 +61,7 @@ Durum kodları İngilizce olabilir; açıklamalar Türkçedir.
 
 ### Profil
 
-1. Hesap oluştur; kalıcı alanlar: **`instagram_url`**, **`tiktok_url`**, **`youtube_url`**, **`portfolio_url`**, **`has_public_instagram`**, **`has_public_tiktok`**, **`can_record_1080p_video`**, **`can_create_vertical_video`**, **`can_shoot_photos`**, **`can_deliver_raw_files`**, **`has_basic_editing_skill`**, **`has_travel_vlog_experience`**, **`passport_type`**, **`has_valid_passport`**, **`visa_eligibility_notes`**. **`MIN_5_PHOTOS` vb. teslim gereksinimleri için profilde alan oluşturulmaz.**
+1. Hesap oluştur; kalıcı alanlar: **`instagram_url`**, **`tiktok_url`**, **`youtube_url`**, **`portfolio_url`**, **`has_public_instagram`**, **`has_public_tiktok`**, **`can_record_1080p_video`**, **`can_create_vertical_video`**, **`can_shoot_photos`**, **`can_deliver_raw_files`**, **`has_basic_editing_skill`**, **`has_travel_vlog_experience`**, **`passport_type`**, **`has_valid_passport`**, **`visa_eligibility_notes`**. Üniversite öğrencisi bilgileri: **`university_name`**, **`department_name`**, **`class_year`**, **`campus_city`**, **`student_verification_status`** (opsiyonel beyan; AUE'ye dahil değildir). **`MIN_5_PHOTOS` vb. teslim gereksinimleri için profilde alan oluşturulmaz.**
 
 ### Başvuru ve kapıları
 

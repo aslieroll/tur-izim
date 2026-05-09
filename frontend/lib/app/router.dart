@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/admin_dashboard/presentation/admin_placeholder_dashboard_screen.dart';
+import '../features/admin_dashboard/presentation/admin_panel_screen.dart';
 import '../features/agency_dashboard/presentation/agency_board_screen.dart';
 import '../features/applications/presentation/agency_tour_applicants_screen.dart';
 import '../features/applications/presentation/creator_application_form_screen.dart';
@@ -122,7 +122,7 @@ GoRouter buildAppRouter(SessionAuthRepository session) {
       ),
       GoRoute(
         path: AppRoutes.adminHome,
-        builder: (_, _) => const AdminPlaceholderDashboardScreen(),
+        builder: (_, _) => const AdminPanelScreen(),
       ),
     ],
     errorBuilder: (_, _) => Scaffold(

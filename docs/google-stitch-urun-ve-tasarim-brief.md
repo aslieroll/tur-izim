@@ -6,17 +6,19 @@ Bu dosya **sıfırdan** mobil uygulama ve web arayüzü tasarımı üretmek içi
 
 ## 1) Stitch’e tek cümlelik talimat (prompt’a yapıştır)
 
-Türkçe etiketli, mobil öncelikli, güven ve operasyon hissi veren bir B2B/B2C uygulama tasarla: **Tur İzim** — yerel tur acenteleri ile boş kontenjanı olan **ulaşım dahil** turlara genç UGC creator ve mikro influencer’ların **manuel başvurduğu** platform. **Sosyal akış, sohbet, otel/uçuş rezervasyonu, video akışı oynatıcı ve dosya yükleme ile içerik teslimi yok.** Teslim ve yayın **yalnızca URL** ile. Ana renkler: primary, surface; durumlar için başarı, uyarı, tehlike. 8px grid, tek birincil eylem, 48dp dokunma hedefi. Üç rol: **Creator**, **Agency**, **Admin**. Metinler **Türkçe**; teknik tablo/API isimleri İngilizce kalabilir.
+Türkçe etiketli, mobil öncelikli, güven ve operasyon hissi veren bir B2B/B2C uygulama tasarla: **Tur İzim** — yerel tur acenteleri ile boş kontenjanı olan **ulaşım dahil** turlara **üniversite öğrencisi içerik üreticilerinin** **manuel başvurduğu**, **şehir bazlı** güven ve operasyon platformu. Acente **şehir** ve **tur çıkış şehri** bilgisini girer; öğrenci üretici **üniversite, bölüm, sınıf ve kampüs/şehir** beyanını profilinde kullanabilir. **Sosyal akış, sohbet, otel/uçuş rezervasyonu, video akışı oynatıcı ve dosya yükleme ile içerik teslimi yok.** Teslim ve yayın **yalnızca URL** ile. Harita, GPS veya otomatik konum doğrulaması yok. Ana renkler: primary, surface; durumlar için başarı, uyarı, tehlike. 8px grid, tek birincil eylem, 48dp dokunma hedefi. Üç rol: **Creator**, **Agency**, **Admin**. Metinler **Türkçe**; teknik tablo/API isimleri İngilizce kalabilir.
 
 ---
 
 ## 2) Ürün kimliği (PRD özeti)
 
+> Tur İzim, yerel tur acentelerinin boş koltuklarını; üniversite öğrencilerinin teknik şartları belirlenmiş fotoğraf/video içerikleri ve 30 günlük yayın taahhüdü karşılığında değerlendirmesini sağlayan şehir bazlı güvenli görev ve içerik teslim platformudur.
+
 | Alan | Açıklama |
 |------|----------|
-| Ne | B2B/B2C **güven ve operasyon** platformu: acenteler boş koltukları doldurmak için creator’larla buluşur. |
+| Ne | B2B/B2C **güven ve operasyon** platformu: acenteler boş koltukları doldurmak için **üniversite öğrencisi içerik üreticileri** (öğrenci içerik üreticisi) ile buluşur; **şehir bazlı** çalışır. |
 | Ne değil | Seyahat acentesi yazılımı gibi sıfırdan paket satışı değil; sosyal feed, chat, otel/uçuş pazarı, video streaming, uygulama içi dosya yükleme ile teslim **değil**. |
-| Pilot | Çıkış: **Adana / Mersin**; varış kümeleri: **Kapadokya**, **Güney**; **ulaşım dahil** acente turları. |
+| Şehir bazlı kullanım | Tek şehir veya tek coğrafyayla **sınırlı bir ürün değildir**. Acente kayıt/profil ve tur ilanında **şehir** ile **çıkış şehri** (ve tur rotası / varış özeti) bilgisini **manuel** girer. Konum GPS veya harita ile doğrulanmaz. Örnek varış kümeleri (tasarım örneği): **Kapadokya**, **Güney**; **ulaşım dahil** acente turları. |
 | Süreç özeti | Manuel başvuru → **Aday Uygunluk Endeksi (AUE)** ile sıralama / karar desteği → acente **elle seçim** → `Assignment` → mock depozito → taslak **URL** → (en fazla bir teknik revizyon) → yayın **URL** → 30 gün izleme / ihlal bildirimi (manuel). |
 
 **Terminoloji (UI’da Türkçe, “match” kullanma):**
@@ -81,7 +83,7 @@ Aşağıdakiler **ekran veya ana navigasyonda yer almamalı**:
 - Karşılama / rol seçimi veya giriş sonrası rol yönlendirmesi.
 - Ayarlar (profil özeti, çıkış — detay MVP’de sade tutulabilir).
 
-### Creator (içerik üreticisi)
+### Creator (üniversite öğrencisi içerik üreticisi)
 
 1. **Gösterge paneli:** Açık ilanlar özeti, başvurularım, atamalarım kısayolları.
 2. **Yayımdaki turlar listesi:** Kart — başlık, çıkış şehir/bölge, varış kümesi, tarih aralığı, üretici kotası, depozito tutarı, tahmini tur fiyatı (varsa), ulaşım dahil etiketi.
@@ -135,7 +137,7 @@ Her prompt’un sonuna ekle: *“Türkçe UI metinleri. Sosyal feed, chat, otel/
 
 **Örnek 1 — Creator açık turlar**
 
-> Mobil öncelikli liste ekranı: üstte “İlanlar (yayımda)” başlığı. Her kartta tur başlığı, “Adana → Kapadokya” formatında çıkış ve varış, tarih aralığı, “Üretici kotası: 1/2”, depozito TRY, tahmini tur fiyatı. Alt kısımda ince durum rozeti. 8px grid, ferah padding.
+> Mobil öncelikli liste ekranı: üstte “İlanlar (yayımda)” başlığı. Her kartta tur başlığı, “Çıkış şehri → tur rotası / varış özeti” formatında kısa rota satırı (ör. “Kayseri → Kapadokya”), tarih aralığı, “Üretici kotası: 1/2”, depozito TRY, tahmini tur fiyatı. Alt kısımda ince durum rozeti. 8px grid, ferah padding.
 
 **Örnek 2 — Agency başvuranlar**
 
@@ -188,4 +190,4 @@ Stitch tasarımını kod veya backend’e bağlarken şu dosyalar kaynak olur: `
 ---
 
 **Dosya adı önerisi projede:** `docs/google-stitch-urun-ve-tasarim-brief.md`  
-**Versiyon:** MVP pilot ile hizalı; PRD ve `design-system.md` ile senkron.
+**Versiyon:** Şehir bazlı MVP ile hizalı; PRD ve `design-system.md` ile senkron.

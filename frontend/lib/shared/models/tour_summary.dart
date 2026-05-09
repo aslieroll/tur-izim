@@ -13,7 +13,9 @@ class TourSummary {
     required this.description,
     required this.departureCity,
     required this.departureRegion,
+    this.destinationCity,
     required this.destinationCluster,
+    this.routeSummary,
     required this.status,
     required this.startsAt,
     required this.endsAt,
@@ -26,11 +28,15 @@ class TourSummary {
     required this.acceptedAssignmentCount,
     required this.pendingApplicationCount,
     this.agencyLegalName,
+    /// Acentenin beyan ettiği faaliyet şehri (MVP’de tek şehir).
+    this.agencyOperatingCity,
     this.tourScope = TourScope.domestic,
     this.requiresPassport = false,
     this.minimumPassportType = PassportType.none,
     this.requiresVisa = false,
     this.visaRequirementText,
+    this.imageAssetPath,
+    this.visualKey,
   });
 
   final String id;
@@ -40,9 +46,19 @@ class TourSummary {
 
   /// Mock / API: acente görünen adı (liste kartları için).
   final String? agencyLegalName;
+
+  /// Acente profilinden gelen işletildiği şehir beyanı (opsiyonel mock).
+  final String? agencyOperatingCity;
+
   final String departureCity;
   final DepartureRegion departureRegion;
+
+  /// Beyana dayalı varış şehri veya bağlantılı nokta (opsiyonel).
+  final String? destinationCity;
   final DestinationCluster destinationCluster;
+
+  /// Liste/detay için isteğe bağlı tek satır rota özeti.
+  final String? routeSummary;
   final TourStatus status;
   final DateTime startsAt;
   final DateTime endsAt;
@@ -75,6 +91,12 @@ class TourSummary {
 
   /// Acentenin metinle tanımladığı vize beklentisi (resmi doğrulama yok).
   final String? visaRequirementText;
+
+  /// Optional local/mock visual asset path. No upload or remote fetch.
+  final String? imageAssetPath;
+
+  /// Optional deterministic visual theme key for premium fallback headers.
+  final String? visualKey;
 
   /// Accepted assignments counted toward kota.
   final int acceptedAssignmentCount;

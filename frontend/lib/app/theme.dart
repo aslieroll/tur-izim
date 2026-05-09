@@ -28,12 +28,15 @@ abstract final class TurIzimTheme {
         titleTextStyle: textTheme.titleLarge,
       ),
       cardTheme: CardThemeData(
-        color: colorScheme.surfaceContainerHighest,
-        elevation: 2,
-        shadowColor: TurIzimPalette.deepNavy.withValues(alpha: 0.06),
+        color: colorScheme.surfaceContainerLowest,
+        elevation: 0,
+        shadowColor: TurIzimPalette.deepNavy.withValues(alpha: 0.08),
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(TurIzimDesignTokens.radiusLarge),
+          side: BorderSide(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.55),
+          ),
         ),
         margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       ),
@@ -44,7 +47,10 @@ abstract final class TurIzimTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: colorScheme.surfaceContainerLow,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         labelStyle: textTheme.labelLarge?.copyWith(
           color: colorScheme.onSurfaceVariant,
           fontWeight: FontWeight.w600,
@@ -54,23 +60,25 @@ abstract final class TurIzimTheme {
           color: colorScheme.onSurfaceVariant,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(TurIzimDesignTokens.radiusMedium),
           borderSide: BorderSide(color: colorScheme.outline),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.6)),
+          borderRadius: BorderRadius.circular(TurIzimDesignTokens.radiusMedium),
+          borderSide: BorderSide(
+            color: colorScheme.outline.withValues(alpha: 0.6),
+          ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(TurIzimDesignTokens.radiusMedium),
           borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(TurIzimDesignTokens.radiusMedium),
           borderSide: BorderSide(color: colorScheme.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(TurIzimDesignTokens.radiusMedium),
           borderSide: BorderSide(color: colorScheme.error, width: 2),
         ),
       ),
@@ -86,13 +94,17 @@ abstract final class TurIzimTheme {
           return TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: selected ? TurIzimPalette.softCoral : Colors.white.withValues(alpha: 0.75),
+            color: selected
+                ? TurIzimPalette.softCoral
+                : Colors.white.withValues(alpha: 0.75),
           );
         }),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           final selected = states.contains(WidgetState.selected);
           return IconThemeData(
-            color: selected ? TurIzimPalette.softCoral : Colors.white.withValues(alpha: 0.75),
+            color: selected
+                ? TurIzimPalette.softCoral
+                : Colors.white.withValues(alpha: 0.75),
             size: 24,
           );
         }),
@@ -103,10 +115,14 @@ abstract final class TurIzimTheme {
           shadowColor: TurIzimPalette.deepNavy.withValues(alpha: 0.12),
           backgroundColor: colorScheme.primary,
           foregroundColor: colorScheme.onPrimary,
-          disabledBackgroundColor: colorScheme.onSurface.withValues(alpha: 0.12),
-          disabledForegroundColor: colorScheme.onSurface.withValues(alpha: 0.38),
+          disabledBackgroundColor: colorScheme.onSurface.withValues(
+            alpha: 0.12,
+          ),
+          disabledForegroundColor: colorScheme.onSurface.withValues(
+            alpha: 0.38,
+          ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(TurIzimDesignTokens.radiusPill),
           ),
           minimumSize: const Size(double.infinity, AppConstants.minTouchTarget),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -119,10 +135,12 @@ abstract final class TurIzimTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: colorScheme.secondary,
-          disabledForegroundColor: colorScheme.onSurface.withValues(alpha: 0.38),
+          disabledForegroundColor: colorScheme.onSurface.withValues(
+            alpha: 0.38,
+          ),
           side: BorderSide(color: colorScheme.outline),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(TurIzimDesignTokens.radiusPill),
           ),
           minimumSize: const Size(double.infinity, AppConstants.minTouchTarget),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -134,7 +152,9 @@ abstract final class TurIzimTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: colorScheme.primary,
-          disabledForegroundColor: colorScheme.onSurface.withValues(alpha: 0.38),
+          disabledForegroundColor: colorScheme.onSurface.withValues(
+            alpha: 0.38,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

@@ -10,6 +10,7 @@ import 'package:tur_izim/shared/models/assignment_timeline_step.dart';
 import 'package:tur_izim/shared/models/content_delivery.dart';
 import 'package:tur_izim/shared/models/content_delivery_status.dart';
 import 'package:tur_izim/shared/models/creator_profile.dart';
+import 'package:tur_izim/shared/models/student_verification_status.dart';
 import 'package:tur_izim/shared/models/destination_cluster.dart';
 import 'package:tur_izim/shared/models/mock_deposit.dart';
 import 'package:tur_izim/shared/models/mock_deposit_status.dart';
@@ -90,11 +91,18 @@ class _TourRow {
 }
 
 class _AgencyRow {
-  _AgencyRow({required this.id, required this.legalName, required this.status});
+  _AgencyRow({
+    required this.id,
+    required this.legalName,
+    required this.status,
+    required this.operatingCity,
+  });
 
   String id;
   String legalName;
   AgencyStatus status;
+  /// MVP: acentenin beyan ettiği tek faaliyet şehri.
+  String operatingCity;
 }
 
 /// Coordinated in-memory persistence for all mock repositories.
@@ -127,7 +135,7 @@ final class MockTurIzimStore {
   void _seed() {
     creators[creatorAliceId] = CreatorProfile(
       id: creatorAliceId,
-      displayName: 'Ayşe (UGC)',
+      displayName: 'Ayşe Yılmaz',
       instagramUrl: 'https://instagram.com/mock-alice',
       tiktokUrl: null,
       youtubeUrl: null,
@@ -143,11 +151,17 @@ final class MockTurIzimStore {
       passportType: PassportType.bordo,
       hasValidPassport: true,
       visaEligibility: VisaEligibilityStatus.hasRequiredVisa,
+      // Öğrenci profili (AUE dışı)
+      universityName: 'Çukurova Üniversitesi',
+      departmentName: 'Yazılım Mühendisliği',
+      classYear: 3,
+      campusCity: 'Adana',
+      studentVerificationStatus: StudentVerificationStatus.unverified,
     );
 
     creators[creatorBobId] = CreatorProfile(
       id: creatorBobId,
-      displayName: 'Mehmet (Vlog)',
+      displayName: 'Mehmet Kaya',
       instagramUrl: 'https://instagram.com/mock-bob',
       tiktokUrl: 'https://tiktok.com/@mock-bob',
       youtubeUrl: null,
@@ -163,11 +177,17 @@ final class MockTurIzimStore {
       passportType: PassportType.bordo,
       hasValidPassport: false,
       visaEligibility: VisaEligibilityStatus.none,
+      // Öğrenci profili (AUE dışı)
+      universityName: 'Hasan Kalyoncu Üniversitesi',
+      departmentName: 'İşletme',
+      classYear: 2,
+      campusCity: 'Gaziantep',
+      studentVerificationStatus: StudentVerificationStatus.unverified,
     );
 
     creators[creatorCerenId] = CreatorProfile(
       id: creatorCerenId,
-      displayName: 'Ceren (Micro Influencer)',
+      displayName: 'Ceren Demir',
       instagramUrl: 'https://instagram.com/mock-ceren',
       tiktokUrl: null,
       youtubeUrl: null,
@@ -183,18 +203,26 @@ final class MockTurIzimStore {
       passportType: PassportType.bordo,
       hasValidPassport: true,
       visaEligibility: VisaEligibilityStatus.none,
+      // Öğrenci profili (AUE dışı)
+      universityName: 'KTO Karatay Üniversitesi',
+      departmentName: 'Gastronomi ve Mutfak Sanatları',
+      classYear: 4,
+      campusCity: 'Konya',
+      studentVerificationStatus: StudentVerificationStatus.unverified,
     );
 
     _agencies[approvedAgencyId] = _AgencyRow(
       id: approvedAgencyId,
-      legalName: 'Adana Gezi Acentesi (Onaylı)',
+      legalName: 'DemirKapı Seyahat — demo acente hesabı',
       status: AgencyStatus.approved,
+      operatingCity: 'Kayseri',
     );
 
     _agencies[pendingAgencyId] = _AgencyRow(
       id: pendingAgencyId,
-      legalName: 'Mersin Turizm (Beklemede)',
+      legalName: 'Sahil Rotasyon Seyahat (onay sürecinde · demo)',
       status: AgencyStatus.pendingApproval,
+      operatingCity: 'Hatay',
     );
 
     final tourStart = DateTime.utc(2026, 6, 10, 8);
@@ -204,12 +232,13 @@ final class MockTurIzimStore {
       detail: TourDetail(
         id: tourKapadokyaId,
         agencyId: approvedAgencyId,
-        title: 'Kapadokya — ulaşım dahil hafta sonu',
+        title: 'Kapadokya — Kayseri çıkışlı ulaşım dahil hafta sonu',
         description:
-            'Pilot bölge ilanı. UGC içerik üreticileri ile boş koltuk '
-            'doldurma senaryosu için mock veri.',
-        departureCity: 'Adana',
-        departureRegion: DepartureRegion.adana,
+            'Şehir bazlı yayınlı mock ilan — üniversite öğrencisi içerik '
+            'üreticileri için boş koltuk ile görev anlatımı için tohum veri.',
+        departureCity: 'Kayseri',
+        departureRegion: DepartureRegion.kayseri,
+        destinationCity: 'Kapadokya bağlantılı (Nevşehir güzergâhı)',
         destinationCluster: DestinationCluster.kapadokya,
         status: TourStatus.published,
         startsAt: tourStart,
@@ -220,6 +249,8 @@ final class MockTurIzimStore {
         expectedDepositAmount: 1500,
         normalSalesPrice: 3500,
         currency: 'TRY',
+        visualKey: 'cappadocia',
+        routeSummary: 'Kayseri çıkışlı · Kapadokya bağlantılı tur rotası',
         acceptedAssignmentCount: 0,
         pendingApplicationCount: 2,
         requirements: const [
@@ -239,12 +270,13 @@ final class MockTurIzimStore {
       detail: TourDetail(
         id: tourAntalyaId,
         agencyId: approvedAgencyId,
-        title: 'Mersin sahil — yaz içerik kampanyası',
+        title: 'Akdeniz kıyı içerik kampanyası — Mersin bağlantılı rota',
         description:
-            'Creator tarafında listelenecek ikinci yayımlı ilan (mock tohum '
-            'veri).',
-        departureCity: 'Mersin',
-        departureRegion: DepartureRegion.mersin,
+            'İkinci yayımlı mock ilan; çıkış ve rota şehir beyanıyla tanımlandı '
+            '(otomatik konum doğrulaması yok).',
+        departureCity: 'Hatay · İskenderun',
+        departureRegion: DepartureRegion.hatay,
+        destinationCity: 'Mersin sahil hatları bağlantılı',
         destinationCluster: DestinationCluster.guney,
         status: TourStatus.published,
         startsAt: antalyaStart,
@@ -255,6 +287,8 @@ final class MockTurIzimStore {
         expectedDepositAmount: 2200,
         normalSalesPrice: 6900,
         currency: 'TRY',
+        visualKey: 'mersin_coast',
+        routeSummary: 'Hatay çıkışlı · Akdeniz kıyı içerik rotası',
         acceptedAssignmentCount: 0,
         pendingApplicationCount: 0,
         requirements: const [TourRequirementType.instagramPublication],
@@ -339,6 +373,9 @@ final class MockTurIzimStore {
 
   String? _agencyLegalName(String agencyId) => _agencies[agencyId]?.legalName;
 
+  String? _agencyOperatingCityFromRow(String agencyId) =>
+      _agencies[agencyId]?.operatingCity;
+
   TourDetail _cloneTourDetail(TourDetail source) {
     return TourDetail(
       id: source.id,
@@ -347,7 +384,9 @@ final class MockTurIzimStore {
       description: source.description,
       departureCity: source.departureCity,
       departureRegion: source.departureRegion,
+      destinationCity: source.destinationCity,
       destinationCluster: source.destinationCluster,
+      routeSummary: source.routeSummary,
       status: source.status,
       startsAt: source.startsAt,
       endsAt: source.endsAt,
@@ -360,11 +399,15 @@ final class MockTurIzimStore {
       acceptedAssignmentCount: source.acceptedAssignmentCount,
       pendingApplicationCount: source.pendingApplicationCount,
       agencyLegalName: _agencyLegalName(source.agencyId),
+      agencyOperatingCity:
+          source.agencyOperatingCity ?? _agencyOperatingCityFromRow(source.agencyId),
       tourScope: source.tourScope,
       requiresPassport: source.requiresPassport,
       minimumPassportType: source.minimumPassportType,
       requiresVisa: source.requiresVisa,
       visaRequirementText: source.visaRequirementText,
+      imageAssetPath: source.imageAssetPath,
+      visualKey: source.visualKey,
       requirements: List.of(source.requirements),
     );
   }
@@ -413,7 +456,9 @@ final class MockTurIzimStore {
       description: row.detail.description,
       departureCity: row.detail.departureCity,
       departureRegion: row.detail.departureRegion,
+      destinationCity: row.detail.destinationCity,
       destinationCluster: row.detail.destinationCluster,
+      routeSummary: row.detail.routeSummary,
       status: row.detail.status,
       startsAt: row.detail.startsAt,
       endsAt: row.detail.endsAt,
@@ -426,11 +471,15 @@ final class MockTurIzimStore {
       acceptedAssignmentCount: accepted,
       pendingApplicationCount: pendingApps,
       agencyLegalName: _agencyLegalName(row.detail.agencyId),
+      agencyOperatingCity: row.detail.agencyOperatingCity ??
+          _agencyOperatingCityFromRow(row.detail.agencyId),
       tourScope: row.detail.tourScope,
       requiresPassport: row.detail.requiresPassport,
       minimumPassportType: row.detail.minimumPassportType,
       requiresVisa: row.detail.requiresVisa,
       visaRequirementText: row.detail.visaRequirementText,
+      imageAssetPath: row.detail.imageAssetPath,
+      visualKey: row.detail.visualKey,
       requirements: row.detail.requirements,
     );
   }
@@ -780,7 +829,9 @@ final class MockTurIzimStore {
       description: row.detail.description,
       departureCity: row.detail.departureCity,
       departureRegion: row.detail.departureRegion,
+      destinationCity: row.detail.destinationCity,
       destinationCluster: row.detail.destinationCluster,
+      routeSummary: row.detail.routeSummary,
       status: TourStatus.applicationClosed,
       startsAt: row.detail.startsAt,
       endsAt: row.detail.endsAt,
@@ -793,11 +844,15 @@ final class MockTurIzimStore {
       acceptedAssignmentCount: row.detail.acceptedAssignmentCount,
       pendingApplicationCount: row.detail.pendingApplicationCount,
       agencyLegalName: _agencyLegalName(row.detail.agencyId),
+      agencyOperatingCity: row.detail.agencyOperatingCity ??
+          _agencyOperatingCityFromRow(row.detail.agencyId),
       tourScope: row.detail.tourScope,
       requiresPassport: row.detail.requiresPassport,
       minimumPassportType: row.detail.minimumPassportType,
       requiresVisa: row.detail.requiresVisa,
       visaRequirementText: row.detail.visaRequirementText,
+      imageAssetPath: row.detail.imageAssetPath,
+      visualKey: row.detail.visualKey,
       requirements: row.detail.requirements,
     );
 
@@ -1190,7 +1245,7 @@ final class MockTurIzimStore {
       throw AppException('Yayın kaydı bulunamadı.');
     }
     if (publication.id != publicationId) {
-      throw AppException('Yayın kimliği eşleşmiyor.');
+      throw AppException('Yayın kimliği geçersiz.');
     }
 
     final tourSnapshot = snapshotTourSummary(

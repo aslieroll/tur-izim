@@ -17,7 +17,7 @@ void main() {
     test('fetchPublishedTours iki yayımlanmış ilan döndürür', () async {
       final list = await repo.fetchPublishedTours();
       expect(list.length, 2);
-      expect(list.first.departureCity, 'Adana');
+      expect(list.first.departureCity, 'Kayseri');
       expect(list.any((t) => t.title.contains('Mersin')), isTrue);
     });
 

@@ -51,7 +51,7 @@ Arayüz sosyal medya uygulaması, otel/uçuş rezervasyon uygulaması veya klasi
 
 Ana konumlandırma:
 
-> Tur İzim, yerel tur acenteleriyle içerik üreticilerini güvenli görev ve içerik teslim süreciyle buluşturan operasyon platformudur.
+> Tur İzim, yerel tur acentelerinin boş koltuklarını; üniversite öğrencilerinin teknik şartları belirlenmiş fotoğraf/video içerikleri ve 30 günlük yayın taahhüdü karşılığında değerlendirmesini sağlayan şehir bazlı güvenli görev ve içerik teslim platformudur.
 
 ---
 
@@ -78,6 +78,11 @@ Aşağıdaki UI yapıları MVP’de kullanılmaz:
 
 UI metinleri Türkçe olmalıdır.
 
+Şehir ve rota (liste/kart uyumu):
+
+- Tur kartları ve detaylarda **çıkış şehri** ile **tur rotası** (kısa rota özeti veya varış şehri metni) okunaklı gösterilir; **harita, GPS veya otomatik konum seçimi** yoktur — değerler beyana dayalıdır.
+- Üretici profil kartlarında **üniversite, bölüm, sınıf, kampüs/şehir** satırı tutarlı bir üst bilgi olarak kullanılabilir.
+
 Doğru terimler:
 
 | Kavram             | UI’da Kullanılacak Terim |
@@ -89,6 +94,7 @@ Doğru terimler:
 | Content Delivery   | İçerik Teslimi           |
 | Publication Submit | Yayın Bildirimi          |
 | Violation Report   | İhlal Bildirimi          |
+| City / route       | Şehir, çıkış şehri, tur rotası |
 
 Kullanılmayacak terimler:
 
@@ -100,6 +106,19 @@ Kullanılmayacak terimler:
 - Rezervasyon
 - Satın al
 - Ödeme yap
+- Influencer
+- Mikro-influencer
+- Fenomen
+- Takipçi gücü / sosyal etki puanı
+- Sponsorlu içerik pazarı
+
+Kullanılacak yeni terimler (creator tarafı):
+
+| Eski | Yeni |
+| ---- | ---- |
+| Creator (UGC / influencer) | Öğrenci içerik üreticisi |
+| Mikro-influencer | Üniversite öğrencisi |
+| Sosyal etki | Teknik içerik yetkinliği |
 
 `Kapora` yerine her yerde **Depozito** kullanılmalıdır.
 
