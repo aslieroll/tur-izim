@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tur İzim - Adaylar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-container": "#503d00",
+                        "surface-tint": "#6750a4",
+                        "primary-container": "#6750a4",
+                        "secondary-fixed": "#e9ddff",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#494551",
+                        "secondary-container": "#e1d4fd",
+                        "tertiary-fixed-dim": "#e7c365",
+                        "tertiary-container": "#c9a74d",
+                        "on-tertiary-fixed": "#241a00",
+                        "on-secondary-fixed-variant": "#4b4263",
+                        "on-surface": "#1d1b20",
+                        "inverse-surface": "#322f35",
+                        "surface-bright": "#fdf7ff",
+                        "surface-container": "#f2ecf4",
+                        "secondary-fixed-dim": "#cdc0e9",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#63597c",
+                        "primary": "#4f378a",
+                        "on-error-container": "#93000a",
+                        "surface": "#fdf7ff",
+                        "background": "#fdf7ff",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#cfbcff",
+                        "on-primary-fixed-variant": "#4f378a",
+                        "outline": "#7a7582",
+                        "surface-container-low": "#f8f2fa",
+                        "inverse-primary": "#cfbcff",
+                        "tertiary": "#765b00",
+                        "on-primary-fixed": "#22005d",
+                        "inverse-on-surface": "#f5eff7",
+                        "on-secondary-fixed": "#1f1635",
+                        "surface-variant": "#e6e0e9",
+                        "tertiary-fixed": "#ffdf93",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#cbc4d2",
+                        "on-background": "#1d1b20",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "primary-fixed": "#e9ddff",
+                        "on-secondary-container": "#645a7d",
+                        "surface-container-highest": "#e6e0e9",
+                        "on-primary-container": "#e0d2ff",
+                        "surface-container-high": "#ece6ee",
+                        "surface-dim": "#ded8e0",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "margin-page": "24px",
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "section-gap": "48px",
+                        "gutter-card": "16px",
+                        "unit": "4px",
+                        "stack-lg": "32px"
+                    },
+                    fontFamily: {
+                        "label-caps": ["Plus Jakarta Sans"],
+                        "h1": ["Noto Serif"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display": ["Noto Serif"],
+                        "button": ["Plus Jakarta Sans"]
+                    },
+                    fontSize: {
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "h1": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "h2": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display": ["34px", { "lineHeight": "42px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased flex flex-col min-h-screen">
+<!-- TopAppBar Component -->
+<header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-lg dark:bg-slate-950/90 border-b border-slate-100/50 dark:border-slate-800/50 shadow-[0_4px_20px_rgba(30,42,90,0.04)]">
+<div class="flex justify-between items-center px-6 h-16 w-full">
+<button class="text-indigo-900 dark:text-indigo-100 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors opacity-70 scale-95 transition-all p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<div class="text-indigo-950 dark:text-white font-serif italic font-bold text-xl font-['Noto_Serif'] tracking-tight">Tur İzim</div>
+<button class="text-indigo-900 dark:text-indigo-100 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors opacity-70 scale-95 transition-all p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-3xl mx-auto pt-24 pb-32 px-margin-page flex flex-col gap-section-gap">
+<!-- Header Section -->
+<section class="flex flex-col gap-stack-sm">
+<h1 class="font-h1 text-h1 text-on-surface">Başvuru Değerlendirmesi</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Kapadokya Balon Turu kampanyası için başvuran içerik üreticileri ve uygunluk skorları.</p>
+</section>
+<!-- Applicants List -->
+<section class="flex flex-col gap-stack-md">
+<!-- Applicant Card 1 (High Score) -->
+<article class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_8px_20px_rgba(30,42,90,0.04)] border border-surface-variant flex flex-col gap-stack-md relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-primary-container"></div>
+<div class="flex items-center gap-4">
+<img alt="Creator Avatar" class="w-14 h-14 rounded-full object-cover shadow-sm" data-alt="A close-up portrait of a young female travel creator smiling brightly. She is wearing a sun hat and a light, airy blouse suitable for a Mediterranean resort. The background is a soft blur of coastal blue waters and bright sunny skies. The lighting is warm, natural, and highly flattering, evoking a premium lifestyle aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJDmZtAU4Vkr1nM7lUc3vHwIfKwjcN03DCxUybQlvPzK1KDtyizMCYt250HCI-D_GcDtSOV7NCc72gEGGh0w2gEURiahm3cYLNts2HN_z9YfpwuxSj1U_JDHG9OGnLwEIAiJiTcLOFeyeNWQ2MfTg59RywvQ2ybfU9xZgqm-ahVf9_EfSw0H-UZVf5Th0meFgJ8FLGS4ooMAm5fEYRH1SwpzrnPvlQvPXAlxSGMBJKVdFOBgtG_7z02490iUAHCrCdNiIl1yUkJv0"/>
+<div class="flex-1">
+<h2 class="font-h2 text-[18px] leading-tight text-on-surface">Ayşe Yılmaz</h2>
+<p class="font-body-md text-[14px] text-on-surface-variant">Seyahat &amp; Yaşam Tarzı</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-caps text-label-caps text-primary-container uppercase tracking-wider mb-1">Uygunluk Endeksi</span>
+<div class="flex items-baseline gap-1">
+<span class="font-h1 text-[24px] text-primary-fixed-variant">92</span>
+<span class="font-body-md text-[14px] text-on-surface-variant">%</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-4 flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-[14px] text-on-surface-variant">Teknik Kriter Uyumu</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="material-symbols-outlined text-primary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="material-symbols-outlined text-primary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-[14px] text-on-surface-variant">Yayın Platform Uyumu</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="material-symbols-outlined text-primary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="material-symbols-outlined text-outline-variant text-[18px]" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-center mt-2">
+<div class="flex gap-2">
+<!-- No missing requirements -->
+</div>
+<button class="bg-primary text-on-primary font-button text-button py-2 px-6 rounded-full shadow-md hover:bg-primary-container hover:shadow-lg transition-all flex items-center gap-2">
+                        İncele
+                        <span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Applicant Card 2 (Medium Score with Warnings) -->
+<article class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_8px_20px_rgba(30,42,90,0.04)] border border-surface-variant flex flex-col gap-stack-md relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-tertiary-container"></div>
+<div class="flex items-center gap-4">
+<img alt="Creator Avatar" class="w-14 h-14 rounded-full object-cover shadow-sm" data-alt="A professional headshot of a male travel vlogger outdoors. He has a short beard and is wearing a casual but stylish linen shirt. The background shows a softly blurred ancient city or ruins under bright midday sun. The lighting is crisp and modern, reflecting a high-end travel influencer style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZnOUuI2MkVigr0K3PChMs44psrUcM4jaG7O6-IiYZieNxVsLs4FSFFrknm_VZ751NQgzy7Tt4Ng_IkQefgn4-Ky9pSH2g5MYhBVhwlqnWswfjfQMn9BdtmKzQxFUHRoUaDDyoN2pl1eAhiJOBpk5_eEvc-iskwUfaJ22otw6fbxNPwdonV448Odg114vlMRVjAAo4oS1zbN9DNc9OoJobIPIoFeTeJdw_tWugsFeKnyOeU_3MrwBW4C1rLiGJAXoAeHHR4ZLXQgc"/>
+<div class="flex-1">
+<h2 class="font-h2 text-[18px] leading-tight text-on-surface">Can Demir</h2>
+<p class="font-body-md text-[14px] text-on-surface-variant">Macera &amp; Doğa</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-caps text-label-caps text-tertiary-container uppercase tracking-wider mb-1">Uygunluk Endeksi</span>
+<div class="flex items-baseline gap-1">
+<span class="font-h1 text-[24px] text-tertiary">74</span>
+<span class="font-body-md text-[14px] text-on-surface-variant">%</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-4 flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-[14px] text-on-surface-variant">Teknik Kriter Uyumu</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-tertiary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="material-symbols-outlined text-tertiary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="material-symbols-outlined text-outline-variant text-[18px]" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-[14px] text-on-surface-variant">Yayın Platform Uyumu</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-tertiary-container text-[18px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="material-symbols-outlined text-outline-variant text-[18px]" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<span class="material-symbols-outlined text-outline-variant text-[18px]" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-center mt-2">
+<div class="flex flex-wrap gap-2">
+<span class="inline-flex items-center gap-1 bg-error-container text-on-error-container font-label-caps text-[10px] px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-[12px]" data-icon="warning">warning</span>
+                            Eksik Drone Ehliyeti
+                        </span>
+</div>
+<button class="bg-surface-variant text-on-surface-variant font-button text-button py-2 px-6 rounded-full hover:bg-surface-dim transition-all flex items-center gap-2">
+                        İncele
+                    </button>
+</div>
+</article>
+</section>
+<!-- Disclaimer Footer -->
+<footer class="mt-8 text-center pb-8 border-t border-surface-variant pt-6">
+<p class="font-body-md text-[13px] text-on-surface-variant/70 max-w-md mx-auto">
+<span class="material-symbols-outlined text-[16px] align-middle mr-1" data-icon="info">info</span>
+                Bu skor yalnızca karar destek amaçlıdır. Nihai seçim acenteye aittir.
+            </p>
+</footer>
+</main>
+<!-- BottomNavBar Component -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 rounded-t-[32px] bg-indigo-950/95 backdrop-blur-xl dark:bg-slate-950/95 shadow-[0_-8px_30px_rgba(0,0,0,0.15)] pb-safe">
+<div class="flex justify-around items-center h-20 px-8">
+<button class="flex flex-col items-center justify-center text-indigo-300/60 dark:text-slate-500 hover:text-white transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="explore">explore</span>
+<span class="text-[11px] font-medium tracking-wide uppercase font-label-caps">Tours</span>
+</button>
+<!-- Active State Navigation -->
+<button class="flex flex-col items-center justify-center text-white relative after:content-[''] after:absolute after:-bottom-1 after:w-1.5 after:h-1.5 after:bg-orange-400 after:rounded-full opacity-70 scale-90 duration-200">
+<span class="material-symbols-outlined mb-1" data-icon="assignment_ind">assignment_ind</span>
+<span class="text-[11px] font-medium tracking-wide uppercase font-label-caps">Applications</span>
+</button>
+<button class="flex flex-col items-center justify-center text-indigo-300/60 dark:text-slate-500 hover:text-white transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="text-[11px] font-medium tracking-wide uppercase font-label-caps">Profile</span>
+</button>
+</div>
+</nav>
+</body></html>

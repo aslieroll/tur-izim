@@ -1,0 +1,1 @@
+enum DepartureRegion { adana, mersin }

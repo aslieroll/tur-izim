@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>İçerik İnceleme</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;family=Plus+Jakarta+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#7a7582",
+                        "surface-dim": "#ded8e0",
+                        "on-tertiary-fixed": "#241a00",
+                        "surface-tint": "#6750a4",
+                        "on-primary-fixed-variant": "#4f378a",
+                        "on-secondary-container": "#645a7d",
+                        "on-secondary-fixed": "#1f1635",
+                        "inverse-surface": "#322f35",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface": "#fdf7ff",
+                        "surface-container-high": "#ece6ee",
+                        "on-secondary-fixed-variant": "#4b4263",
+                        "inverse-primary": "#cfbcff",
+                        "primary-fixed-dim": "#cfbcff",
+                        "on-primary-container": "#e0d2ff",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#e1d4fd",
+                        "primary-fixed": "#e9ddff",
+                        "on-error": "#ffffff",
+                        "on-background": "#1d1b20",
+                        "primary": "#4f378a",
+                        "tertiary-container": "#c9a74d",
+                        "surface-container": "#f2ecf4",
+                        "outline-variant": "#cbc4d2",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "on-primary-fixed": "#22005d",
+                        "secondary-fixed": "#e9ddff",
+                        "background": "#fdf7ff",
+                        "tertiary": "#765b00",
+                        "surface-container-highest": "#e6e0e9",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f5eff7",
+                        "on-surface-variant": "#494551",
+                        "secondary": "#63597c",
+                        "surface-bright": "#fdf7ff",
+                        "primary-container": "#6750a4",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1d1b20",
+                        "secondary-fixed-dim": "#cdc0e9",
+                        "tertiary-fixed": "#ffdf93",
+                        "surface-container-low": "#f8f2fa",
+                        "on-tertiary-container": "#503d00",
+                        "tertiary-fixed-dim": "#e7c365",
+                        "surface-variant": "#e6e0e9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "margin-page": "24px",
+                        "gutter-card": "16px",
+                        "section-gap": "48px",
+                        "stack-sm": "8px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "label-caps": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "h1": ["Noto Serif"],
+                        "display": ["Noto Serif"],
+                        "button": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "h2": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "h1": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "display": ["34px", { "lineHeight": "42px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background: linear-gradient(135deg, #f8f2fa 0%, #ece6ee 100%);
+            min-height: 100vh;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-body-md text-on-surface antialiased bg-background">
+<!-- TopAppBar -->
+<header class="bg-white/90 backdrop-blur-lg dark:bg-slate-950/90 fixed top-0 w-full z-50 border-b border-slate-100/50 dark:border-slate-800/50 shadow-[0_4px_20px_rgba(30,42,90,0.04)]">
+<div class="flex justify-between items-center px-6 h-16 w-full">
+<button aria-label="Menu" class="text-indigo-900 dark:text-indigo-100 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors rounded-full p-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<h1 class="font-['Noto_Serif'] font-semibold tracking-tight text-indigo-950 dark:text-white font-serif italic font-bold text-xl">Tur İzim</h1>
+<button aria-label="Search" class="text-indigo-900 dark:text-indigo-100 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors rounded-full p-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+</div>
+</header>
+<main class="pt-[88px] pb-[104px] px-margin-page max-w-7xl mx-auto flex flex-col gap-section-gap">
+<!-- Page Header -->
+<div class="flex flex-col gap-stack-sm">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-xl">arrow_back</span>
+<span class="font-button text-button">Geri Dön</span>
+</div>
+<h2 class="font-display text-display text-on-surface">İçerik İnceleme</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Kapadokya Balon Turu Kampanyası için içerik onayı bekleniyor.</p>
+</div>
+<!-- Main Content Area -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter-card">
+<!-- Left Column: Preview Area -->
+<div class="lg:col-span-2 flex flex-col gap-stack-md">
+<div class="bg-surface-container-lowest rounded-xl p-[20px] shadow-[0_8px_20px_rgba(30,42,90,0.04)] flex flex-col gap-stack-md h-full">
+<div class="flex justify-between items-center border-b border-surface-variant pb-4">
+<h3 class="font-h2 text-h2 text-on-surface">İçerik Taslağı</h3>
+<span class="bg-surface-container py-1 px-3 rounded-full font-label-caps text-label-caps text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">link</span>
+                            Harici Link
+                        </span>
+</div>
+<!-- Simulated Video Player Area -->
+<div class="relative w-full aspect-[9/16] max-h-[600px] bg-surface-container-highest rounded-lg overflow-hidden flex items-center justify-center group mx-auto max-w-[340px]">
+<img alt="Kapadokya Preview" class="absolute inset-0 w-full h-full object-cover" data-alt="A beautiful, high-quality, vertically-oriented photograph of a bright, sun-drenched morning over the unique landscape of Cappadocia, Turkey. Numerous colorful hot air balloons dot the clear blue sky above the fairy chimneys. The lighting is soft and warm, capturing the essence of a premium travel experience. The overall aesthetic is modern, clean, and inspiring, fitting a luxury travel concierge brand with a soft sky blue and warm white color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCHUa5st_u9Z4TfI0ny-msNvGna9ZY7XaQopVX6xKTnB6W4VYGvDD9z8-_jmFrmWv6EguIo2Of782MjP9FMrjsUmg_eQ9VJMJ7odSU0s_BB0NwK4PYpgX0SKJY69Hi9JOf7nA0-jLoEKYYHguzwHj8DpFqZlfa45IjR5hKO99IVsRaKud2CAX-ELXCehkaCd6cKkDf1nYiZ-VYjbIDB94QZ3xM8FW42acMSwprctJIqG-m5lGR6tEBTD_Uncd5YJxabMmBXQPgSHs"/>
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+<button class="w-16 h-16 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-primary shadow-lg hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+<!-- Video Controls Overlay -->
+<div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/60 to-transparent flex flex-col gap-2">
+<div class="h-1 bg-white/30 rounded-full overflow-hidden">
+<div class="h-full w-1/3 bg-primary rounded-full"></div>
+</div>
+<div class="flex justify-between text-white font-label-caps text-label-caps">
+<span>00:12</span>
+<span>00:45</span>
+</div>
+</div>
+</div>
+<div class="mt-4 p-4 bg-surface-container rounded-lg">
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">AÇIKLAMA METNİ</p>
+<p class="font-body-md text-body-md text-on-surface">Güneşin doğuşunu Kapadokya'nın eşsiz manzarasında karşılamak... 🌅 Hayatımın en unutulmaz anlarından biriydi. @TurIzim ile bu deneyimi yaşamak bir ayrıcalık! #Kapadokya #Seyahat #TurIzim</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Checklist & Actions -->
+<div class="flex flex-col gap-stack-lg">
+<!-- Creator Info -->
+<div class="bg-surface-container-lowest rounded-xl p-[20px] shadow-[0_8px_20px_rgba(30,42,90,0.04)] flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden shrink-0 border-2 border-primary-container">
+<img alt="Creator Avatar" class="w-full h-full object-cover" data-alt="A close-up portrait of a young, stylish woman with a warm smile, set against a bright, soft-lit background. She looks professional yet approachable, embodying the persona of a high-end travel content creator. The lighting is natural and flattering, fitting perfectly within a modern, clean UI aesthetic dominated by warm whites and soft pastel tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDNMFx2E40lygkrTvK_9fuT1X0sryAAC5OGwI43YT3kNi7v2ZXVZVoArcqQVQ0Wfa_NTr4yQH8X3eX66YtFt5s7qInLj5ZOQsZiQbCmrgePqHIw-PUQhYUPZxtgGZ5-L8cVTg9Uko429Wc8F-jOZH5CdrHByXvvzZARS3s7brqfw17NNi2Av7ccWqIMVq0X_ILYbcIwGlNpEw2TncB6X2hXt5Uu7nq8Pj8EoolNy8dos_C5ysZ7VE66DUahCU_fLsMLf4OcZB1Tm0"/>
+</div>
+<div>
+<h4 class="font-h2 text-body-lg text-on-surface">Ayşe Yılmaz</h4>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">verified</span>
+                            Seyahat İçerik Üreticisi
+                        </p>
+</div>
+</div>
+<!-- Checklist Card -->
+<div class="bg-surface-container-lowest rounded-xl p-[20px] shadow-[0_8px_20px_rgba(30,42,90,0.04)] flex flex-col gap-stack-md flex-1">
+<h3 class="font-h2 text-h2 text-on-surface border-b border-surface-variant pb-4">Kontrol Kriterleri</h3>
+<div class="flex flex-col gap-4">
+<!-- Checklist Item 1 -->
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="relative flex items-center justify-center mt-1">
+<input class="peer appearance-none w-5 h-5 border-2 border-outline rounded-sm checked:bg-primary checked:border-primary transition-colors" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-white text-[16px] opacity-0 peer-checked:opacity-100 pointer-events-none" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button text-button text-on-surface group-hover:text-primary transition-colors">Marka Logosu Görünürlüğü</span>
+<span class="font-body-md text-[14px] text-on-surface-variant">Videonun ilk 5 saniyesinde logo net olarak seçilebiliyor mu?</span>
+</div>
+</label>
+<!-- Checklist Item 2 -->
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="relative flex items-center justify-center mt-1">
+<input class="peer appearance-none w-5 h-5 border-2 border-outline rounded-sm checked:bg-primary checked:border-primary transition-colors" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-white text-[16px] opacity-0 peer-checked:opacity-100 pointer-events-none" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button text-button text-on-surface group-hover:text-primary transition-colors">Doğru Etiketleme (@TurIzim)</span>
+<span class="font-body-md text-[14px] text-on-surface-variant">Açıklama metninde ve video üzerinde doğru hesap etiketlenmiş mi?</span>
+</div>
+</label>
+<!-- Checklist Item 3 -->
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="relative flex items-center justify-center mt-1">
+<input class="peer appearance-none w-5 h-5 border-2 border-outline rounded-sm checked:bg-primary checked:border-primary transition-colors" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-white text-[16px] opacity-0 peer-checked:opacity-100 pointer-events-none" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button text-button text-on-surface group-hover:text-primary transition-colors">Müzik / Ses Seçimi</span>
+<span class="font-body-md text-[14px] text-on-surface-variant">Seçilen müzik telif hakkı ihlali yaratmıyor ve marka kimliğine uygun mu?</span>
+</div>
+</label>
+<!-- Checklist Item 4 -->
+<label class="flex items-start gap-3 cursor-pointer group">
+<div class="relative flex items-center justify-center mt-1">
+<input class="peer appearance-none w-5 h-5 border-2 border-outline rounded-sm checked:bg-primary checked:border-primary transition-colors" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-white text-[16px] opacity-0 peer-checked:opacity-100 pointer-events-none" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button text-button text-on-surface group-hover:text-primary transition-colors">Görsel Kalite</span>
+<span class="font-body-md text-[14px] text-on-surface-variant">Işık, renkler ve genel çözünürlük yüksek standartlarımızı karşılıyor mu?</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-4 mt-auto">
+<button class="w-full h-12 bg-[#2e7d32] hover:bg-[#1b5e20] text-white font-button text-button rounded-full shadow-[0_4px_12px_rgba(46,125,50,0.3)] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">thumb_up</span>
+                        Onayla
+                    </button>
+<button class="w-full h-12 bg-[#f57c00] hover:bg-[#e65100] text-white font-button text-button rounded-full shadow-[0_4px_12px_rgba(245,124,0,0.3)] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">edit_note</span>
+                        Revizyon İste
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Hidden on md, visible on mobile) -->
+<nav class="md:hidden bg-indigo-950/95 backdrop-blur-xl dark:bg-slate-950/95 fixed bottom-0 left-0 w-full z-50 rounded-t-[32px] shadow-[0_-8px_30px_rgba(0,0,0,0.15)] flex justify-around items-center h-20 px-8 pb-safe">
+<a class="flex flex-col items-center justify-center text-indigo-300/60 dark:text-slate-500 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[24px]">explore</span>
+<span class="text-[11px] font-medium tracking-wide uppercase mt-1">Tours</span>
+</a>
+<a class="flex flex-col items-center justify-center text-white relative after:content-[''] after:absolute after:-bottom-1 after:w-1.5 after:h-1.5 after:bg-orange-400 after:rounded-full hover:text-white transition-all scale-90 duration-200" href="#">
+<span class="material-symbols-outlined text-[24px]">assignment_ind</span>
+<span class="text-[11px] font-medium tracking-wide uppercase mt-1">Applications</span>
+</a>
+<a class="flex flex-col items-center justify-center text-indigo-300/60 dark:text-slate-500 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="text-[11px] font-medium tracking-wide uppercase mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

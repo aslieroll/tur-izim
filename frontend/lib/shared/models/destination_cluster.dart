@@ -1,0 +1,1 @@
+enum DestinationCluster { kapadokya, guney }

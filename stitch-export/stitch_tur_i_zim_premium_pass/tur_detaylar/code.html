@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tur İzim - Tour Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#503d00",
+                      "surface-tint": "#6750a4",
+                      "primary-container": "#6750a4",
+                      "secondary-fixed": "#e9ddff",
+                      "on-secondary": "#ffffff",
+                      "on-surface-variant": "#494551",
+                      "secondary-container": "#e1d4fd",
+                      "tertiary-fixed-dim": "#e7c365",
+                      "tertiary-container": "#c9a74d",
+                      "on-tertiary-fixed": "#241a00",
+                      "on-secondary-fixed-variant": "#4b4263",
+                      "on-surface": "#1d1b20",
+                      "inverse-surface": "#322f35",
+                      "surface-bright": "#fdf7ff",
+                      "surface-container": "#f2ecf4",
+                      "secondary-fixed-dim": "#cdc0e9",
+                      "error": "#ba1a1a",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#63597c",
+                      "primary": "#4f378a",
+                      "on-error-container": "#93000a",
+                      "surface": "#fdf7ff",
+                      "background": "#fdf7ff",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#cfbcff",
+                      "on-primary-fixed-variant": "#4f378a",
+                      "outline": "#7a7582",
+                      "surface-container-low": "#f8f2fa",
+                      "inverse-primary": "#cfbcff",
+                      "tertiary": "#765b00",
+                      "on-primary-fixed": "#22005d",
+                      "inverse-on-surface": "#f5eff7",
+                      "on-secondary-fixed": "#1f1635",
+                      "surface-variant": "#e6e0e9",
+                      "tertiary-fixed": "#ffdf93",
+                      "on-primary": "#ffffff",
+                      "outline-variant": "#cbc4d2",
+                      "on-background": "#1d1b20",
+                      "on-tertiary-fixed-variant": "#594400",
+                      "primary-fixed": "#e9ddff",
+                      "on-secondary-container": "#645a7d",
+                      "surface-container-highest": "#e6e0e9",
+                      "on-primary-container": "#e0d2ff",
+                      "surface-container-high": "#ece6ee",
+                      "surface-dim": "#ded8e0",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-page": "24px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "section-gap": "48px",
+                      "gutter-card": "16px",
+                      "unit": "4px",
+                      "stack-lg": "32px"
+              },
+              "fontFamily": {
+                      "label-caps": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "h1": [
+                              "Noto Serif"
+                      ],
+                      "h2": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display": [
+                              "Noto Serif"
+                      ],
+                      "button": [
+                              "Plus Jakarta Sans"
+                      ]
+              },
+              "fontSize": {
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "h1": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "h2": [
+                              "22px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display": [
+                              "34px",
+                              {
+                                      "lineHeight": "42px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "button": [
+                              "16px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased min-h-screen font-body-md text-body-md pb-32">
+<!-- Hero Image & Back Navigation -->
+<header class="relative w-full h-[397px] min-h-[350px]">
+<img alt="Luxury travel destination" class="absolute inset-0 w-full h-full object-cover" data-alt="A breathtaking, wide-angle shot of a luxurious coastal travel destination at sunrise. The scene features crystal clear turquoise waters gently lapping against a pristine white sand beach, bordered by dramatic, lush green cliffs. The soft, warm morning sunlight casts long, elegant shadows and creates a serene, premium atmosphere. The overall aesthetic is high-end, airy, and inviting, perfectly aligning with a sophisticated travel concierge service brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL6fQGzNTCzZFDBexT9heku564MdGFj83XuQmiTOWmpuVVy4DdbxHTCoW7mIGMFsyPyEGT6u94rZVQJ4fJk5x7e7BtHf90ZZn1gSofMktyGT2krbN-dK-GfGEIyToViN-ca1TMcCmqVD30XXJ_dfbp8fcANmzmtB-A2Uq_LQVkHeygQeS53Qbwwb-XyduRPDj0qkacL99G2Ejho3FuYdJXW_LOyySOWhVH02jWahWsFCDOMv3Am4fup_yn-WA8zTJcuBv1kSY5yJY"/>
+<!-- Gradient Overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
+<!-- Back Button -->
+<div class="absolute top-0 left-0 w-full p-margin-page flex justify-between items-center z-10 pt-12">
+<button class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative z-20 px-margin-page -mt-12 max-w-3xl mx-auto space-y-section-gap">
+<!-- Header Section -->
+<section class="space-y-stack-md">
+<div class="flex flex-wrap gap-2 mb-stack-sm">
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-caps text-label-caps uppercase">Kültür</span>
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps uppercase">7 Gün</span>
+</div>
+<h1 class="font-display text-display text-on-background">Kapadokya Balon Turu &amp; Tarihi Vadiler Keşfi</h1>
+<div class="flex items-center gap-3 mt-stack-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden shadow-sm">
+<img alt="Agency Logo" class="w-full h-full object-cover" data-alt="A clean, minimalist corporate logo placeholder featuring a subtle geometric design in soft blue and lavender tones. Set against a pure white background, conveying a sense of premium professionalism and trust typical of a high-end travel concierge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2-4Gs8fEfVTdTsoatuoQjuXb7gXvcc_CqFRlaFV841fuAU5FLjoPowxYw06gYOtZv-isFdKlZhYNKATTimIJqZ17BpxLWpmrVZ2ScPGnzA-M3ZOEs4_4IfJp9k3s9wwiceXaAKZLOjwx5Tx0y-wEih9krhZvPNUzCdkmHGR0aWGZc5d0G70w6QoqHh2djT8EibaQA4tTCEyf-J14rlqLoaHoOEdAtm-TdM9bwBdPtJVKPoBpF-2jtnuc3-OxU5OAm8ehkuVtwa_0"/>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Düzenleyen Acente</p>
+<p class="font-body-lg text-body-lg text-primary font-medium">Elite Voyager Türkiye</p>
+</div>
+</div>
+</section>
+<!-- Route & Date Section -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<div class="bg-surface-container-lowest rounded-xl p-stack-lg shadow-[0_4px_20px_rgba(30,42,90,0.04)] border border-surface-variant/30 flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+</div>
+<div>
+<h3 class="font-h2 text-h2 text-on-background mb-1">Tarih</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">15 Mayıs 2024 - 22 Mayıs 2024</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-stack-lg shadow-[0_4px_20px_rgba(30,42,90,0.04)] border border-surface-variant/30 flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined" data-icon="route">route</span>
+</div>
+<div>
+<h3 class="font-h2 text-h2 text-on-background mb-1">Rota</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Nevşehir &gt; Ürgüp &gt; Göreme &gt; Avanos</p>
+</div>
+</div>
+</section>
+<!-- Value Card (Tahmini Değer vs Kapora) -->
+<section class="bg-gradient-to-br from-secondary-container to-surface-container rounded-[24px] p-stack-lg shadow-[0_8px_30px_rgba(30,42,90,0.08)] relative overflow-hidden">
+<!-- Decorative blur -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
+<h2 class="font-h2 text-h2 text-on-secondary-container mb-stack-lg relative z-10">Finansal Detaylar</h2>
+<div class="grid grid-cols-2 gap-stack-md relative z-10">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Tahmini Değer</p>
+<p class="font-display text-display text-primary">₺45.000</p>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Gerekli Kapora</p>
+<p class="font-display text-display text-on-surface">₺4.500</p>
+</div>
+</div>
+</section>
+<!-- Technical & Publication Requirements -->
+<section class="space-y-stack-md">
+<h2 class="font-h1 text-h1 text-on-background border-b border-surface-variant pb-stack-sm">İçerik Gereksinimleri</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg pt-stack-sm">
+<!-- Technical -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-[0_4px_20px_rgba(30,42,90,0.04)]">
+<div class="flex items-center gap-2 mb-stack-md">
+<span class="material-symbols-outlined text-primary" data-icon="videocam">videocam</span>
+<h3 class="font-h2 text-h2 text-on-background">Teknik Format</h3>
+</div>
+<ul class="space-y-3">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-sm mt-1" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Minimum 4K 60fps çözünürlük</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-sm mt-1" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Dikey format (9:16) Reels/TikTok için</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-sm mt-1" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Drone çekimi zorunludur</span>
+</li>
+</ul>
+</div>
+<!-- Publication -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-[0_4px_20px_rgba(30,42,90,0.04)]">
+<div class="flex items-center gap-2 mb-stack-md">
+<span class="material-symbols-outlined text-primary" data-icon="share">share</span>
+<h3 class="font-h2 text-h2 text-on-background">Yayın Platformları</h3>
+</div>
+<ul class="space-y-3">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-sm mt-1" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Instagram Reels (Min. 3 adet)</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-sm mt-1" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant">TikTok (Min. 2 adet)</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-sm mt-1" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Ortak gönderi daveti acenteye gönderilmeli</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Information Card (Warning Amber accent) -->
+<section class="bg-tertiary-fixed-dim/20 border border-tertiary-fixed-dim/40 rounded-xl p-stack-md flex gap-4 items-start mb-section-gap">
+<span class="material-symbols-outlined text-tertiary-container mt-1" data-icon="info">info</span>
+<div>
+<h4 class="font-button text-button text-on-tertiary-container mb-1">30 Günlük Yayın Taahhüdü</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">İçeriklerinizi turun bitiminden itibaren en geç 30 gün içerisinde yayınlamanız gerekmektedir. Zamanında yayınlanmayan içerikler, depozitonuzun iadesinde sorunlara yol açabilir.</p>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom CTA -->
+<div class="fixed bottom-0 left-0 w-full bg-surface/90 backdrop-blur-xl border-t border-surface-variant/30 p-margin-page pb-safe z-50 shadow-[0_-8px_30px_rgba(0,0,0,0.05)]">
+<div class="max-w-3xl mx-auto">
+<button class="w-full bg-primary hover:bg-primary/90 text-on-primary font-button text-button py-4 rounded-full shadow-[0_4px_14px_rgba(79,55,138,0.3)] transition-all flex items-center justify-center gap-2">
+                Başvur
+                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>

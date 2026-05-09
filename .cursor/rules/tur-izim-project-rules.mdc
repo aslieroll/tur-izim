@@ -1,0 +1,110 @@
+---
+description: Tur İzim proje kapsamı, MVP sınırları ve çalışma kuralları
+alwaysApply: true
+---
+
+# Tur İzim Proje Kuralları
+
+Bu kural Tur İzim projesinde tüm görevlerde geçerlidir.
+
+## Proje Kimliği
+
+- Tur İzim, boş kontenjanı olan (ulaşım dahil) turları; yerel acenteler ile genç UGC creator/micro-influencer adaylarını buluşturan B2B/B2C güven ve operasyon platformudur.
+- Tur İzim **değildir**: seyahat acentesi, sosyal medya uygulaması, otel pazar yeri, uçuş pazar yeri, video streaming/feed platformu, chat uygulaması.
+
+## MVP Kapsam Dışı (Hard Exclusions)
+
+İstenen geliştirme aşağıdakilerden birine giriyorsa kapsam dışı say ve kısa gerekçe ile reddet:
+
+- Social feed
+- Chat
+- Hotel booking
+- Flight booking
+- Video upload
+- Gerçek ödeme entegrasyonu
+- Otomatik sosyal medya izleme
+- Otomatik matching
+- Random assignment
+- MVP’de AI video analysis
+
+## Temel İş Kuralları
+
+- Acenta creator seçimini **manuel** yapar.
+- Sistem yalnızca **Aday Uygunluk Endeksi (AUE)** hesaplar/gösterir; karar desteğidir, otomatik karar değildir.
+- Terminoloji:
+  - `Application`: creator’ın tura başvurması.
+  - `Assignment`: acentanın creator’ı manuel seçmesi.
+  - `Match` terimini kullanma; `Assignment` kullan.
+- Creator açık onay vermeden süreç ilerlemez. Aşağıdaki checkbox’lar zorunlu kapıdır ve **asla pre-selected** olamaz:
+  1. 30 günlük paylaşım taahhüdü
+  2. Acentanın içerik kullanım izni
+  3. Post 30 günden önce kaldırılırsa tur bedeli talep koşulu
+- `MockDeposit` yaşam döngüsü:
+  - Acenta başvuruyu kabul edince: `PENDING`
+  - Creator final onayı verince: `HELD`
+  - Creator yayınlanan post URL’sini gönderince: release
+- Yayınlanan post en az 30 gün public erişilebilir kalmalıdır.
+- Post 30 gün dolmadan silinir/gizlenir/archive edilir/inaccessible olursa acenta violation bildirimi açabilir.
+- Violation incelemesi admin tarafından **manuel** yapılır.
+- MVP’de gerçek para otomatik tahsil edilmez.
+
+## Mimari ve Geliştirme Stratejisi
+
+- Önce frontend geliştirilir.
+- Frontend: Flutter + Dart.
+- Backend daha sonra: Java Spring Boot + PostgreSQL.
+- Frontend ve backend ayrı klasörlerde kalmalıdır.
+- Backend hazır değilken Flutter tarafında mock repository + API-ready interface yaklaşımı kullan.
+- Flutter widget’larında core business logic tutma.
+- Business logic gelecekte Spring Boot service layer’da olmalıdır.
+- Google Stitch yalnızca UI referansı olarak kullanılabilir; business rules veya backend mimarisini belirlemez.
+
+## Mevcut Durum Bilgisi
+
+- Aşama 0 dokümantasyonu tamam.
+- Flutter frontend shell çalışır durumda.
+- Proje kökü: `C:\dev\tur-izim`
+- Flutter proje yolu: `C:\dev\tur-izim\frontend`
+- `flutter analyze` geçiyor.
+- `flutter test` geçiyor.
+- `flutter run -d chrome` çalışıyor.
+- Aşama 2.1 router/session/model/repository interface slice debug edilip çalışır durumda.
+
+## Çalışma Şekli
+
+- Tüm projeyi tek adımda implement etme; küçük ve review edilebilir slice’lar halinde ilerle.
+- Büyük değişikliklerden önce plan çıkar.
+- Küçük implementasyonlarda Agent yaklaşımı uygula.
+- Karmaşık modüllerde önce Plan yaklaşımı uygula.
+- Build/analyze/test/runtime sorunu varsa Debug yaklaşımına geç.
+- Flutter değişikliğinden sonra sırasıyla çalıştır:
+  1. `flutter pub get`
+  2. `flutter analyze`
+  3. `flutter test`
+- `analyze` veya `test` fail ise bir sonraki adıma geçme.
+- Frontend çalıştırma komutu:
+  - `cd C:\dev\tur-izim\frontend`
+  - `flutter run -d chrome`
+
+## Kodlama Kuralları
+
+- Clean architecture ve feature-based Flutter yapı korunmalı.
+- Repository interface’leri implementation’dan önce tanımlanmalı.
+- Mock data deterministik olmalı.
+- Flutter mock data içindeki AUE değerleri widget içinde yeniden hesaplanmamalı; precomputed olmalı.
+- UI label’ları Türkçe kalmalı.
+- Teknik sınıf/dosya isimleri İngilizce kalmalı.
+- Gereksiz package ekleme.
+- Büyük/şişkin dosyalardan kaçın.
+- Tekrar eden logic üretme.
+- Açık istek yoksa backend kodu yazma.
+
+## Kaynak Dokümanlar (Source of Truth)
+
+- `docs/prd.md`
+- `docs/business-rules.md`
+- `docs/user-flows.md`
+- `docs/database-schema.md`
+- `docs/suitability-score.md`
+- `docs/api-contract.md`
+- `docs/design-system.md`
