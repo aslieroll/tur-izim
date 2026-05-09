@@ -2,51 +2,63 @@
 
 ## Varlıklar ve kavramlar (`Match` yok)
 
-- **`Application`**: İçerik üreticisi bir **tura başvurdu**.  
+- **`Application`**: İçerik üreticisi bir **tura başvurdu**.
 - **`Assignment`**: Acente başvuruyu **manuel kabul ettikten sonra** oluşan **atama**. **`Match`** tablosu veya buna paralel süreç yoktur.
 
 ## Seçim ve skor
 
-- Sistem içerik üreticisini **otomatik atamaz**, **yüksek skorluyu kendiliğinden seçmez**, **rastgele seçim yapmaz**.  
-- Tek işlev: **`Aday Uygunluk Endeksi`** hesaplama ve adayların **sıralanması**.  
+- Sistem içerik üreticisini **otomatik atamaz**, **yüksek skorluyu kendiliğinden seçmez**, **rastgele seçim yapmaz**.
+- Tek işlev: **`Aday Uygunluk Endeksi`** hesaplama ve adayların **sıralanması**.
 - Nihai karar **daima acentedir**; kota dahilinde **bir veya birden fazla** üretici seçilebilir.
 
 Formül ve bileşen ayrımı: **`docs/suitability-score.md`**.
 
 ### Tur yayımlama — yayın platformu zorunluluğu (MVP)
 
-- Bir tur **`PUBLISHED`** (yayımlanmış) statüsüne geçirilecekse, **`tour_content_requirements`** içinde **`INSTAGRAM_PUBLICATION`** veya **`TIKTOK_PUBLICATION`** türlerinden **en az biri seçili olmalıdır**.  
-- **Hiçbiri yoksa** tur MVP’de **yayımlanamaz** (taslakta kalır veya sunucu reddeder).  
+- Bir tur **`PUBLISHED`** (yayımlanmış) statüsüne geçirilecekse, **`tour_content_requirements`** içinde **`INSTAGRAM_PUBLICATION`** veya **`TIKTOK_PUBLICATION`** türlerinden **en az biri seçili olmalıdır**.
+- **Hiçbiri yoksa** tur MVP’de **yayımlanamaz** (taslakta kalır veya sunucu reddeder).
 - Bu kural, **Yayın Platform Uyumu (Y)** hesabında paydanın sıfır olmasını engeller (`suitability-score.md`).
+
+### Yurt içi / yurt dışı tur uygunluğu ve pasaport/vize kapısı
+
+- Acente tur ilanı oluştururken turu **yurt içi** veya **yurt dışı** olarak işaretlemelidir.
+- Yurt dışı turlarda acente, ilanın gerektirdiği **pasaport** ve varsa **vize** koşullarını açıkça belirtmelidir.
+- İçerik üreticisi profilinde pasaport uygunluğu ve gerekiyorsa vize uygunluğu bilgileri tutulur.
+- Creator, yurt dışı turun zorunlu pasaport/vize koşullarını karşılamıyorsa:
+  - ilan creator karşısına çıkarılmayabilir veya
+  - başvuru denemesi sunucuda reddedilir.
+- Bu kontrol **must-have başvuru kapısıdır**.
+- Pasaport/vize uygunluğu **Aday Uygunluk Endeksi skoruna dahil edilmez**.
+- Sistem uygun olmayan creator’a “düşük skor” vererek başvuru almaz; uygun değilse başvuru kapısı kapanır.
 
 ### Başvuru kabulü ve kota davranışı
 
-- Acentenin **elle kabulünde**, yalnızca seçilen **`Application`** **`ACCEPTED`** olur (**diğer bekleyen başvurular aynı anda otomatik olarak `REJECTED` yapılmak zorunda değildir**).  
+- Acentenin **elle kabulünde**, yalnızca seçilen **`Application`** **`ACCEPTED`** olur (**diğer bekleyen başvurular aynı anda otomatik olarak `REJECTED` yapılmak zorunda değildir**).
 - **`creator_quota` doldurulunca** tur **`APPLICATION_CLOSED`** durumuna çekilir; seçilmemiş kalan **`PENDING`** başvurular kota nedeniyle **`REJECTED`** işlenebilir (iş kuralı net mesaj ile).
 
 ## Ödeme ve depozito
 
-- MVP’de **gerçek tahsil yoktur**; **Stripe, iyzico, kart işlemcisi ve gerçek ödeme bağlantıları yoktur**.  
+- MVP’de **gerçek tahsil yoktur**; **Stripe, iyzico, kart işlemcisi ve gerçek ödeme bağlantıları yoktur**.
 - **`mock_deposits`** yaşam döngüsü kullanılır; tutar **`tours.deposit_amount`** ile ilişkilendirilir.
 
 ### Doğru depozito / atama sırası (**HELD**, acenteden sonra değildir)
 
-1. Acente başvuruyu **manuel kabul eder**.  
-2. **`Assignment`** oluşturulur; durum **`PENDING_DEPOSIT`**.  
-3. **`MockDeposit`** oluşturulur / güncellenir; durum **`PENDING`** (henüz blokaj yoktur).  
-4. İçerik üreticisi **son onay** ekranını görür: **30 günlük yayın taahhüdü**, **içerik kullanımına izin**, **tur bedeli ile ilgili iddia/taahhüt koşulu** (kutucuklar **ön işaretlenmez**, başvuru anıyla ayrı doğrulanır).  
-5. Üretici bu ekranı onayladığında: **`mock_deposit` → HELD**, **`assignment` → ACTIVE**.  
+1. Acente başvuruyu **manuel kabul eder**.
+2. **`Assignment`** oluşturulur; durum **`PENDING_DEPOSIT`**.
+3. **`MockDeposit`** oluşturulur / güncellenir; durum **`PENDING`** (henüz blokaj yoktur).
+4. İçerik üreticisi **son onay** ekranını görür: **30 günlük yayın taahhüdü**, **içerik kullanımına izin**, **tur bedeli ile ilgili iddia/taahhüt koşulu** (kutucuklar **ön işaretlenmez**, başvuru anıyla ayrı doğrulanır).
+5. Üretici bu ekranı onayladığında: **`mock_deposit` → HELD**, **`assignment` → ACTIVE**.
 6. **Depozitonun gerçek anlamda serbest bırakılması** ise yalnızca üretici **yayın gönderisi URL**’yi sistemde ilettikten sonra gerçekleşir (**`RELEASED_AFTER_PUBLICATION`** süreç olarak; kart ücreti çekimi yoktur).
 
 ## Teslimat aracı
 
-- Taslak içerik yalnızca **taslak bağlantı (URL)** ile (bulut bağlantısı vb.).  
+- Taslak içerik yalnızca **taslak bağlantı (URL)** ile (bulut bağlantısı vb.).
 - Uygulama içinden **dosya veya ham video yükleme** yoktur.
 
 ## Yayın ve 30 gün
 
-- Üretici, onayından sonra içeriği **kendi** sosyal hesabından yayınlar ve **URL** bildirir.  
-- Gönderi **30 gün** boyunca herkese açık kalmalıdır; erken erişilemez yapılırsa acente **ihlal bildirimi** oluşturur; **otomatik crawler yoktur**.  
+- Üretici, onayından sonra içeriği **kendi** sosyal hesabından yayınlar ve **URL** bildirir.
+- Gönderi **30 gün** boyunca herkese açık kalmalıdır; erken erişilemez yapılırsa acente **ihlal bildirimi** oluşturur; **otomatik crawler yoktur**.
 - Admin teyidine kadar hak ve kayıtlar MVP kapsamında **kayıtlı tutulur**; **otomatik hukuki takip veya karttan çekim yoktur**.
 
 ## İhlal ve talep kaydı
@@ -55,23 +67,35 @@ Formül ve bileşen ayrımı: **`docs/suitability-score.md`**.
 
 ## İçerik kullanımı ve kayıt
 
-- İçeriğin acentenin **kendi** sosyal ve tanıtım kanallarında kullanımına izin **`agreements`** kaydında işlenir.  
+- İçeriğin acentenin **kendi** sosyal ve tanıtım kanallarında kullanımına izin **`agreements`** kaydında işlenir.
 - **PDF çıktı** veya **e-imza ürünü** MVP **yoktur**.
 
 ## Revizyon
 
-- Tur başına teslim sürecinde acenteye **tek revizyon** talebi hakkı verilir (**ikinci hak yok**).  
+- Tur başına teslim sürecinde acenteye **tek revizyon** talebi hakkı verilir (**ikinci hak yok**).
 - Revizyon yalnızca **teknik gereksinim kontrol listesi** ihlalleri için kullanılabilir; “estetik beğeni” gibi öznel gerekçe **iş kuralına uygun değildir**.
 
 ## Başvuru oluşturma kapısı (skor ile karıştırılmaz)
 
-- `accepted_publication_commitment`, `accepted_content_usage_permission`, `accepted_tour_price_claim_condition` üçünün de **`true`** olması zorundadır (**biri bile `false`** ise **`application` oluşturulamaz** — sunucuda reddedilir); **bunlar Aday Uygunluk Endeksinin parçası değildir** (`suitability-score.md`).  
-- **Hiçbir onay kutusu varsayılan işaretli olamaz.**
+- `accepted_publication_commitment`, `accepted_content_usage_permission`, `accepted_tour_price_claim_condition` üçünün de **`true`** olması zorundadır.
+- Biri bile **`false`** ise **`application` oluşturulamaz** — sunucuda reddedilir.
+- Bu üç onay **Aday Uygunluk Endeksinin parçası değildir** (`suitability-score.md`).
+- **Hiçbir onay kutusu varsayılan işaretli olamaz.** Creator bu kutuları manuel olarak işaretlemelidir.
+- Yurt dışı turlarda pasaport/vize uygunluğu da ayrı bir **başvuru kapısıdır**.
+- Creator, yurt dışı turun pasaport/vize gereksinimlerini karşılamıyorsa **application oluşturulamaz**.
+- Pasaport/vize uygunluğu da skor bileşeni değildir; uygunluk kapısıdır.
 
 ## Üreticide profil vs teslim listesi (**çakışmayı önlemek için**)
 
-- **`creators`**: kalıcı yetkinlikler (**1080p kayıt, dikey video, foto çekme, ham dosya vb.**) ile sosyal URL / kamuya açık hesap bildirimi — **`database-schema.md`**.  
+- **`creators`**: kalıcı yetkinlikler (**1080p kayıt, dikey video, foto çekme, ham dosya vb.**) ile sosyal URL / kamuya açık hesap bildirimi — **`database-schema.md`**.
 - **`MIN_5_PHOTOS`, `MIN_3_LOCATIONS`, vb.** teslim sırasında **acente doğrulanan “checklist”** kapsamına girer; **profilde capability olarak tutulmaz** ve **T skoru paydasına girmez.**
+
+### Pasaport/vize profil bilgisi
+
+- Creator profilinde yurt dışı tur başvurularına uygunluk için pasaport/vize bilgileri tutulabilir.
+- Bu bilgiler içerik üretim yetkinliği değildir.
+- Pasaport/vize bilgileri **Teknik Kriter Uyumu (T)** veya **Yayın Platform Uyumu (Y)** hesabına dahil edilmez.
+- Bu bilgiler yalnızca yurt dışı turlar için **must-have uygunluk kapısı** olarak kullanılır.
 
 ## Tekrar doğrulama (atama / depozito öncesi)
 
@@ -79,15 +103,17 @@ Formül ve bileşen ayrımı: **`docs/suitability-score.md`**.
 
 ## Yönetişim ve admin
 
-- Acenteler **admin onayı** olmadan **yayımlanan tur** oluşturmaz (**onay bekleyen** durum **`PENDING_APPROVAL`** ile uyumludur).  
+- Acenteler **admin onayı** olmadan **yayımlanan tur** oluşturmaz (**onay bekleyen** durum **`PENDING_APPROVAL`** ile uyumludur).
 - Üreticide **otomatik güvenilirlik yapay zeka analizi veya görüntü analizi** yoktur.
+- Yurt dışı tur yayımlayan acenteler, pasaport/vize gerekliliklerini ilanda açıkça belirtmek zorundadır. Eksik gereklilik bilgisiyle yurt dışı tur yayımlanmamalıdır.
 
 ## Kesin olarak yoktur
 
-| Alan | MVP |
-|------|-----|
-| Otomatik eşleştirme / sistemsel atama | Hayır |
-| Sosyal akış ürünü | Hayır |
-| Uygulama içi sohbet/DM kanalı ürünü | Hayır |
-| Otel / uçuş rezervasyonu | Hayır |
-| Dosya yükleme ile teslim | Hayır (yalın URL) |
+| Alan                                                  | MVP               |
+| ----------------------------------------------------- | ----------------- |
+| Otomatik eşleştirme / sistemsel atama                 | Hayır             |
+| Sosyal akış ürünü                                     | Hayır             |
+| Uygulama içi sohbet/DM kanalı ürünü                   | Hayır             |
+| Otel / uçuş rezervasyonu                              | Hayır             |
+| Dosya yükleme ile teslim                              | Hayır (yalın URL) |
+| Pasaport/vize uygunluğu yokken yurt dışı tura başvuru | Hayır             |

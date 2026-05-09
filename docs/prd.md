@@ -24,31 +24,37 @@ Acentelerde boş kontenjan ve görünürlük ihtiyacı; üreticilerde ise **şef
 
 ## 3. Hedef Kullanıcılar
 
-| Rol | Kim | Ne yapar? |
-|-----|-----|-----------|
-| **Creator** | Genç UGC veya mikro influencer | İçerik üretir/düzenler; onaylı içeriği **kendi** sosyal hesabında yayınlar; gönderiyi **en az 30 gün** herkese açık tutar. |
-| **Agency** | Yerel tur acentesi | İlan açar, teknik gereksinim seçer, başvuranları skora göre inceler, **elle** seçer, taslağı onaylar veya **bir kez** teknik revizyon ister, yayın bağlantısını inceler, ihlal bildirir. |
-| **Admin** | Platform yöneticisi | Acente hesabını onaylar; ihlal raporlarını inceler; MVP’de güven katmanını yönetir (ileride hesap askısı vb. genişleyebilir). |
+| Rol         | Kim                            | Ne yapar?                                                                                                                                                                                |
+| ----------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Creator** | Genç UGC veya mikro influencer | İçerik üretir/düzenler; onaylı içeriği **kendi** sosyal hesabında yayınlar; gönderiyi **en az 30 gün** herkese açık tutar.                                                               |
+| **Agency**  | Yerel tur acentesi             | İlan açar, teknik gereksinim seçer, başvuranları skora göre inceler, **elle** seçer, taslağı onaylar veya **bir kez** teknik revizyon ister, yayın bağlantısını inceler, ihlal bildirir. |
+| **Admin**   | Platform yöneticisi            | Acente hesabını onaylar; ihlal raporlarını inceler; MVP’de güven katmanını yönetir (ileride hesap askısı vb. genişleyebilir).                                                            |
 
 ---
 
 ## 4. MVP Kapsamı
 
-**Pilot coğrafya:** Yalnızca **Adana / Mersin** çıkışlı turlar; varış kümeleri başlangıçta **Kapadokya** ve **Güney**; yalnızca **ulaşım dahil acente turları**.  
-**Kapsam dışı (MVP):** Ülke geneli lansman, otel/uçuş pazaryeri, ülke genelinde sınırsız tur ilanı.
+**Pilot coğrafya:** İlk fazda yalnızca **Adana / Mersin çıkışlı** ve **ulaşım dahil** acente turları önceliklidir. Başlangıç varış kümeleri **Kapadokya** ve **Güney** turlarıdır.
 
-**Uçtan uca özet:** Admin onaylı acente **ulaşım dahil** tur yayımlar → **üreticide yalnız kalıcı yetenekler/sosyal bilgiler tanımlanır** (`MIN_5_PHOTOS` gibi maddeler **`tour_content_requirements`** üzerinde kalır; teslim/onayda kontrol — bkz. `suitability-score.md`) → başvuruda üç **`accepted_*` alanı hep `true`** olmalıdır (**kapı şartı**, skor bileşeni değil) → **AUE = Teknik %75 + Yayın Platformu %25** → acente kota içinde seçer (**yalnızca seçilen `ACCEPTED`**; diğerleri anında reddedilmez; kota dolunca tur **`APPLICATION_CLOSED`**, kalanlar **`REJECTED`**) → **`Assignment`** **`PENDING_DEPOSIT`**, **`MockDeposit`** **`PENDING`** (henüz **HELD değil**) → üreticide **son taahhüt onayından** sonra **HELD / ACTIVE** → taslak **URL**; **teslim checklist** onayda → **yayındaki bağlantı ile** **`RELEASED_AFTER_PUBLICATION`** (**gerçek ödeme ve otomatik crawler yok**).
+**Tur tipi:** MVP’de sistem yalnızca **tur şirketlerinin ulaşım dahil turlarını** kapsar. Otel pazaryeri, uçak bileti, tekil konaklama veya uçuş rezervasyonu yoktur.
 
----
+**Yurt içi / yurt dışı ayrımı:** Acente tur ilanı oluştururken turu **yurt içi** veya **yurt dışı** olarak işaretlemelidir. Yurt dışı turlar MVP’de opsiyonel olarak desteklenebilir; ancak her yurt dışı turda pasaport/vize gereklilikleri açıkça belirtilmelidir.
+
+**Pasaport / vize uygunluğu:** Yurt dışı turlarda acente, ilanın gerektirdiği pasaport ve vize koşullarını belirtir. İçerik üreticisi profilinde pasaport uygunluğu ve gerekiyorsa vize uygunluğu bilgileri tutulur. Creator bu gereklilikleri karşılamıyorsa sistem ilanı göstermemeli veya başvuruyu engellemelidir. Bu kontrol **must-have uygunluk kapısıdır**, Aday Uygunluk Endeksi skorunun parçası değildir.
+
+**Kapsam dışı (MVP):** Ülke geneli lansman, sınırsız tur kategorisi, otel/uçuş pazaryeri, gerçek ödeme entegrasyonu, sosyal medya akışı, sohbet, uygulama içi video oynatma/streaming ve dosya yükleme ile içerik teslimi.
+
+## **Uçtan uca özet:** Admin onaylı acente **ulaşım dahil** tur yayımlar → tur yurt dışı ise pasaport/vize uygunluk kapıları kontrol edilir → üreticide yalnız kalıcı yetenekler/sosyal bilgiler tanımlanır (`MIN_5_PHOTOS` gibi maddeler `tour_content_requirements` üzerinde kalır; teslim/onayda kontrol edilir — bkz. `suitability-score.md`) → başvuru gönderilebilmesi için kullanıcı üç `accepted_*` kutusunu **manuel olarak işaretler**; kutular varsayılan işaretli gelmez (**kapı şartı**, skor bileşeni değil) → **AUE = Teknik %75 + Yayın Platformu %25** → acente kota içinde elle seçer (**yalnızca seçilen `ACCEPTED`**; diğerleri anında reddedilmez; kota dolunca tur **`APPLICATION_CLOSED`**, kalanlar **`REJECTED`**) → **`Assignment`** **`PENDING_DEPOSIT`**, **`MockDeposit`** **`PENDING`** (henüz **HELD değil**) → üreticide **son taahhüt onayından** sonra **HELD / ACTIVE** → taslak **URL**; **teslim checklist** onayda → **yayındaki bağlantı ile** **`RELEASED_AFTER_PUBLICATION`** (**gerçek ödeme ve otomatik crawler yok**).
 
 ## 5. MVP Dışı Bırakılanlar
 
-- En yüksek skorluyu veya rastgele adayı **sistemin ataması**; **Match** varlığı.  
-- **Stripe, iyzico**, kart ve gerçek ödeme sağlayıcıları.  
-- Uygulama içi **medya / video dosyası yükleme**; teslim ve yayın **bağlantı (URL)** ile.  
-- Sosyal medyada **otomatik izleme** veya **yapay zeka ile video analizi**.  
-- Uygulama içi **sosyal akış**, **sohbet**, **video akışı oynatıcı**.  
+- En yüksek skorluyu veya rastgele adayı **sistemin ataması**; **Match** varlığı.
+- **Stripe, iyzico**, kart ve gerçek ödeme sağlayıcıları.
+- Uygulama içi **medya / video dosyası yükleme**; teslim ve yayın **bağlantı (URL)** ile.
+- Sosyal medyada **otomatik izleme** veya **yapay zeka ile video analizi**.
+- Uygulama içi **sosyal akış**, **sohbet**, **video akışı oynatıcı**.
 - **Otel veya uçuş rezervasyonu** ve bu pazarlara ilişkin arayüz.
+- Yurt dışı tur uygunluğu için pasaport/vize şartını yok sayarak başvuru alma. Yurt dışı turda uygunluk kapısı karşılanmıyorsa creator başvuramaz.
 
 ---
 
@@ -73,12 +79,12 @@ Bkz. Bölüm 3. **`Application`** başvuru; **`Assignment`** yalnızca acente ka
 
 ## 8. İş Kuralları
 
-- **`Assignment`** kullanılır; **`Match` yoktur**.  
-- **`Application` ≠ `Assignment`**.  
-- Skor **yalnızca sıralama / karar desteği**; atlama yapısı `docs/suitability-score.md`.  
+- **`Assignment`** kullanılır; **`Match` yoktur**.
+- **`Application` ≠ `Assignment`**.
+- Skor **yalnızca sıralama / karar desteği**; atlama yapısı `docs/suitability-score.md`.
 - Acente düşük skorluyu veya sıralama dışı birini **istemesi halinde seçebilir**; sistem **en yüksek skorluyu atamaz**.
-
-Ayrıntı: **`docs/business-rules.md`**.
+- Yurt dışı turlarda pasaport/vize uygunluğu **başvuru öncesi zorunlu kapıdır**. Bu kontrol Aday Uygunluk Endeksi’ne ek puan olarak katılmaz; uygun değilse creator başvuramaz veya ilanı göremez.
+  Ayrıntı: **`docs/business-rules.md`**.
 
 ---
 
@@ -111,6 +117,7 @@ Taslak yalnızca **taslak bağlantı (URL)** ile gönderilir. **`MIN_5_PHOTOS`**
 ## 12. Aday Uygunluk Endeksi
 
 Ürün adıyla **Türkçe: Aday Uygunluk Endeksi.** **Teknik Kriter Uyumu** ve **Yayın Platform Uyumu**, başvuru onay kutucuklarıyla **birleştirilmez** (**onlar kapıdır**). Bilgi kümesinin tamamı: **`docs/suitability-score.md`**.
+Pasaport/vize uygunluğu, başvuru checkbox üçlüsü gibi **skor bileşeni değildir**. Bu bilgiler yalnızca yurt dışı turlar için başvuru uygunluk kapısıdır.
 
 ---
 
@@ -128,18 +135,18 @@ Google **Stitch** yalnızca **tasarım referansı** için kullanılır; **backen
 
 ## 15. Başarı Kriterleri
 
-- Pilot parametreleriyle bir **tur** yayınlanır; başvurular **endekse göre** sıralanır; kota dahilinde **elle** seçim ve **Assignment** oluşur.  
-- **URL ile taslak** ve **teknik revizyon** kuralına uygun uçtan uca teslim ve yayın.  
-- Yayın bağlantısı sonrası **mock depozito serbest**, ardından 30 günlük izlemeye geçiş.  
+- Pilot parametreleriyle bir **tur** yayınlanır; başvurular **endekse göre** sıralanır; kota dahilinde **elle** seçim ve **Assignment** oluşur.
+- **URL ile taslak** ve **teknik revizyon** kuralına uygun uçtan uca teslim ve yayın.
+- Yayın bağlantısı sonrası **mock depozito serbest**, ardından 30 günlük izlemeye geçiş.
 - Dokümantasyon ile **PostgreSQL taslağı** ve **REST sözleşmesi tutarlı** kalır.
 
 ---
 
 ## 16. Riskler ve Kısıtlar
 
-- Elle doğrulama ve manuel bildirimlere dayalı **güven** modeli (**otomatik crawler yok**).  
-- Teknik ve hukuki şartların kullanıcıya net gösterimi ihtiyacı.  
-- Önden Flutter + mock yaklaşımında **iş mantığının tekrarsızlığı**: UI’ya mock oran yazılmamalıdır (çift doğrulama riski).  
+- Elle doğrulama ve manuel bildirimlere dayalı **güven** modeli (**otomatik crawler yok**).
+- Teknik ve hukuki şartların kullanıcıya net gösterimi ihtiyacı.
+- Önden Flutter + mock yaklaşımında **iş mantığının tekrarsızlığı**: UI’ya mock oran yazılmamalıdır (çift doğrulama riski).
 - Pilotta **dar coğrafya** operasyon geri bildirimini sınırlar.
 
 ---
@@ -152,13 +159,13 @@ Google **Stitch** yalnızca **tasarım referansı** için kullanılır; **backen
 
 ## İlgili dokümanlar
 
-| Dosya | İçerik |
-|-------|--------|
-| `product-scope.md` | Kısa ürün kapsamı |
-| `business-rules.md` | İş kuralları maddeleri |
-| `user-flows.md` | Rol akışları |
-| `suitability-score.md` | Aday Uygunluk Endeksi |
-| `database-schema.md` | Veritabanı taslağı |
-| `api-contract.md` | REST uçları (taslak) |
-| `design-system.md` | Flutter arayüz ilkeleri |
-| `cursor-prompts.md` | Cursor için İngilizce şablonlar |
+| Dosya                  | İçerik                          |
+| ---------------------- | ------------------------------- |
+| `product-scope.md`     | Kısa ürün kapsamı               |
+| `business-rules.md`    | İş kuralları maddeleri          |
+| `user-flows.md`        | Rol akışları                    |
+| `suitability-score.md` | Aday Uygunluk Endeksi           |
+| `database-schema.md`   | Veritabanı taslağı              |
+| `api-contract.md`      | REST uçları (taslak)            |
+| `design-system.md`     | Flutter arayüz ilkeleri         |
+| `cursor-prompts.md`    | Cursor için İngilizce şablonlar |
