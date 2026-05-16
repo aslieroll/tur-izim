@@ -4,9 +4,17 @@ Tur İzim, boş **ulaşım dahil tur koltuklarına** sahip yerel tur acenteleri 
 
 Platform; tarafların güvenli şekilde anlaşmasını, içerik teslimini ve operasyonel sürecin yönetimini kolaylaştırır.
 
+<<<<<<< HEAD
 > Tur İzim bir seyahat acentesi değildir.  
 > Sosyal medya platformu değildir.  
 > Otel veya uçak bileti satışı yapmaz.
+=======
+| Dizin | Rol |
+|--------|-----|
+| `backend/` | Java Spring Boot REST API (PostgreSQL) |
+| `frontend/` | Flutter / Dart, mobil öncelikli uygulama |
+| `prodocs/` | Türkçe ürün ve teknik dokümantasyon (PRD, plan, ilerleme, tasarım sistemi, API, şema, akışlar) |
+>>>>>>> 2511fe9 (Backend temel yapısını ve prodocs teslim dokümanlarını düzenle)
 
 ---
 
@@ -22,6 +30,7 @@ Platform; tarafların güvenli şekilde anlaşmasını, içerik teslimini ve ope
 - Mikro influencer’lar
 - Seyahat içerikleri üretebilen genç kullanıcılar
 
+<<<<<<< HEAD
 ---
 
 # MVP Scope
@@ -99,17 +108,55 @@ Platform; tarafların güvenli şekilde anlaşmasını, içerik teslimini ve ope
 ## PostgreSQL
 
 Development database can be started with:
+=======
+## Yerel PostgreSQL (Docker Compose)
+
+Docker yüklüyse depo kökünden yalnızca veritabanı servisini başlatın:
+>>>>>>> 2511fe9 (Backend temel yapısını ve prodocs teslim dokümanlarını düzenle)
 
 ```bash
-docker compose up -d
+docker compose up -d postgres
 ```
 
+<<<<<<< HEAD
 Spring Boot configuration should match the credentials defined in:
+=======
+Durdurma (konteyneri durdurur; named volume ile veri kalır):
+
+```bash
+docker compose stop postgres
+```
+
+Konteyneri kaldırıp ağları temizlemek (volume’ü silmez):
+
+```bash
+docker compose down
+```
+
+**Gizlilik:** `POSTGRES_PASSWORD`, API anahtarları veya üretim sırları **asla** Git’e eklenmemelidir. Ortam değişkenleri için kökteki `.env.example` şablonuna bakın; kişisel `.env` dosyası oluşturun (`.gitignore` ile hariç tutulur). Üretimde gerçek sırlar yapılandırma veya gizli yönetim araçları ile verilir.
+
+**Backend + PostgreSQL (PowerShell):**
+
+```powershell
+docker compose up -d postgres
+
+cd backend
+$env:DB_URL="jdbc:postgresql://localhost:5432/turizim"
+$env:DB_USERNAME="turizim"
+$env:DB_PASSWORD="turizim_dev_password"
+.\mvnw.cmd spring-boot:run
+```
+
+JDK için `JAVA_HOME` ayarlı değilse `mvnw` hata verir; yolunu kendi kurulumunuza göre verin.
+
+Ayrıntılı backend adımları: `backend/README.md`.
+>>>>>>> 2511fe9 (Backend temel yapısını ve prodocs teslim dokümanlarını düzenle)
 
 ```text
 docs/database-schema.md
 ```
 
+<<<<<<< HEAD
 ---
 
 # Core Business Rules
@@ -154,3 +201,27 @@ The MVP intentionally avoids:
 - automatic moderation systems.
 
 The primary goal is validating the marketplace and operational workflow between local tour agencies and university student creators.
+=======
+**Birincil kaynak:** `prodocs/` klasörü.
+
+| Dosya | Açıklama |
+|--------|-----------|
+| `prodocs/PRD.md` | Ürün gereksinimleri |
+| `prodocs/tech-stack.md` | Teknoloji yığını |
+| `prodocs/Plan.md` | Yürütme planı (özet) |
+| `prodocs/DesignSystem.md` | Tasarım sistemi (Flutter) |
+| `prodocs/Progress.md` | İlerleme özeti |
+| `prodocs/business-rules.md` | İş kuralları |
+| `prodocs/user-flows.md` | Kullanıcı akışları |
+| `prodocs/product-scope.md` | Ürün kapsamı özeti |
+| `prodocs/api-contract.md` | API sözleşmesi taslağı |
+| `prodocs/database-schema.md` | Veri modeli |
+| `prodocs/suitability-score.md` | Aday Uygunluk Endeksi (AUE) |
+| `prodocs/premium-travel-pass-ui-guidelines.md` | UI kılavuzu |
+| `prodocs/stitch-export-screen-map.md` | Stitch ekran eşlemesi |
+| `prodocs/cursor-prompts.md` | Cursor teknik prompt şablonları |
+
+Klasör indeksi: `prodocs/README.md`.
+
+> **Not:** Kök `docs/` dizininde yalnızca sınırlı arşiv dosyaları kalmış olabilir; **tam doküman seti `prodocs/` altındadır.**
+>>>>>>> 2511fe9 (Backend temel yapısını ve prodocs teslim dokümanlarını düzenle)

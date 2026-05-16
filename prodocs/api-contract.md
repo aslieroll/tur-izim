@@ -2,7 +2,7 @@
 
 **Backend:** Java **Spring Boot**, **PostgreSQL**. Temel kök `/api`; sürüm örn. `/api/v1` uygulanırken eklenir. JSON gövdeler varsayılarak.
 
-**Katmanlı mimari:** `Controller → Service → Repository`. **İş kuralları** (skor hesapları, depozito geçişleri, tek revizyon, `assignment` oluşturma, ihlalin teyidi) **serviste** bulunmalıdır (`prd.md`, `business-rules.md` uyumu).
+**Katmanlı mimari:** `Controller → Service → Repository`. **İş kuralları** (skor hesapları, depozito geçişleri, tek revizyon, `assignment` oluşturma, ihlalin teyidi) **serviste** bulunmalıdır (`PRD.md`, `business-rules.md` uyumu).
 
 Tur İzim’de **`Match`** kaynak ucu **yoktur**; atanmışlık **`assignments`** üzerinden yönetilir.
 

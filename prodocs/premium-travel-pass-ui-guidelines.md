@@ -4,7 +4,7 @@ Bu rehber, Tur İzim MVP frontend ekranlarının Google Stitch ile üretilen **P
 
 Bu dosya yalnızca **görsel dil ve UI uygulama rehberi**dir. İş kurallarında ana kaynaklar:
 
-- `prd.md`
+- `PRD.md`
 - `business-rules.md`
 - `user-flows.md`
 - `database-schema.md`
@@ -19,7 +19,7 @@ Kaynak görsel referanslar:
 
 - `stitch-export/stitch_tur_izim_premium_pass`
 - `stitch-export/stitch_tur_izim_premium_pass/DESIGN.md`
-- `docs/stitch-export-screen-map.md`
+- `stitch-export-screen-map.md`
 
 ---
 
@@ -704,7 +704,7 @@ Stitch HTML dosyaları Flutter’a kopyalanmaz.
 
 Doğru yaklaşım:
 
-1. `docs/stitch-export-screen-map.md` dosyasından hedef ekran bulunur.
+1. `stitch-export-screen-map.md` dosyasından hedef ekran bulunur.
 2. İlgili Stitch HTML ve screen görseli görsel referans olarak incelenir.
 3. Mevcut Flutter route/session/mock repository yapısı korunur.
 4. Ekran mevcut Flutter widget mimarisine uygun şekilde yeniden oluşturulur.

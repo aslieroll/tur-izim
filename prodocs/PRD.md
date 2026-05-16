@@ -68,7 +68,7 @@ Bkz. Bölüm 3. **`Application`** başvuru; **`Assignment`** yalnızca acente ka
 
 ## 7. Temel Kullanıcı Akışları
 
-Özet sıra için `docs/user-flows.md`. PRD doğruluğunda kritik adımlar:
+Özet sıra için `user-flows.md`. PRD doğruluğunda kritik adımlar:
 
 1–3. Kayıtlar ve admin onayı; yayın için acente **onaylı** olmalı.  
 10. Başvuruda üç onay kutusu (**30 gün yayın**, **içerik kullanımı**, **tur fiyatı iddia koşulu**) — **varsayılan işaretlenmez**.  
@@ -83,10 +83,10 @@ Bkz. Bölüm 3. **`Application`** başvuru; **`Assignment`** yalnızca acente ka
 
 - **`Assignment`** kullanılır; **`Match` yoktur**.
 - **`Application` ≠ `Assignment`**.
-- Skor **yalnızca sıralama / karar desteği**; atlama yapısı `docs/suitability-score.md`.
+- Skor **yalnızca sıralama / karar desteği**; atlama yapısı `suitability-score.md`.
 - Acente düşük skorluyu veya sıralama dışı birini **istemesi halinde seçebilir**; sistem **en yüksek skorluyu atamaz**.
 - Yurt dışı turlarda pasaport/vize uygunluğu **başvuru öncesi zorunlu kapıdır**. Bu kontrol Aday Uygunluk Endeksi’ne ek puan olarak katılmaz; uygun değilse creator başvuramaz veya ilanı göremez.
-  Ayrıntı: **`docs/business-rules.md`**.
+  Ayrıntı: **`business-rules.md`**.
 
 ---
 
@@ -129,7 +129,7 @@ Creator tarafı hedef kullanıcı **üniversite öğrencisi içerik üreticisi**
 
 ## 12. Aday Uygunluk Endeksi
 
-Ürün adıyla **Türkçe: Aday Uygunluk Endeksi.** **Teknik Kriter Uyumu** ve **Yayın Platform Uyumu**, başvuru onay kutucuklarıyla **birleştirilmez** (**onlar kapıdır**). Bilgi kümesinin tamamı: **`docs/suitability-score.md`**.
+Ürün adıyla **Türkçe: Aday Uygunluk Endeksi.** **Teknik Kriter Uyumu** ve **Yayın Platform Uyumu**, başvuru onay kutucuklarıyla **birleştirilmez** (**onlar kapıdır**). Bilgi kümesinin tamamı: **`suitability-score.md`**.
 Pasaport/vize uygunluğu, başvuru checkbox üçlüsü gibi **skor bileşeni değildir**. Bu bilgiler yalnızca yurt dışı turlar için başvuru uygunluk kapısıdır.
 
 ---
@@ -180,5 +180,5 @@ Google **Stitch** yalnızca **tasarım referansı** için kullanılır; **backen
 | `suitability-score.md` | Aday Uygunluk Endeksi           |
 | `database-schema.md`   | Veritabanı taslağı              |
 | `api-contract.md`      | REST uçları (taslak)            |
-| `design-system.md`     | Flutter arayüz ilkeleri         |
+| `DesignSystem.md`        | Flutter arayüz ilkeleri         |
 | `cursor-prompts.md`    | Cursor için İngilizce şablonlar |

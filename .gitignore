@@ -1,0 +1,7 @@
+# Yerel sırlar ve geçici dosyalar — asla commit etmeyin
+.env
+
+# Günlük / hata ayıklama çıktıları
+*.log
+debug-*.log
+logs/

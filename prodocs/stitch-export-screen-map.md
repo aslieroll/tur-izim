@@ -12,13 +12,13 @@ stitch-export/stitch_tur_izim_premium_pass
 
 İş kuralı kaynakları:
 
-- `prd.md`
+- `PRD.md`
 - `business-rules.md`
 - `user-flows.md`
 - `database-schema.md`
 - `api-contract.md`
 - `suitability-score.md`
-- `design-system.md`
+- `DesignSystem.md`
 - `premium-travel-pass-ui-guidelines.md`
 
 ---

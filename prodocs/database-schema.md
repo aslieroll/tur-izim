@@ -8,7 +8,7 @@
 
 - **`Match` tablosu yoktur.**
 - **`applications`:** İçerik üreticisinin bir tura **başvurusu** (aday kaydı).
-- **`assignments`:** Acentenin başvuruyu **elle kabul etmesinden** sonra oluşturulan **atama**. Depozitonun **HELD** olması, üreticinin **atama/deposit son onayında** oluşur (akış **`docs/prd.md`**, **`user-flows.md`** ile uyumlu).
+- **`assignments`:** Acentenin başvuruyu **elle kabul etmesinden** sonra oluşturulan **atama**. Depozitonun **HELD** olması, üreticinin **atama/deposit son onayında** oluşur (akış **`PRD.md`**, **`user-flows.md`** ile uyumlu).
 
 ### Tur gereksinimleri: profil uyumu ile teslim listesi karıştırılmaz
 

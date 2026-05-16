@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: tur-izim-backend
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/turizim}
+    username: ${DB_USERNAME:turizim}
+    password: ${DB_PASSWORD:turizim_dev_password}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: ${SERVER_PORT:8080}

@@ -2,7 +2,7 @@
 
 Dokümantasyon Türkçe; Flutter tema sınıfları, component adları ve teknik token isimleri İngilizce kalabilir.
 
-Bu dosya Tur İzim Flutter arayüzünün temel UI kurallarını belirler. Detaylı Premium Travel Pass görsel yönü için `premium-travel-pass-ui-guidelines.md`, ürün/iş kuralı sınırları için `prd.md` ve `business-rules.md` kaynak alınır.
+Bu dosya Tur İzim Flutter arayüzünün temel UI kurallarını belirler. Detaylı Premium Travel Pass görsel yönü için `premium-travel-pass-ui-guidelines.md`, ürün/iş kuralı sınırları için `PRD.md` ve `business-rules.md` kaynak alınır.
 
 ---
 
@@ -21,13 +21,13 @@ Bu dosya Tur İzim Flutter arayüzünün temel UI kurallarını belirler. Detayl
 
 UI implementasyonunda kaynak önceliği şu sıradadır:
 
-1. `prd.md`
+1. `PRD.md`
 2. `business-rules.md`
 3. `user-flows.md`
 4. `database-schema.md`
 5. `api-contract.md`
 6. `suitability-score.md`
-7. `design-system.md`
+7. `DesignSystem.md`
 8. `premium-travel-pass-ui-guidelines.md`
 9. `stitch-export-screen-map.md`
 10. `stitch-export` HTML ve görselleri

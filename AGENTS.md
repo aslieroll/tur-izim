@@ -115,10 +115,12 @@ Frontend çalıştırma:
 
 Karar çelişkisi olduğunda önce aşağıdaki dokümanları esas al:
 
-- `docs/prd.md`
-- `docs/business-rules.md`
-- `docs/user-flows.md`
-- `docs/database-schema.md`
-- `docs/suitability-score.md`
-- `docs/api-contract.md`
-- `docs/design-system.md`
+- `prodocs/PRD.md`
+- `prodocs/business-rules.md`
+- `prodocs/user-flows.md`
+- `prodocs/database-schema.md`
+- `prodocs/suitability-score.md`
+- `prodocs/api-contract.md`
+- `prodocs/DesignSystem.md`
+
+Yürütme planı, teknoloji özeti ve ilerleme: `prodocs/Plan.md`, `prodocs/tech-stack.md`, `prodocs/Progress.md`. İndeks: `prodocs/README.md`.

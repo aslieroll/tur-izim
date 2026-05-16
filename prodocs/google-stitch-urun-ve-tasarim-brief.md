@@ -1,6 +1,6 @@
 # Tur İzim — Google Stitch için ürün ve arayüz brief’i
 
-Bu dosya **sıfırdan** mobil uygulama ve web arayüzü tasarımı üretmek için hazırlanmıştır. Kaynak: `docs/prd.md` ve `docs/design-system.md`. **Stitch yalnızca tasarım referansıdır**; iş kurallarının veya backend’in tek kaynağı değildir.
+Bu dosya **sıfırdan** mobil uygulama ve web arayüzü tasarımı üretmek için hazırlanmıştır. Kaynak: `PRD.md` ve `DesignSystem.md`. **Stitch yalnızca tasarım referansıdır**; iş kurallarının veya backend’in tek kaynağı değildir.
 
 ---
 
@@ -185,9 +185,9 @@ Her prompt’un sonuna ekle: *“Türkçe UI metinleri. Sosyal feed, chat, otel/
 
 ## 13) İlgili dokümanlar (iş kuralı derinliği için — Stitch dışı)
 
-Stitch tasarımını kod veya backend’e bağlarken şu dosyalar kaynak olur: `docs/business-rules.md`, `docs/user-flows.md`, `docs/suitability-score.md`, `docs/database-schema.md`, `docs/api-contract.md`.
+Stitch tasarımını kod veya backend’e bağlarken şu dosyalar kaynak olur: `business-rules.md`, `user-flows.md`, `suitability-score.md`, `database-schema.md`, `api-contract.md`.
 
 ---
 
-**Dosya adı önerisi projede:** `docs/google-stitch-urun-ve-tasarim-brief.md`  
-**Versiyon:** Şehir bazlı MVP ile hizalı; PRD ve `design-system.md` ile senkron.
+**Dosya konumu (bu repo):** `prodocs/google-stitch-urun-ve-tasarim-brief.md`  
+**Versiyon:** Şehir bazlı MVP ile hizalı; `PRD.md` ve `DesignSystem.md` ile senkron.

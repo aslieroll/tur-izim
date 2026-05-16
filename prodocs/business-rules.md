@@ -23,7 +23,7 @@ Creator tarafı hedef kullanıcı **üniversite öğrencisi içerik üreticisi**
 - Tek işlev: **`Aday Uygunluk Endeksi`** hesaplama ve adayların **sıralanması**.
 - Nihai karar **daima acentedir**; kota dahilinde **bir veya birden fazla** üretici seçilebilir.
 
-Formül ve bileşen ayrımı: **`docs/suitability-score.md`**.
+Formül ve bileşen ayrımı: **`suitability-score.md`**.
 
 ### Tur yayımlama — yayın platformu zorunluluğu (MVP)
 

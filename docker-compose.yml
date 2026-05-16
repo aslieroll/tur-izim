@@ -1,11 +1,11 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:16
     container_name: tur-izim-postgres
     environment:
       POSTGRES_DB: turizim
       POSTGRES_USER: turizim
-      POSTGRES_PASSWORD: turizim_dev
+      POSTGRES_PASSWORD: turizim_dev_password
     ports:
       - "5432:5432"
     volumes:
