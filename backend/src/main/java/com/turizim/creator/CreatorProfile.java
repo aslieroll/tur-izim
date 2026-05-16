@@ -2,10 +2,14 @@ package com.turizim.creator;
 
 import com.turizim.common.domain.BaseEntity;
 import com.turizim.domain.enums.PassportType;
+import com.turizim.user.UserAccount;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -45,6 +49,18 @@ public class CreatorProfile extends BaseEntity {
 
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_account_id", unique = true)
+    private UserAccount userAccount;
+
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
+    }
 
     public String getFullName() {
         return fullName;

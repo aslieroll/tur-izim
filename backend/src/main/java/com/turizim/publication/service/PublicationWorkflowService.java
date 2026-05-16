@@ -5,6 +5,9 @@ import com.turizim.assignment.AssignmentRepository;
 import com.turizim.common.exception.BusinessRuleException;
 import com.turizim.domain.enums.AssignmentStatus;
 import com.turizim.domain.enums.PublicationStatus;
+import com.turizim.domain.enums.UserRole;
+import com.turizim.security.SecurityContextSupport;
+import com.turizim.security.TurIzimPrincipal;
 import com.turizim.publication.PublicationProof;
 import com.turizim.publication.PublicationProofRepository;
 import com.turizim.publication.dto.PublicationProofRequest;
@@ -31,8 +34,10 @@ public class PublicationWorkflowService {
     @Transactional
     public PublicationProofResponse upsert(UUID assignmentId, PublicationProofRequest request) {
         Assignment assignment = assignmentRepository
-                .findById(assignmentId)
+                .findDetailById(assignmentId)
                 .orElseThrow(() -> new BusinessRuleException(HttpStatus.NOT_FOUND.value(), "Atama bulunamadı."));
+        SecurityContextSupport.currentUser()
+                .ifPresent(actor -> enforceCreatorPublisher(actor, assignment));
         if (assignment.getStatus() != AssignmentStatus.CONFIRMED) {
             throw new BusinessRuleException(
                     HttpStatus.BAD_REQUEST.value(), "Yayın kanıtı yalnız onaylanmış atamalarda gönderilir.");
@@ -63,7 +68,34 @@ public class PublicationWorkflowService {
         PublicationProof proof = publicationProofRepository
                 .findByAssignment_Id(assignmentId)
                 .orElseThrow(() -> new BusinessRuleException(HttpStatus.NOT_FOUND.value(), "Yayın kanıtı yok."));
+        Assignment a = assignmentRepository
+                .findDetailById(assignmentId)
+                .orElseThrow(() -> new BusinessRuleException(HttpStatus.NOT_FOUND.value(), "Atama bulunamadı."));
+        SecurityContextSupport.currentUser().ifPresent(actor -> enforcePublicationViewer(actor, a));
         return toResponse(proof);
+    }
+
+    private static void enforceCreatorPublisher(TurIzimPrincipal actor, Assignment assignment) {
+        if (actor.getRole() != UserRole.CREATOR) {
+            throw new BusinessRuleException(HttpStatus.FORBIDDEN.value(), "Yayın kanıtı yalnız üretici tarafından gönderilebilir.");
+        }
+        if (actor.getCreatorProfileId() == null
+                || !actor.getCreatorProfileId().equals(assignment.getCreator().getId())) {
+            throw new BusinessRuleException(HttpStatus.FORBIDDEN.value(), "Bu atama için yayın kanıtı gönderemezsiniz.");
+        }
+    }
+
+    private void enforcePublicationViewer(TurIzimPrincipal actor, Assignment a) {
+        if (actor.getRole() == UserRole.CREATOR) {
+            if (actor.getCreatorProfileId() == null
+                    || !actor.getCreatorProfileId().equals(a.getCreator().getId())) {
+                throw new BusinessRuleException(HttpStatus.FORBIDDEN.value(), "Bu yayın kanıtını görüntüleme yetkiniz yok.");
+            }
+        } else if (actor.getRole() == UserRole.AGENCY) {
+            if (actor.getAgencyId() == null || !actor.getAgencyId().equals(a.getTour().getAgency().getId())) {
+                throw new BusinessRuleException(HttpStatus.FORBIDDEN.value(), "Bu yayın kanıtını görüntüleme yetkiniz yok.");
+            }
+        }
     }
 
     private PublicationProofResponse toResponse(PublicationProof p) {

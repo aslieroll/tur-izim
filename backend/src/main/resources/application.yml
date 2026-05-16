@@ -21,3 +21,9 @@ server:
 # Yerel: boş DB'de DevDataLoader çalışır. Test profili kapalı.
 app:
   dev-seed: ${APP_DEV_SEED:true}
+  # TODO(Flutter): Authorization: Bearer <JWT>; false iken korumalı uçlar 401/403 döner.
+  security:
+    legacy-open-api: ${APP_LEGACY_OPEN_API:true}
+    jwt:
+      secret: ${JWT_SECRET:01234567890123456789012345678901234567890123456789012345678901234567890123456789012}
+      expiration-ms: ${JWT_EXP_MS:3600000}

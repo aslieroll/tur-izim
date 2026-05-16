@@ -4,7 +4,10 @@ import com.turizim.agency.Agency;
 import com.turizim.agency.AgencyRepository;
 import com.turizim.common.exception.BusinessRuleException;
 import com.turizim.domain.enums.TourStatus;
+import com.turizim.domain.enums.UserRole;
 import com.turizim.domain.service.TourCreatorEligibilityService;
+import com.turizim.security.SecurityContextSupport;
+import com.turizim.security.TurIzimPrincipal;
 import com.turizim.tour.Tour;
 import com.turizim.tour.TourRepository;
 import com.turizim.tour.dto.CreateTourRequest;
@@ -52,6 +55,8 @@ public class TourService {
 
     @Transactional
     public TourSummaryResponse create(CreateTourRequest request) {
+        SecurityContextSupport.currentUser()
+                .ifPresent(actor -> enforceAgencyMatchesCreateRequest(actor, request.agencyId()));
         Agency agency = agencyRepository
                 .findById(request.agencyId())
                 .orElseThrow(() -> new BusinessRuleException(HttpStatus.BAD_REQUEST.value(), "Acente bulunamadı."));
@@ -91,9 +96,33 @@ public class TourService {
         if (!agencyRepository.existsById(agencyId)) {
             throw new BusinessRuleException(HttpStatus.NOT_FOUND.value(), "Acente bulunamadı.");
         }
+        SecurityContextSupport.currentUser().ifPresent(actor -> enforceAgencyPath(actor, agencyId));
         return tourRepository.findByAgencyIdWithAgency(agencyId).stream()
                 .map(this::toSummary)
                 .toList();
+    }
+
+    private static void enforceAgencyMatchesCreateRequest(TurIzimPrincipal actor, UUID agencyIdInBody) {
+        if (actor.getRole() != UserRole.AGENCY) {
+            throw new BusinessRuleException(HttpStatus.FORBIDDEN.value(), "Tur oluşturma yalnız acente hesabıyla yapılabilir.");
+        }
+        if (actor.getAgencyId() == null || !actor.getAgencyId().equals(agencyIdInBody)) {
+            throw new BusinessRuleException(
+                    HttpStatus.FORBIDDEN.value(), "İstek gövdesindeki acente kimliği oturumla eşleşmiyor.");
+        }
+    }
+
+    private static void enforceAgencyPath(TurIzimPrincipal actor, UUID agencyIdInPath) {
+        if (actor.getRole() == UserRole.CREATOR) {
+            throw new BusinessRuleException(
+                    HttpStatus.FORBIDDEN.value(), "Acente turları yalnız acente hesabıyla listelenebilir.");
+        }
+        if (actor.getRole() != UserRole.AGENCY) {
+            return;
+        }
+        if (actor.getAgencyId() == null || !actor.getAgencyId().equals(agencyIdInPath)) {
+            throw new BusinessRuleException(HttpStatus.FORBIDDEN.value(), "Bu acenteye ait turları listeleyemezsiniz.");
+        }
     }
 
     private void validateDates(LocalDate start, LocalDate end) {

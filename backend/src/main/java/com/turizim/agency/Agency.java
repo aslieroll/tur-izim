@@ -2,10 +2,14 @@ package com.turizim.agency;
 
 import com.turizim.common.domain.BaseEntity;
 import com.turizim.domain.enums.AgencyStatus;
+import com.turizim.user.UserAccount;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,6 +31,18 @@ public class Agency extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 32)
     private AgencyStatus status = AgencyStatus.PENDING_APPROVAL;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_account_id", unique = true)
+    private UserAccount userAccount;
+
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
+    }
 
     public String getName() {
         return name;

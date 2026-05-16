@@ -8,10 +8,14 @@ import com.turizim.domain.enums.AgencyStatus;
 import com.turizim.domain.enums.PassportType;
 import com.turizim.domain.enums.TourStatus;
 import com.turizim.domain.enums.TourType;
+import com.turizim.domain.enums.UserRole;
 import com.turizim.tour.Tour;
 import com.turizim.tour.TourRepository;
+import com.turizim.user.UserAccount;
+import com.turizim.user.UserAccountRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -19,6 +23,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,17 +38,25 @@ public class DevDataLoader implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DevDataLoader.class);
 
+    private static final String DEMO_PASSWORD = "Demo123!";
+
     private final AgencyRepository agencyRepository;
     private final CreatorProfileRepository creatorProfileRepository;
     private final TourRepository tourRepository;
+    private final UserAccountRepository userAccountRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public DevDataLoader(
             AgencyRepository agencyRepository,
             CreatorProfileRepository creatorProfileRepository,
-            TourRepository tourRepository) {
+            TourRepository tourRepository,
+            UserAccountRepository userAccountRepository,
+            PasswordEncoder passwordEncoder) {
         this.agencyRepository = agencyRepository;
         this.creatorProfileRepository = creatorProfileRepository;
         this.tourRepository = tourRepository;
+        this.userAccountRepository = userAccountRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -60,6 +73,9 @@ public class DevDataLoader implements ApplicationRunner {
         agency.setPhone("+90 322 000 00 00");
         agency.setCity("Adana");
         agency.setStatus(AgencyStatus.APPROVED);
+        UserAccount agencyUser = buildUserAccount(agency.getName(), agency.getContactEmail(), UserRole.AGENCY);
+        agencyUser = userAccountRepository.save(agencyUser);
+        agency.setUserAccount(agencyUser);
         agency = agencyRepository.save(agency);
 
         CreatorProfile c1 = new CreatorProfile();
@@ -73,6 +89,9 @@ public class DevDataLoader implements ApplicationRunner {
         c1.setHasUsVisa(false);
         c1.setHasUkVisa(false);
         c1.setHasOtherValidVisa(false);
+        UserAccount u1 = buildUserAccount(c1.getFullName(), c1.getEmail(), UserRole.CREATOR);
+        u1 = userAccountRepository.save(u1);
+        c1.setUserAccount(u1);
         c1 = creatorProfileRepository.save(c1);
 
         CreatorProfile c2 = new CreatorProfile();
@@ -86,6 +105,9 @@ public class DevDataLoader implements ApplicationRunner {
         c2.setHasUsVisa(false);
         c2.setHasUkVisa(false);
         c2.setHasOtherValidVisa(false);
+        UserAccount u2 = buildUserAccount(c2.getFullName(), c2.getEmail(), UserRole.CREATOR);
+        u2 = userAccountRepository.save(u2);
+        c2.setUserAccount(u2);
         c2 = creatorProfileRepository.save(c2);
 
         Tour t1 = buildTour(
@@ -146,7 +168,22 @@ public class DevDataLoader implements ApplicationRunner {
         tourRepository.save(t2);
         tourRepository.save(t3);
 
-        log.warn("DEV DEMO yükleme tamam — acenteId={} creatorId1={} creatorId2={}", agency.getId(), c1.getId(), c2.getId());
+        log.warn(
+                "DEV DEMO yükleme tamam — acenteId={} creatorId1={} creatorId2={} (demo giriş şifresi: {})",
+                agency.getId(),
+                c1.getId(),
+                c2.getId(),
+                DEMO_PASSWORD);
+    }
+
+    private UserAccount buildUserAccount(String fullName, String email, UserRole role) {
+        UserAccount u = new UserAccount();
+        u.setFullName(fullName);
+        u.setEmail(email.trim().toLowerCase(Locale.ROOT));
+        u.setPasswordHash(passwordEncoder.encode(DEMO_PASSWORD));
+        u.setRole(role);
+        u.setActive(true);
+        return u;
     }
 
     private static Tour buildTour(
