@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:tur_izim/app/router.dart';
 import 'package:tur_izim/app/tur_izim_scope.dart';
+import 'package:tur_izim/core/api/api_exception.dart';
 import 'package:tur_izim/core/constants/app_constants.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
 import 'package:tur_izim/core/errors/app_exception.dart';
@@ -94,7 +95,7 @@ class _CreatorApplicationFormScreenState
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Başvuru mock olarak kaydedildi.')),
+        const SnackBar(content: Text('Başvurunuz kaydedildi.')),
       );
       context.go(AppRoutes.creatorApplications);
     } on AppException catch (e) {
@@ -102,6 +103,11 @@ class _CreatorApplicationFormScreenState
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(e.message)));
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.userMessage)),
+      );
     } finally {
       if (mounted) setState(() => _submitting = false);
     }

@@ -5,6 +5,8 @@ import 'package:tur_izim/app/router.dart';
 import 'package:tur_izim/app/tur_izim_scope.dart';
 import 'package:tur_izim/core/constants/app_constants.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
+import 'package:tur_izim/core/errors/user_error_message.dart';
+import 'package:tur_izim/features/agency_dashboard/domain/agency_board_snapshot.dart';
 import 'package:tur_izim/shared/models/tour_scope.dart';
 import 'package:tur_izim/shared/models/tour_summary.dart';
 import 'package:tur_izim/shared/models/tour_status.dart';
@@ -22,15 +24,38 @@ import 'package:tur_izim/shared/widgets/tour_visual_header.dart';
 String _formatTourDate(DateTime d) =>
     '${d.day.toString().padLeft(2, '0')}.${d.month.toString().padLeft(2, '0')}.${d.year}';
 
-class AgencyBoardScreen extends StatelessWidget {
+class AgencyBoardScreen extends StatefulWidget {
   const AgencyBoardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<AgencyBoardScreen> createState() => _AgencyBoardScreenState();
+}
+
+class _AgencyBoardScreenState extends State<AgencyBoardScreen> {
+  Future<AgencyBoardSnapshot>? _loadFuture;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadFuture ??= _createLoadFuture();
+  }
+
+  Future<AgencyBoardSnapshot> _createLoadFuture() {
     final deps = TurIzimDependencies.of(context);
     final session = TurIzimScope.of(context);
-
     final agencyId = session.activeAgencyId!;
+    return deps.agencyDashboard.loadAgencyBoard(agencyId);
+  }
+
+  void _retry() {
+    setState(() {
+      _loadFuture = _createLoadFuture();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final session = TurIzimScope.of(context);
 
     return Scaffold(
       backgroundColor: TurIzimPalette.warmWhite,
@@ -59,20 +84,43 @@ class AgencyBoardScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: FutureBuilder<(int, List<TourSummary>)>(
-        future: () async {
-          final awaiting = await deps.agencyDashboard.countAwaitingApplicants(
-            agencyId,
-          );
-          final tours = await deps.agencyDashboard.featuredTours(agencyId);
-          return (awaiting, tours);
-        }(),
+      body: FutureBuilder<AgencyBoardSnapshot>(
+        future: _loadFuture,
         builder: (context, snap) {
+          if (snap.connectionState == ConnectionState.waiting && !snap.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snap.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(AppConstants.pageHorizontalMargin),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      userFacingErrorMessage(snap.error),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: TurIzimPalette.deepNavy.withValues(alpha: 0.85),
+                          ),
+                    ),
+                    const SizedBox(height: 20),
+                    FilledButton(
+                      onPressed: _retry,
+                      child: const Text('Yeniden dene'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
           if (!snap.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-          final awaiting = snap.data!.$1;
-          final tours = snap.data!.$2;
+
+          final board = snap.data!;
+          final tours = board.tours;
+          final awaiting = board.pendingApplicantCount;
           final activePublishedCount = tours
               .where(
                 (tour) =>

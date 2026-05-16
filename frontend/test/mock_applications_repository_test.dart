@@ -12,7 +12,7 @@ void main() {
     late ApplicationsRepository repo;
 
     setUp(() {
-      final bootstrap = TurIzimMockBootstrap();
+      final bootstrap = TurIzimMockBootstrap.mockOnly();
       repo = bootstrap.applications;
     });
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:tur_izim/app/tur_izim_scope.dart';
+import 'package:tur_izim/core/api/api_client.dart';
 import 'package:tur_izim/core/bootstrap/tur_izim_mock_bootstrap.dart';
 import 'package:tur_izim/core/constants/mock_actor_ids.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
@@ -15,13 +16,15 @@ void main() {
   ) async {
     final session = SessionAuthRepository();
     await session.selectRole(UserRole.agency);
-    final bootstrap = TurIzimMockBootstrap();
+    final api = HttpTurIzimApiClient();
+    final bootstrap = TurIzimMockBootstrap.mockOnly();
 
     await tester.pumpWidget(
       MaterialApp(
         home: TurIzimScope(
           session: session,
           child: TurIzimDependencies(
+            apiClient: api,
             tours: bootstrap.tours,
             applications: bootstrap.applications,
             assignments: bootstrap.assignments,
@@ -40,8 +43,6 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Liste Sliver olarak tembel oluşturulur; başlık blokları yüzünden aday kartları
-    // ilk görünür alanda düşmeyebilir — kaydırarak metin bekleriz.
     await tester.drag(
       find.descendant(
         of: find.byType(AgencyTourApplicantsScreen),
@@ -65,13 +66,15 @@ void main() {
   testWidgets('Başvurusuz ilanda boş durum', (tester) async {
     final session = SessionAuthRepository();
     await session.selectRole(UserRole.agency);
-    final bootstrap = TurIzimMockBootstrap();
+    final api = HttpTurIzimApiClient();
+    final bootstrap = TurIzimMockBootstrap.mockOnly();
 
     await tester.pumpWidget(
       MaterialApp(
         home: TurIzimScope(
           session: session,
           child: TurIzimDependencies(
+            apiClient: api,
             tours: bootstrap.tours,
             applications: bootstrap.applications,
             assignments: bootstrap.assignments,

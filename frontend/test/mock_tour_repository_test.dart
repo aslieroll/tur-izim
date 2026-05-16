@@ -10,7 +10,7 @@ void main() {
     late TourRepository repo;
 
     setUp(() {
-      final bootstrap = TurIzimMockBootstrap();
+      final bootstrap = TurIzimMockBootstrap.mockOnly();
       repo = bootstrap.tours;
     });
 

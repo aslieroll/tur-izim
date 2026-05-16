@@ -662,6 +662,8 @@ String? agencyApplicantSelectHint({
   return switch (status) {
     ApplicationStatus.accepted =>
       'Bu aday seçildi — atama adımlarını üst bloktan izleyebilirsiniz.',
+    ApplicationStatus.agencySelected =>
+      'Bu aday seçildi — atama adımlarını üst bloktan izleyebilirsiniz.',
     ApplicationStatus.rejected => 'Bu başvuru daha önce reddedildi.',
     ApplicationStatus.withdrawn => 'Üretici başvurusunu geri çekmişti.',
     ApplicationStatus.pendingReview => null,

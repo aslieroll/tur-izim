@@ -1,0 +1,7 @@
+package com.turizim.admin;
+
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ViolationReportRepository extends JpaRepository<ViolationReport, UUID> {
+}

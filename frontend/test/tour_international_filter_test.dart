@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:tur_izim/core/constants/mock_actor_ids.dart';
 import 'package:tur_izim/core/bootstrap/tur_izim_mock_bootstrap.dart';
+import 'package:tur_izim/core/constants/mock_actor_ids.dart';
 import 'package:tur_izim/features/tours/domain/tour_repository.dart';
 
 void main() {
@@ -9,7 +9,7 @@ void main() {
     late TourRepository repo;
 
     setUp(() {
-      repo = TurIzimMockBootstrap().tours;
+      repo = TurIzimMockBootstrap.mockOnly().tours;
     });
 
     test('Ayşe iki yayımlanmış tur görür', () async {

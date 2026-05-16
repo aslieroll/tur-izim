@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/api/api_client.dart';
 import '../core/bootstrap/tur_izim_mock_bootstrap.dart';
 import '../core/constants/app_constants.dart';
 import '../core/di/tur_izim_dependencies.dart';
@@ -19,11 +20,13 @@ class TurIzimApp extends StatefulWidget {
 
 class _TurIzimAppState extends State<TurIzimApp> {
   late final SessionAuthRepository _session = SessionAuthRepository();
-  late final TurIzimMockBootstrap _mock = TurIzimMockBootstrap();
+  late final TurIzimApiClient _apiClient = HttpTurIzimApiClient();
+  late final TurIzimMockBootstrap _mock = TurIzimMockBootstrap(apiClient: _apiClient);
   late final GoRouter _router = buildAppRouter(_session);
 
   @override
   void dispose() {
+    _apiClient.close();
     _session.dispose();
     _router.dispose();
     super.dispose();
@@ -34,6 +37,7 @@ class _TurIzimAppState extends State<TurIzimApp> {
     return TurIzimScope(
       session: _session,
       child: TurIzimDependencies(
+        apiClient: _apiClient,
         tours: _mock.tours,
         applications: _mock.applications,
         assignments: _mock.assignments,

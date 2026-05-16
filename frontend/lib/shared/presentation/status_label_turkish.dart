@@ -33,6 +33,7 @@ String tourStatusLabelTurkish(TourStatus status) => switch (status) {
 String applicationStatusLabelTurkish(ApplicationStatus status) =>
     switch (status) {
       ApplicationStatus.pendingReview => 'İncelemede (acente)',
+      ApplicationStatus.agencySelected => 'Seçildi (atama)',
       ApplicationStatus.accepted => 'Kabul edildi',
       ApplicationStatus.rejected => 'Reddedildi',
       ApplicationStatus.withdrawn => 'Geri çekildi',

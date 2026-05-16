@@ -5,6 +5,7 @@ import 'package:tur_izim/app/router.dart';
 import 'package:tur_izim/app/tur_izim_scope.dart';
 import 'package:tur_izim/core/constants/app_constants.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
+import 'package:tur_izim/core/errors/user_error_message.dart';
 import 'package:tur_izim/shared/models/tour_scope.dart';
 import 'package:tur_izim/shared/models/tour_summary.dart';
 import 'package:tur_izim/shared/models/tour_status.dart';
@@ -64,7 +65,17 @@ class CreatorOpenToursScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError || snapshot.data == null) {
-            return const Center(child: Text('Turlar yüklenemedi.'));
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  snapshot.hasError
+                      ? userFacingErrorMessage(snapshot.error)
+                      : 'Turlar yüklenemedi.',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
           }
           final tours = snapshot.data!.tours;
           final peek = snapshot.data!.peek;

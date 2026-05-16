@@ -7,9 +7,11 @@ import '../features/applications/presentation/agency_tour_applicants_screen.dart
 import '../features/applications/presentation/creator_application_form_screen.dart';
 import '../features/applications/presentation/creator_my_applications_screen.dart';
 import '../features/assignments/presentation/creator_assignment_hub_screen.dart';
+import '../features/assignments/presentation/creator_deposit_ack_screen.dart';
 import '../features/assignments/presentation/creator_my_assignments_screen.dart';
 import '../features/auth/data/session_auth_repository.dart';
 import '../features/auth/presentation/welcome_screen.dart';
+import '../features/publications/presentation/creator_submit_publication_screen.dart';
 import '../features/tours/presentation/creator_open_tours_screen.dart';
 import '../features/tours/presentation/creator_tour_detail_screen.dart';
 import '../shared/models/user_role.dart';
@@ -104,6 +106,18 @@ GoRouter buildAppRouter(SessionAuthRepository session) {
       GoRoute(
         path: '/creator/assignment/:assignmentId',
         builder: (context, state) => CreatorAssignmentHubScreen(
+          assignmentId: state.pathParameters['assignmentId']!,
+        ),
+      ),
+      GoRoute(
+        path: '/creator/assignment/:assignmentId/deposit-ack',
+        builder: (context, state) => CreatorDepositAckScreen(
+          assignmentId: state.pathParameters['assignmentId']!,
+        ),
+      ),
+      GoRoute(
+        path: '/creator/assignment/:assignmentId/publication',
+        builder: (context, state) => CreatorSubmitPublicationScreen(
           assignmentId: state.pathParameters['assignmentId']!,
         ),
       ),

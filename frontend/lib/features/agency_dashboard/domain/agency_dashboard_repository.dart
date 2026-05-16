@@ -1,7 +1,6 @@
-import 'package:tur_izim/shared/models/tour_summary.dart';
+import 'agency_board_snapshot.dart';
 
 abstract class AgencyDashboardRepository {
-  Future<List<TourSummary>> featuredTours(String agencyId);
-
-  Future<int> countAwaitingApplicants(String agencyId);
+  /// Turlar + toplam bekleyen başvuru (tek API turunda hesaplanır).
+  Future<AgencyBoardSnapshot> loadAgencyBoard(String agencyId);
 }

@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:tur_izim/app/router.dart';
 import 'package:tur_izim/app/tur_izim_scope.dart';
 import 'package:tur_izim/core/constants/app_constants.dart';
+import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
+import 'package:tur_izim/features/auth/data/session_auth_repository.dart';
 import 'package:tur_izim/features/auth/domain/auth_repository.dart';
 import 'package:tur_izim/shared/models/user_role.dart';
 import 'package:tur_izim/shared/theme/tur_izim_design_tokens.dart';
@@ -90,6 +92,10 @@ class WelcomeScreen extends StatelessWidget {
     };
 
     await session.selectRole(role);
+    if (context.mounted && session is SessionAuthRepository) {
+      final api = TurIzimDependencies.of(context).apiClient;
+      await session.primeDemoIdentityFromApi(api);
+    }
     if (!context.mounted) return;
     context.go(target);
   }

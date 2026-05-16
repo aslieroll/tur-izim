@@ -1,4 +1,7 @@
 /// Deterministic actor identifiers shared by mock repositories + UX seeds.
+///
+/// **Backend demo:** Gerçek UUID’ler [MvpDemoIdentity] / [SessionAuthRepository.primeDemoIdentityFromApi]
+/// ile dolar; bu sabitler yalnızca saf mock veya sunucu kapalıyken kullanılır.
 abstract final class MockActorIds {
   MockActorIds._();
 

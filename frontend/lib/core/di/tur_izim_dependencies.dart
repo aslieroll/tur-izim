@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/api/api_client.dart';
 import '../../features/admin_dashboard/domain/admin_dashboard_repository.dart';
 import '../../features/agency_dashboard/domain/agency_dashboard_repository.dart';
 import '../../features/applications/domain/applications_repository.dart';
@@ -13,6 +14,7 @@ import '../../features/violations/domain/violations_repository.dart';
 /// Composition root for repositories (mock / API gelecek).
 class TurIzimDependencies extends InheritedWidget {
   const TurIzimDependencies({
+    required this.apiClient,
     required this.tours,
     required this.applications,
     required this.assignments,
@@ -26,6 +28,7 @@ class TurIzimDependencies extends InheritedWidget {
     super.key,
   });
 
+  final TurIzimApiClient apiClient;
   final TourRepository tours;
   final ApplicationsRepository applications;
   final AssignmentsRepository assignments;
