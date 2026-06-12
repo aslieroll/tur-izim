@@ -2,7 +2,24 @@
 
 Bu dosya **ürün / mühendislik ilerlemesinin** kısa özetidir. Tarihçe için commit mesajları ve iş kayıtları tam kaynak olabilir.
 
-**Son güncelleme:** 2026-06-12 (Final teslim depo yapısı hazırlandı; dokümantasyon tamamlandı)
+**Son güncelleme:** 2026-06-12 (AI Match Assistant backend endpoint eklendi ve doğrulandı)
+
+---
+
+## 2026-06-12 — AI Match Assistant Backend (Doğrulandı)
+
+- `POST /api/ai/match-score` endpoint'i eklendi: deterministik uygunluk skoru (0–100) + OpenRouter LLM açıklaması + risk seviyesi (`LOW` / `MEDIUM` / `HIGH`).
+- Yeni dosyalar: `com.turizim.ai` paketi (`AiMatchController`, `AiMatchService`, `OpenRouterClient`, `AiMatchRequest`, `AiMatchResponse`) ve `RiskLevel` enum'u.
+- Deterministik skor rastgelelik içermez; mevcut entity alanlarını kullanır (aktiflik, pasaport/vize uygunluğu — mevcut `PassportType.satisfiesMinimum` hiyerarşisi ile, şehir uyumu). Skor 0–100 aralığına clamp edilir.
+- OpenRouter entegrasyonu fallback davranışıyla eklendi: `OPENROUTER_API_KEY` boşsa ağ çağrısı yapılmaz; çağrı başarısız olursa loglanır ve deterministik Türkçe fallback özet döner (`fallbackUsed: true`). Endpoint AI hatasından asla patlamaz.
+- Yapılandırma `application.yml` → `app.ai.openrouter.*`; ortam değişkenleri `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` (varsayılan `openai/gpt-4o-mini`). Kodda gerçek anahtar yok.
+- `SecurityConfig`: `POST /api/ai/match-score` → `AGENCY` / `ADMIN` rolleri (legacy-open-api=true iken açık, mevcut davranışla tutarlı).
+- Birim testler eklendi (`AiMatchServiceTest`): risk seviyesi sınırları, deterministiklik, fallback davranışı, 404 senaryoları.
+- Doğrulama: `.\mvnw.cmd test` → **BUILD SUCCESS — Tests run: 22, Failures: 0, Errors: 0** (2026-06-12).
+- Açık TODO'lar:
+  - Equipment quality, content category ve previous delivery score alanları MVP şemasında yok; eklendiklerinde skor formülü genişletilecek.
+  - Frontend (Flutter) entegrasyonu henüz başlamadı.
+  - OpenRouter canlı çağrısı gerçek API anahtarıyla manuel test edilmedi (fallback yolu birim testli).
 
 ---
 

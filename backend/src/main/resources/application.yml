@@ -21,6 +21,12 @@ server:
 # Yerel: boş DB'de DevDataLoader çalışır. Test profili kapalı.
 app:
   dev-seed: ${APP_DEV_SEED:true}
+  # AI Match Assistant: anahtar boşsa LLM atlanır ve deterministik fallback özet döner.
+  ai:
+    openrouter:
+      api-key: ${OPENROUTER_API_KEY:}
+      model: ${OPENROUTER_MODEL:openai/gpt-4o-mini}
+      base-url: ${OPENROUTER_BASE_URL:https://openrouter.ai/api/v1}
   # TODO(Flutter): Authorization: Bearer <JWT>; false iken korumalı uçlar 401/403 döner.
   security:
     legacy-open-api: ${APP_LEGACY_OPEN_API:true}

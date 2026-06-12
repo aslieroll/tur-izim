@@ -87,6 +87,8 @@ public class SecurityConfig {
                                     .hasRole("AGENCY")
                                     .requestMatchers(HttpMethod.POST, "/api/applications/*/select")
                                     .hasRole("AGENCY")
+                                    .requestMatchers(HttpMethod.POST, "/api/ai/match-score")
+                                    .hasAnyRole("AGENCY", "ADMIN")
                                     .requestMatchers(HttpMethod.POST, "/api/publication-proofs/*/violations")
                                     .hasAnyRole("AGENCY", "ADMIN")
                                     .requestMatchers("/api/assignments/**")
