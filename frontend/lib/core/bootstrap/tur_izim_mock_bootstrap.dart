@@ -6,6 +6,9 @@ import 'package:tur_izim/features/admin_dashboard/domain/admin_dashboard_reposit
 import 'package:tur_izim/features/agency_dashboard/data/api_agency_dashboard_repository.dart';
 import 'package:tur_izim/features/agency_dashboard/data/mock_agency_dashboard_repository.dart';
 import 'package:tur_izim/features/agency_dashboard/domain/agency_dashboard_repository.dart';
+import 'package:tur_izim/features/ai_match/data/api_ai_match_repository.dart';
+import 'package:tur_izim/features/ai_match/data/mock_ai_match_repository.dart';
+import 'package:tur_izim/features/ai_match/domain/ai_match_repository.dart';
 import 'package:tur_izim/features/applications/data/api_applications_repository.dart';
 import 'package:tur_izim/features/applications/data/mock_applications_repository.dart';
 import 'package:tur_izim/features/applications/domain/applications_repository.dart';
@@ -67,6 +70,11 @@ final class TurIzimMockBootstrap {
       mock: MockAgencyDashboardRepository(store),
     );
     adminDashboard = MockAdminDashboardRepository(store);
+
+    aiMatch = ResilientAiMatchRepository(
+      api: ApiAiMatchRepository(apiClient),
+      mock: const MockAiMatchRepository(),
+    );
   }
 
   /// Flutter `test` ortamında `http` 400 sahte cevap verir; bu fabrika yalnızca mock kullanır.
@@ -80,6 +88,7 @@ final class TurIzimMockBootstrap {
     creatorDashboard = MockCreatorDashboardRepository(store);
     agencyDashboard = MockAgencyDashboardRepository(store);
     adminDashboard = MockAdminDashboardRepository(store);
+    aiMatch = const MockAiMatchRepository();
   }
 
   final MockTurIzimStore store;
@@ -93,4 +102,5 @@ final class TurIzimMockBootstrap {
   late final CreatorDashboardRepository creatorDashboard;
   late final AgencyDashboardRepository agencyDashboard;
   late final AdminDashboardRepository adminDashboard;
+  late final AiMatchRepository aiMatch;
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/api/api_client.dart';
 import '../../features/admin_dashboard/domain/admin_dashboard_repository.dart';
 import '../../features/agency_dashboard/domain/agency_dashboard_repository.dart';
+import '../../features/ai_match/domain/ai_match_repository.dart';
 import '../../features/applications/domain/applications_repository.dart';
 import '../../features/assignments/domain/assignments_repository.dart';
 import '../../features/creator_dashboard/domain/creator_dashboard_repository.dart';
@@ -24,6 +25,7 @@ class TurIzimDependencies extends InheritedWidget {
     required this.creatorDashboard,
     required this.agencyDashboard,
     required this.adminDashboard,
+    required this.aiMatch,
     required super.child,
     super.key,
   });
@@ -38,6 +40,7 @@ class TurIzimDependencies extends InheritedWidget {
   final CreatorDashboardRepository creatorDashboard;
   final AgencyDashboardRepository agencyDashboard;
   final AdminDashboardRepository adminDashboard;
+  final AiMatchRepository aiMatch;
 
   static TurIzimDependencies of(BuildContext context) {
     final scope = context

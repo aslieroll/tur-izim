@@ -2,7 +2,26 @@
 
 Bu dosya **ürün / mühendislik ilerlemesinin** kısa özetidir. Tarihçe için commit mesajları ve iş kayıtları tam kaynak olabilir.
 
-**Son güncelleme:** 2026-06-12 (AI Match Assistant backend endpoint eklendi ve doğrulandı)
+**Son güncelleme:** 2026-06-12 (Frontend MVP demo akışı backend'e bağlandı; AI Match Score arayüzde)
+
+---
+
+## 2026-06-12 — Frontend MVP Demo Akışı Backend'e Bağlandı
+
+- **Tur listesi bağlı:** `CreatorOpenToursScreen` → `GET /api/tours` (resilient: backend kapalıysa mock'a düşer). Kartlarda başlık, çıkış şehri/rota, tarih, müsait creator koltuğu ve "Başvur" akışı mevcut.
+- **Creator başvuru akışı bağlı:** Başvuru formu → `POST /api/tours/{tourId}/applications`; 3 zorunlu taahhüt checkbox'u (pre-selected değil) korunuyor. Demo kimlik `MvpDemoIdentity` / JWT oturumu ile geliyor.
+- **Acente başvuru listesi bağlı:** `GET /api/agency/tours/{tourId}/applications` + creator profili `GET /api/creators/{id}`; kartlarda üretici adı, öğrenci profili, doğrulama durumu, başvuru durumu ve aksiyon butonları.
+- **AI Match Score arayüzde:** Yeni `features/ai_match` dilimi — `AiMatchRepository` (interface), `ApiAiMatchRepository` (`POST /api/ai/match-score`, UUID string gövde), `MockAiMatchRepository` (deterministik çevrimdışı fallback), `ResilientAiMatchRepository` sarmalayıcı.
+  - Acente başvuran kartında `AiMatchScoreCard`: uygunluk skoru (0–100), risk seviyesi (Düşük/Orta/Yüksek), AI özeti; `fallbackUsed: true` ise italik not ile normal gösterim.
+  - İstekler başvuru başına **bir kez** yapılır ve ekran state'inde cache'lenir (render döngüsünde tekrar çağrı yok); "AI skoru hesaplanıyor..." yükleme durumu ve sayfayı kırmayan hata durumu + "Yeniden dene".
+- **Acente manuel seçimi bağlı:** "Seçimi Onayla" → `POST /api/applications/{id}/select` (assignments repository üzerinden); başarı snackbar'ı ve liste yenileme mevcut. Ödeme entegrasyonu yok (mock depozito korunur).
+- **Ortam yapılandırması:** `ApiConfig` → `--dart-define=API_BASE_URL` (varsayılan `http://localhost:8080`); hardcoded tek adres yok.
+- **Doğrulama:** `flutter analyze` → No issues found; `flutter test` → **All tests passed! (40)** — AI parse/deterministiklik birim testleri ve acente ekranı AI kartı widget assertion'ları eklendi.
+- Kalan TODO'lar:
+  - AI skoru canlı OpenRouter anahtarıyla uçtan uca manuel test edilmedi (fallback yolu test edildi).
+  - Başvuru geri çekme API'si yok (yalnızca çevrimdışı demo).
+  - Admin ekranları kısmen mock'ta.
+  - Deploy (web build host + backend host) ayrı görev.
 
 ---
 

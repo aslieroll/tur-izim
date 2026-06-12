@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:tur_izim/app/tur_izim_scope.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
+import 'package:tur_izim/features/ai_match/domain/ai_match_repository.dart';
+import 'package:tur_izim/features/ai_match/presentation/ai_match_score_card.dart';
 import 'package:tur_izim/features/applications/presentation/agency_rated_applicant_detail_screen.dart';
 import 'package:tur_izim/features/applications/presentation/agency_review_content_delivery_screen.dart';
 import 'package:tur_izim/features/publications/presentation/agency_review_publication_screen.dart';
@@ -45,10 +47,27 @@ class AgencyTourApplicantsScreen extends StatefulWidget {
 class _AgencyTourApplicantsScreenState extends State<AgencyTourApplicantsScreen> {
   Future<_ApplicantsPayload>? _future;
 
+  /// AI skoru başvuru başına bir kez istenir; rebuild'lerde tekrar çağrılmaz.
+  final Map<String, Future<AiMatchResult>> _aiMatchFutures = {};
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _future ??= _load();
+  }
+
+  Future<AiMatchResult> _aiMatchFor(RatedApplication row) {
+    return _aiMatchFutures.putIfAbsent(
+      row.summary.id,
+      () => TurIzimDependencies.of(context).aiMatch.evaluateMatch(
+            tourId: widget.tourId,
+            creatorId: row.creator.id,
+          ),
+    );
+  }
+
+  void _retryAiMatch(RatedApplication row) {
+    setState(() => _aiMatchFutures.remove(row.summary.id));
   }
 
   Future<_ApplicantsPayload> _load() async {
@@ -403,6 +422,8 @@ class _AgencyTourApplicantsScreenState extends State<AgencyTourApplicantsScreen>
                             meta: meta,
                             tourTitle: tourTitle,
                             row: row,
+                            aiMatchFuture: _aiMatchFor(row),
+                            onAiMatchRetry: () => _retryAiMatch(row),
                             onInspectDetail: () => _openApplicantDetail(
                               row,
                               tourDetail,
@@ -434,6 +455,8 @@ class _RatedApplicantCard extends StatelessWidget {
     required this.meta,
     required this.tourTitle,
     required this.row,
+    required this.aiMatchFuture,
+    required this.onAiMatchRetry,
     required this.onInspectDetail,
     required this.onQuickConfirm,
   });
@@ -441,6 +464,10 @@ class _RatedApplicantCard extends StatelessWidget {
   final TourMeta meta;
   final String tourTitle;
   final RatedApplication row;
+
+  /// Ekran state'inde cache'lenmiş AI eşleşme isteği.
+  final Future<AiMatchResult> aiMatchFuture;
+  final VoidCallback onAiMatchRetry;
 
   final VoidCallback onInspectDetail;
 
@@ -556,6 +583,11 @@ class _RatedApplicantCard extends StatelessWidget {
             ),
           const SizedBox(height: TurIzimDesignTokens.stackMedium),
           SuitabilityScoreCard(scores: row.scores),
+          const SizedBox(height: TurIzimDesignTokens.stackMedium),
+          AiMatchScoreCard(
+            future: aiMatchFuture,
+            onRetry: onAiMatchRetry,
+          ),
           const SizedBox(height: TurIzimDesignTokens.stackMedium),
           Row(
             children: [

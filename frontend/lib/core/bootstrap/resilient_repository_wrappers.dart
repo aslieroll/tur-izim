@@ -4,6 +4,7 @@ import 'package:tur_izim/core/constants/mock_actor_ids.dart';
 import 'package:tur_izim/core/errors/app_exception.dart';
 import 'package:tur_izim/features/agency_dashboard/domain/agency_board_snapshot.dart';
 import 'package:tur_izim/features/agency_dashboard/domain/agency_dashboard_repository.dart';
+import 'package:tur_izim/features/ai_match/domain/ai_match_repository.dart';
 import 'package:tur_izim/features/applications/domain/applications_repository.dart';
 import 'package:tur_izim/features/assignments/domain/assignments_repository.dart';
 import 'package:tur_izim/features/creator_dashboard/domain/creator_dashboard_repository.dart';
@@ -362,5 +363,26 @@ final class ResilientCreatorDashboardRepository implements CreatorDashboardRepos
   Future<CreatorHomePeek> loadHomePeek(String creatorId) => runWithApiFallback(
         tryApi: () => _api.loadHomePeek(creatorId),
         fallback: () => _mock.loadHomePeek(creatorId),
+      );
+}
+
+final class ResilientAiMatchRepository implements AiMatchRepository {
+  ResilientAiMatchRepository({
+    required AiMatchRepository api,
+    required AiMatchRepository mock,
+  })  : _api = api,
+        _mock = mock;
+
+  final AiMatchRepository _api;
+  final AiMatchRepository _mock;
+
+  @override
+  Future<AiMatchResult> evaluateMatch({
+    required String tourId,
+    required String creatorId,
+  }) =>
+      runWithApiFallback(
+        tryApi: () => _api.evaluateMatch(tourId: tourId, creatorId: creatorId),
+        fallback: () => _mock.evaluateMatch(tourId: tourId, creatorId: creatorId),
       );
 }
