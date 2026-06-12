@@ -2,7 +2,29 @@
 
 Bu dosya **ürün / mühendislik ilerlemesinin** kısa özetidir. Tarihçe için commit mesajları ve iş kayıtları tam kaynak olabilir.
 
-**Son güncelleme:** 2026-06-12 (Frontend MVP demo akışı backend'e bağlandı; AI Match Score arayüzde)
+**Son güncelleme:** 2026-06-12 (Canlı dağıtım hazırlığı tamamlandı: Railway + Vercel yapılandırması)
+
+---
+
+## 2026-06-12 — Dağıtım Hazırlığı (Railway + Vercel)
+
+- **Backend Railway'e hazırlandı:**
+  - `backend/Dockerfile` eklendi: multi-stage (Maven wrapper build → JRE 17 runtime), CRLF düzeltmesi ile Linux uyumlu, `EXPOSE 8080`.
+  - `backend/railway.json` eklendi: Dockerfile builder, `/api/health` healthcheck, on-failure restart.
+  - `backend/.dockerignore` eklendi.
+  - `application.yml`: `server.port=${PORT:${SERVER_PORT:8080}}` (Railway dinamik portu); datasource artık `SPRING_DATASOURCE_URL/USERNAME/PASSWORD` → `DB_*` → yerel varsayılan öncelik zinciri ile çalışıyor (yerel geliştirme bozulmadı).
+- **CORS yapılandırılabilir yapıldı:** `WebConfig` artık `FRONTEND_ORIGIN` ortam değişkenini okuyor (virgülle çoklu origin); localhost geliştirme origin'leri her zaman açık; credentials açık olduğundan wildcard kullanılmıyor.
+- **Frontend Flutter web hosting'e hazırlandı:**
+  - `frontend/vercel.json` eklendi: `build/web` çıktı dizini, SPA rewrite, build komutu yok (Vercel imajında Flutter olmadığından önerilen akış yerel build + prebuilt deploy).
+  - `frontend/.vercelignore` eklendi (yalnızca `build/web` yüklenir).
+  - Üretim build komutu doğrulandı: `flutter build web --release --dart-define=API_BASE_URL=<backend-url>`.
+- **Dokümantasyon:** `README.md` dağıtım bölümü (Railway adımları, env tablosu, Vercel/manuel deploy, canlı demo kontrol listesi); `.env.example` yeni değişkenlerle güncellendi (`PORT`, `SPRING_DATASOURCE_*`, `FRONTEND_ORIGIN`, `API_BASE_URL`).
+- **Demo vs üretim modu belgelendi:** Demo: `APP_DEV_SEED=true` + `APP_LEGACY_OPEN_API=true` (token'sız erişim, seed veri). Üretim: ikisi de `false` + güçlü `JWT_SECRET`. Bilinen sınırlama: admin rolü için backend'de kullanıcı tanımı gerekir; tam üretim auth sertleştirmesi ayrı görev.
+- **OpenRouter:** Anahtar opsiyonel kalır; boşsa AI özeti deterministik fallback ile döner (canlı demo için kabul edilebilir).
+- **Doğrulama (2026-06-12):**
+  - Backend: `.\mvnw.cmd test` → BUILD SUCCESS — Tests run: 22, Failures: 0.
+  - Frontend: `flutter analyze` → No issues found; `flutter test` → All tests passed! (40); `flutter build web --release` → `√ Built build\web`.
+- **Kalan iş:** Gerçek canlı dağıtım (Railway servis + PostgreSQL oluşturma, Vercel deploy) ve uçtan uca smoke test; `FRONTEND_ORIGIN`'e gerçek Vercel domain'inin girilmesi; Docker build'in Railway üzerinde ilk kez doğrulanması.
 
 ---
 

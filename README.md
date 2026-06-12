@@ -135,25 +135,80 @@ API adresi: `--dart-define=API_BASE_URL=http://localhost:8080`
 
 | Değişken | Açıklama |
 |----------|----------|
-| `DATABASE_URL` | PostgreSQL JDBC bağlantı URL'si |
-| `POSTGRES_USER` | Veritabanı kullanıcı adı |
-| `POSTGRES_PASSWORD` | Veritabanı şifresi |
-| `OPENROUTER_API_KEY` | OpenRouter API anahtarı (AI özellikler) |
+| `DATABASE_URL` | PostgreSQL JDBC bağlantı URL'si (yerel) |
+| `POSTGRES_USER` | Veritabanı kullanıcı adı (yerel) |
+| `POSTGRES_PASSWORD` | Veritabanı şifresi (yerel) |
+| `SPRING_DATASOURCE_URL` | Deploy için açık JDBC URL (Railway vb.) |
+| `SPRING_DATASOURCE_USERNAME` | Deploy veritabanı kullanıcısı |
+| `SPRING_DATASOURCE_PASSWORD` | Deploy veritabanı şifresi |
+| `PORT` | Platform tarafından verilen dinamik port (yerelde 8080) |
+| `FRONTEND_ORIGIN` | CORS için dağıtılan frontend origin'i |
+| `APP_DEV_SEED` | Boş DB'ye demo veri (demo: `true`, üretim: `false`) |
+| `APP_LEGACY_OPEN_API` | Token'sız API erişimi (demo: `true`, üretim: `false`) |
+| `JWT_SECRET` | JWT imza anahtarı (üretimde zorunlu) |
+| `OPENROUTER_API_KEY` | OpenRouter API anahtarı (boşsa AI fallback özet) |
 | `OPENROUTER_MODEL` | Kullanılacak model (varsayılan: `openai/gpt-4o-mini`) |
-| `FRONTEND_API_BASE_URL` | Flutter'ın bağlandığı backend URL'si |
+| `API_BASE_URL` | Flutter `--dart-define` ile geçirilen backend URL'si |
 
 > Gerçek değerleri asla Git'e eklemeyin. `.env` dosyası `.gitignore` ile hariç tutulmuştur.
 
 ---
 
-## Dağıtım Notları
+## Dağıtım
 
-- Üretimde `POSTGRES_PASSWORD` ve `OPENROUTER_API_KEY` gerçek secret manager veya CI/CD environment secrets ile verilmelidir.
-- `app.dev-seed=false` yapılmalıdır (demo veri üretimde açık kalmamalıdır).
-- `app.security.legacy-open-api=false` yapılarak tüm korumalı uçlar JWT zorunlu hale getirilmelidir.
-- Flutter web derlemesi: `flutter build web --dart-define=API_BASE_URL=<production-url>`
-- Backend: `./mvnw package` → üretilen `.jar` dosyası container veya VM'de çalıştırılır.
-- CORS ayarları üretim alan adına göre güncellenmelidir.
+Hedef: **Backend → Railway** (Dockerfile ile), **Veritabanı → Railway PostgreSQL**, **Frontend → Vercel** (Flutter web build çıktısı).
+
+### Backend — Railway
+
+Depoda hazır: `backend/Dockerfile` (multi-stage, Java 17) ve `backend/railway.json` (healthcheck: `/api/health`).
+
+1. Railway'de yeni proje oluşturun, **PostgreSQL** eklentisi ekleyin.
+2. GitHub deposunu servis olarak bağlayın; **Root Directory** = `backend`.
+3. Railway, `railway.json` sayesinde Dockerfile ile build eder.
+4. Servise ortam değişkenlerini girin (aşağıdaki tablo).
+5. Domain oluşturun (Settings → Networking → Generate Domain) ve
+   `https://<domain>/api/health` ile doğrulayın.
+
+| Değişken | Demo değeri | Açıklama |
+|----------|-------------|----------|
+| `SPRING_DATASOURCE_URL` | `jdbc:postgresql://<host>:<port>/<db>` | Railway PostgreSQL bilgilerinden **JDBC formatında** yazın (Railway'in verdiği `postgresql://` URL'sini `jdbc:postgresql://` yapın, kullanıcı/şifreyi ayırın) |
+| `SPRING_DATASOURCE_USERNAME` | Railway PG kullanıcı | |
+| `SPRING_DATASOURCE_PASSWORD` | Railway PG şifre | Asla repoya yazmayın |
+| `FRONTEND_ORIGIN` | `https://<app>.vercel.app` | CORS; virgülle birden fazla origin olabilir |
+| `APP_DEV_SEED` | `true` | Boş DB'ye demo acente/creator/tur ekler; gerçek üretimde `false` |
+| `APP_LEGACY_OPEN_API` | `true` | Demo: API token'sız erişilir. Gerçek üretimde `false` (JWT zorunlu) |
+| `JWT_SECRET` | güçlü rastgele değer | `APP_LEGACY_OPEN_API=false` ise zorunlu |
+| `OPENROUTER_API_KEY` | (opsiyonel) | Boşsa AI özeti deterministik fallback döner — demo için yeterli |
+| `OPENROUTER_MODEL` | `openai/gpt-4o-mini` | Varsayılan |
+| `PORT` | — | Railway otomatik verir; elle girmeyin |
+
+> **Demo vs üretim:** Canlı demo için `APP_DEV_SEED=true` + `APP_LEGACY_OPEN_API=true` kullanılabilir; bu modda frontend token göndermeden çalışır. Gerçek üretimde ikisi de `false` olmalı ve frontend JWT oturumu ile çalışır (bilinen sınırlama: admin için backend'de kullanıcı tanımı gerekir).
+
+### Frontend — Vercel (Flutter web)
+
+Vercel build ortamında Flutter yüklü olmadığı için **önerilen yol: yerelde build + hazır çıktıyı deploy**. Depoda hazır: `frontend/vercel.json` (SPA rewrite + `build/web` çıktı dizini) ve `frontend/.vercelignore`.
+
+```bash
+cd frontend
+flutter build web --release --dart-define=API_BASE_URL=https://<railway-backend-domain>
+npx vercel deploy --prod
+```
+
+`vercel` CLI ilk çalıştırmada proje bağlama soruları sorar; `vercel.json` build komutu çalıştırmaz, yalnızca `build/web` içeriğini yayınlar.
+
+Alternatif statik hostlar: `build/web` klasörü Netlify veya Firebase Hosting'e de aynen yüklenebilir.
+
+> Deploy sonrası backend'de `FRONTEND_ORIGIN` değişkenine Vercel domain'ini eklemeyi unutmayın; aksi halde tarayıcı CORS hatası verir.
+
+### Canlı Demo Kontrol Listesi
+
+1. [ ] Railway PostgreSQL çalışıyor; backend healthcheck (`/api/health`) yeşil.
+2. [ ] Backend log'unda seed mesajı var (demo acente + 2 creator + 3 tur).
+3. [ ] `https://<backend>/api/tours` JSON liste dönüyor.
+4. [ ] `FRONTEND_ORIGIN` Vercel domain'i ile ayarlı.
+5. [ ] Flutter web build `API_BASE_URL=https://<backend>` ile alındı ve deploy edildi.
+6. [ ] Tarayıcıda: tur listesi → başvuru → acente başvuran listesi → AI Eşleşme Asistanı kartı görünüyor.
+7. [ ] `POST /api/ai/match-score` yanıt veriyor (OpenRouter anahtarı yoksa `fallbackUsed: true` — demo için normal).
 
 ---
 

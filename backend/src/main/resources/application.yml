@@ -2,10 +2,13 @@ spring:
   application:
     name: tur-izim-backend
 
+  # Öncelik: standart Spring env (SPRING_DATASOURCE_*) → eski yerel env (DB_*) → yerel varsayılan.
+  # Railway gibi platformlarda SPRING_DATASOURCE_URL ile açık JDBC URL verin
+  # (örn. jdbc:postgresql://host:5432/railway).
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/turizim}
-    username: ${DB_USERNAME:turizim}
-    password: ${DB_PASSWORD:turizim_dev_password}
+    url: ${SPRING_DATASOURCE_URL:${DB_URL:jdbc:postgresql://localhost:5432/turizim}}
+    username: ${SPRING_DATASOURCE_USERNAME:${DB_USERNAME:turizim}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DB_PASSWORD:turizim_dev_password}}
 
   jpa:
     hibernate:
@@ -15,12 +18,17 @@ spring:
       hibernate:
         format_sql: true
 
+# Railway/Heroku tarzı platformlar PORT verir; yerelde 8080.
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${PORT:${SERVER_PORT:8080}}
 
 # Yerel: boş DB'de DevDataLoader çalışır. Test profili kapalı.
 app:
   dev-seed: ${APP_DEV_SEED:true}
+  # Üretimde dağıtılan frontend origin'i (örn. https://tur-izim.vercel.app).
+  # Virgülle birden fazla origin verilebilir; boşsa yalnızca localhost geliştirme origin'leri açık.
+  cors:
+    frontend-origin: ${FRONTEND_ORIGIN:}
   # AI Match Assistant: anahtar boşsa LLM atlanır ve deterministik fallback özet döner.
   ai:
     openrouter:
