@@ -6,6 +6,49 @@ Bu dosya Tur İzim Flutter arayüzünün temel UI kurallarını belirler. Detayl
 
 ---
 
+## 0. Marka Kimliği
+
+| Alan | Değer |
+|------|-------|
+| **Marka adı** | tur.izim |
+| **Slogan** | Boş koltuğu içeriğe dönüştür |
+| **Ton** | Güvenilir, sakin, operasyon odaklı — sosyal medya ya da turizm satış platformu değil |
+
+### Renk Paleti (Token → HEX)
+
+| Token | İsim | HEX | Kullanım |
+|-------|------|-----|---------|
+| `primary` | Royal Indigo | `#4B3FD8` | Ana CTA, aktif tab, önemli vurgu |
+| `primaryVariant` | Deep Indigo | `#3730A3` | Hover / pressed primary |
+| `secondary` | Soft Coral | `#F47C6A` | Küçük vurgu, bildirim rozetleri |
+| `background` | Warm White | `#F9F8FF` | Sayfa zemini |
+| `surface` | White | `#FFFFFF` | Kart yüzeyi |
+| `surfaceVariant` | Lavender Mist | `#EDE9FE` | İkincil kart, chip, soft alan |
+| `onPrimary` | White | `#FFFFFF` | Primary buton üzerindeki metin/ikon |
+| `onBackground` | Deep Navy | `#1E1B4B` | Başlık ve birincil metin |
+| `onSurface` | Slate | `#374151` | Kart içi metin |
+| `success` | Emerald | `#10B981` | Onaylandı, tamamlandı, pozitif depozito durumu |
+| `warning` | Amber | `#F59E0B` | Beklemede, revizyon, admin incelemesi |
+| `danger` | Rose | `#EF4444` | İhlal, red, kritik uyarı |
+| `muted` | Cool Gray | `#9CA3AF` | İkincil açıklama, meta metin |
+
+> Soft Coral (`#F47C6A`) baskın ana renk yapılmamalıdır. `danger` dışında kırmızı tonu (`#EF4444`) yoğun kullanılmamalıdır.
+
+### Tipografi
+
+| Rol | Öneri | Flutter TextStyle |
+|-----|-------|-------------------|
+| Sayfa başlığı (H1) | Bold, 24–28sp | `headlineMedium` |
+| Bölüm başlığı (H2) | SemiBold, 18–20sp | `titleLarge` |
+| Kart başlığı (H3) | SemiBold, 16sp | `titleMedium` |
+| Gövde metni | Regular, 14sp | `bodyMedium` |
+| Yardımcı / meta | Regular, 12sp, muted renk | `bodySmall` |
+| Buton metni | Medium, 14–16sp | `labelLarge` |
+
+Font ailesi: sistem sans-serif (`Roboto` Android, `SF Pro` iOS). Türkçe metinler için `height: 1.5` satır aralığı önerilir.
+
+---
+
 ## 1. Mimari Uyum
 
 - Frontend: **Flutter + Dart**.

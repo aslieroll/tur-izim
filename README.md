@@ -1,145 +1,105 @@
-# Tur İzim
+# tur.izim
 
-Tur İzim, boş **ulaşım dahil tur koltuklarına** sahip yerel tur acenteleri ile üniversite öğrencisi genç **UGC içerik üreticileri** ve mikro influencer’ları güvenli şekilde buluşturan bir **B2B/B2C güven ve operasyon platformudur**.
+**Tur İzim**, yerel tur acentelerinin boş ulaşım dahil tur koltuklarını; üniversite öğrencisi genç UGC içerik üreticileri ve mikro-influencer adaylarıyla buluşturan **B2B/B2C güven ve operasyon platformudur**.
 
-Platform; tarafların güvenli şekilde anlaşmasını, içerik teslimini ve operasyonel sürecin yönetimini kolaylaştırır.
-
-<<<<<<< HEAD
-> Tur İzim bir seyahat acentesi değildir.  
-> Sosyal medya platformu değildir.  
-> Otel veya uçak bileti satışı yapmaz.
-=======
-| Dizin | Rol |
-|--------|-----|
-| `backend/` | Java Spring Boot REST API (PostgreSQL) |
-| `frontend/` | Flutter / Dart, mobil öncelikli uygulama |
-| `prodocs/` | Türkçe ürün ve teknik dokümantasyon (PRD, plan, ilerleme, tasarım sistemi, API, şema, akışlar) |
->>>>>>> 2511fe9 (Backend temel yapısını ve prodocs teslim dokümanlarını düzenle)
+> Tur İzim bir seyahat acentesi değildir. Sosyal medya platformu değildir. Otel veya uçak bileti satışı yapmaz.
 
 ---
 
-# Target Users
+## Hedef Kullanıcılar
 
-## Agencies
-- Yerel tur acenteleri
-- Boş ulaşım dahil tur koltuklarını değerlendirmek isteyen işletmeler
-
-## Creators
-- Üniversite öğrencileri
-- UGC içerik üreticileri
-- Mikro influencer’lar
-- Seyahat içerikleri üretebilen genç kullanıcılar
-
-<<<<<<< HEAD
----
-
-# MVP Scope
-
-## Included
-
-- Ulaşım dahil tur ilanları
-- Creator başvuru sistemi
-- Suitability score (aday uygunluk skoru)
-- Manuel creator seçimi
-- Mock deposit sistemi
-- Teknik içerik checklist yapısı
-- Link tabanlı içerik teslimi
-- Yayın URL doğrulama akışı
-- İhlal bildirim sistemi
-- Üniversite ve öğrenci bilgisi doğrulama alanları
-
-## Excluded
-
-- Otomatik eşleştirme
-- Gerçek ödeme sistemi
-- Uygulama içi video upload
-- Sosyal medya feed sistemi
-- Chat / mesajlaşma
-- Otel rezervasyonu
-- Uçak bileti satışı
-- Otomatik sosyal medya takibi
+| Rol | Kim | Ne yapar? |
+|-----|-----|-----------|
+| **Creator** | Üniversite öğrencisi içerik üreticisi | Tura başvurur, içerik üretir, onaylı içeriği kendi sosyal hesabında en az 30 gün yayınlar |
+| **Agency** | Yerel tur acentesi | Ulaşım dahil tur ilanı açar, başvuranları skorla inceler, **manuel** seçim yapar, içeriği onaylar |
+| **Admin** | Platform yöneticisi | Acente hesabını onaylar, ihlal raporlarını manuel inceler |
 
 ---
 
-# Pilot Region
+## Temel MVP Özellikleri
 
-İlk MVP operasyonu:
-
-## Departure Cities
-- Adana
-- Mersin
-
-## Initial Tour Categories
-- Kapadokya turları
-- Güneydoğu turları
-
-## Tour Type
-- Sadece ulaşım dahil acente turları
+- **Tur ilanları** — Ulaşım dahil acente turları; yurt içi / yurt dışı ayrımı; pasaport/vize kapısı
+- **Başvuru sistemi** — Creator başvurusu; 3 zorunlu onay checkbox'u (pre-selected değil)
+- **Aday Uygunluk Endeksi (AUE)** — Teknik %75 + Yayın Platform %25; karar desteği, otomatik seçim değil
+- **Manuel acente seçimi** — `Assignment`; sistem asla otomatik atama yapmaz
+- **Mock depozito** — `PENDING → HELD → RELEASED_AFTER_PUBLICATION`; gerçek para hareketi yok
+- **İçerik teslimi** — Yalnızca URL ile; dosya/video yükleme yok
+- **Yayın takibi** — 30 günlük public kalma zorunluluğu; URL bildirimi
+- **İhlal bildirimi** — Acente raporlar; admin manuel inceler
 
 ---
 
-# Repository Structure
+## MVP Kapsam Dışı
 
-| Directory | Description |
-|---|---|
-| `backend/` | Java Spring Boot REST API + PostgreSQL |
-| `frontend/` | Flutter / Dart mobile application |
-| `docs/` | PRD, business rules, flows, API contracts, database schema, design system |
-
----
-
-# Tech Stack
-
-## Frontend
-- Flutter
-- Dart
-
-## Backend
-- Java
-- Spring Boot
-
-## Database
-- PostgreSQL
+- Sosyal medya feed'i
+- Uygulama içi chat / mesajlaşma
+- Otel veya uçak bileti rezervasyonu
+- Gerçek ödeme entegrasyonu
+- Otomatik eşleştirme / random assignment
+- Video upload veya uygulama içi streaming
+- Otomatik sosyal medya izleme
+- AI video analizi
 
 ---
 
-# Local Development
+## AI Kullanımı
 
-## PostgreSQL
+Tur İzim MVP'sinde AI şu şekilde kullanılmıştır:
 
-Development database can be started with:
-=======
-## Yerel PostgreSQL (Docker Compose)
+- **Ürün geliştirme desteği** — PRD, iş kuralları, kullanıcı akışları ve API sözleşmesi taslaklarının oluşturulmasında OpenRouter üzerinden LLM asistanı kullanıldı
+- **Kod iskelet ve review** — Flutter widget iskeletleri ve Spring Boot controller/service desenleri için yardımcı araç
+- **AUE skoru** — Kural tabanlı formül (AI değil); `suitability-score.md` bakınız
 
-Docker yüklüyse depo kökünden yalnızca veritabanı servisini başlatın:
->>>>>>> 2511fe9 (Backend temel yapısını ve prodocs teslim dokümanlarını düzenle)
+Planlanan (MVP sonrası):
+- Creator başvuru kalitesi hakkında açıklayıcı AI önerileri (karar verici değil, karar destekleyici)
+
+---
+
+## Teknoloji Yığını
+
+| Katman | Teknoloji |
+|--------|-----------|
+| Frontend | Flutter + Dart (mobil öncelikli, Chrome/web destekli) |
+| Backend | Java 17 + Spring Boot 3.x + Maven |
+| Veritabanı | PostgreSQL 16 |
+| AI servisi | OpenRouter API (`openai/gpt-4o-mini` varsayılan) |
+| Yerel altyapı | Docker Compose (PostgreSQL) |
+
+---
+
+## Depoyu Çalıştırma
+
+### Gereksinimler
+
+- Docker Desktop (PostgreSQL için)
+- JDK 17+
+- Flutter SDK 3.x
+- PowerShell (Windows) veya bash (macOS/Linux)
+
+### 1. Ortam Değişkenleri
 
 ```bash
+# Kök dizindeki şablonu kopyalayın:
+cp .env.example .env
+# .env dosyasını düzenleyip gerçek değerleri girin (asla Git'e eklemeyin)
+```
+
+### 2. PostgreSQL (Docker Compose)
+
+```bash
+# Veritabanını başlat
 docker compose up -d postgres
-```
 
-<<<<<<< HEAD
-Spring Boot configuration should match the credentials defined in:
-=======
-Durdurma (konteyneri durdurur; named volume ile veri kalır):
-
-```bash
+# Durdur (veri korunur)
 docker compose stop postgres
-```
 
-Konteyneri kaldırıp ağları temizlemek (volume’ü silmez):
-
-```bash
+# Kaldır (veriyi silmez)
 docker compose down
 ```
 
-**Gizlilik:** `POSTGRES_PASSWORD`, API anahtarları veya üretim sırları **asla** Git’e eklenmemelidir. Ortam değişkenleri için kökteki `.env.example` şablonuna bakın; kişisel `.env` dosyası oluşturun (`.gitignore` ile hariç tutulur). Üretimde gerçek sırlar yapılandırma veya gizli yönetim araçları ile verilir.
-
-**Backend + PostgreSQL (PowerShell):**
+### 3. Backend (Spring Boot)
 
 ```powershell
-docker compose up -d postgres
-
 cd backend
 $env:DB_URL="jdbc:postgresql://localhost:5432/turizim"
 $env:DB_USERNAME="turizim"
@@ -147,81 +107,86 @@ $env:DB_PASSWORD="turizim_dev_password"
 .\mvnw.cmd spring-boot:run
 ```
 
-JDK için `JAVA_HOME` ayarlı değilse `mvnw` hata verir; yolunu kendi kurulumunuza göre verin.
+Backend varsayılan olarak `http://localhost:8080` adresinde çalışır.  
+Health check: `GET /api/health`
 
-Ayrıntılı backend adımları: `backend/README.md`.
->>>>>>> 2511fe9 (Backend temel yapısını ve prodocs teslim dokümanlarını düzenle)
+İlk çalıştırmada `app.dev-seed=true` (varsayılan) ile demo veri otomatik eklenir:
+- Demo acente (onaylı) + 2 creator + 3 tur
+- Şifre: `Demo123!` (konsol log'unda görünür)
 
-```text
-docs/database-schema.md
+Ayrıntılar: `backend/README.md`
+
+### 4. Frontend (Flutter)
+
+```bash
+cd frontend
+flutter pub get
+flutter run -d chrome
 ```
 
-<<<<<<< HEAD
----
-
-# Core Business Rules
-
-- Creator selection is always manual.
-- System only provides scoring and ranking support.
-- Content requirements are objective and checkbox-based.
-- No artistic evaluation exists in the system.
-- Content delivery is link-based.
-- Mock deposit protects agencies against no-show risk.
-- Publication visibility minimum is 30 days.
-- Creator users are university students only.
-- International tours may require passport/visa eligibility.
-- Agencies define technical content requirements during listing creation.
+Backend hazır değilse mock repository'ler otomatik devreye girer.  
+API adresi: `--dart-define=API_BASE_URL=http://localhost:8080`
 
 ---
 
-# Documentation
+## Ortam Değişkenleri
 
-| Document | Description |
-|---|---|
-| `docs/prd.md` | Product requirements document |
-| `docs/product-scope.md` | MVP scope and exclusions |
-| `docs/business-rules.md` | Core business rules |
-| `docs/user-flows.md` | User flows |
-| `docs/api-contract.md` | API contracts |
-| `docs/database-schema.md` | PostgreSQL schema |
-| `docs/design-system.md` | UI design system |
-| `docs/suitability-score.md` | Scoring algorithm details |
-| `docs/cursor-prompts.md` | Cursor AI development prompts |
+Şablon: `.env.example`
+
+| Değişken | Açıklama |
+|----------|----------|
+| `DATABASE_URL` | PostgreSQL JDBC bağlantı URL'si |
+| `POSTGRES_USER` | Veritabanı kullanıcı adı |
+| `POSTGRES_PASSWORD` | Veritabanı şifresi |
+| `OPENROUTER_API_KEY` | OpenRouter API anahtarı (AI özellikler) |
+| `OPENROUTER_MODEL` | Kullanılacak model (varsayılan: `openai/gpt-4o-mini`) |
+| `FRONTEND_API_BASE_URL` | Flutter'ın bağlandığı backend URL'si |
+
+> Gerçek değerleri asla Git'e eklemeyin. `.env` dosyası `.gitignore` ile hariç tutulmuştur.
 
 ---
 
-# Important Notes
+## Dağıtım Notları
 
-Tur İzim focuses on operational simplicity and scalable architecture.
+- Üretimde `POSTGRES_PASSWORD` ve `OPENROUTER_API_KEY` gerçek secret manager veya CI/CD environment secrets ile verilmelidir.
+- `app.dev-seed=false` yapılmalıdır (demo veri üretimde açık kalmamalıdır).
+- `app.security.legacy-open-api=false` yapılarak tüm korumalı uçlar JWT zorunlu hale getirilmelidir.
+- Flutter web derlemesi: `flutter build web --dart-define=API_BASE_URL=<production-url>`
+- Backend: `./mvnw package` → üretilen `.jar` dosyası container veya VM'de çalıştırılır.
+- CORS ayarları üretim alan adına göre güncellenmelidir.
 
-The MVP intentionally avoids:
-- social platform complexity,
-- real-time systems,
-- heavy media infrastructure,
-- automatic moderation systems.
+---
 
-The primary goal is validating the marketplace and operational workflow between local tour agencies and university student creators.
-=======
-**Birincil kaynak:** `prodocs/` klasörü.
+## Dokümantasyon
 
-| Dosya | Açıklama |
-|--------|-----------|
+Tüm ürün ve teknik belgeler `prodocs/` klasöründedir:
+
+| Dosya | İçerik |
+|-------|--------|
 | `prodocs/PRD.md` | Ürün gereksinimleri |
-| `prodocs/tech-stack.md` | Teknoloji yığını |
-| `prodocs/Plan.md` | Yürütme planı (özet) |
-| `prodocs/DesignSystem.md` | Tasarım sistemi (Flutter) |
-| `prodocs/Progress.md` | İlerleme özeti |
 | `prodocs/business-rules.md` | İş kuralları |
 | `prodocs/user-flows.md` | Kullanıcı akışları |
-| `prodocs/product-scope.md` | Ürün kapsamı özeti |
-| `prodocs/api-contract.md` | API sözleşmesi taslağı |
-| `prodocs/database-schema.md` | Veri modeli |
-| `prodocs/suitability-score.md` | Aday Uygunluk Endeksi (AUE) |
-| `prodocs/premium-travel-pass-ui-guidelines.md` | UI kılavuzu |
-| `prodocs/stitch-export-screen-map.md` | Stitch ekran eşlemesi |
-| `prodocs/cursor-prompts.md` | Cursor teknik prompt şablonları |
+| `prodocs/tech-stack.md` | Teknoloji yığını ve gerekçeler |
+| `prodocs/Plan.md` | Yürütme planı ve kullanıcı hikayeleri |
+| `prodocs/DesignSystem.md` | Flutter tasarım sistemi |
+| `prodocs/Progress.md` | Geliştirme ilerlemesi |
+| `prodocs/api-contract.md` | REST API sözleşmesi |
+| `prodocs/database-schema.md` | Veritabanı şeması |
+| `prodocs/suitability-score.md` | AUE (Aday Uygunluk Endeksi) |
 
-Klasör indeksi: `prodocs/README.md`.
+Klasör indeksi: `prodocs/README.md`
 
-> **Not:** Kök `docs/` dizininde yalnızca sınırlı arşiv dosyaları kalmış olabilir; **tam doküman seti `prodocs/` altındadır.**
->>>>>>> 2511fe9 (Backend temel yapısını ve prodocs teslim dokümanlarını düzenle)
+---
+
+## Depo Yapısı
+
+```
+tur-izim/
+├── backend/          # Java Spring Boot REST API (PostgreSQL)
+├── frontend/         # Flutter / Dart, mobil öncelikli uygulama
+├── prodocs/          # Ürün ve teknik dokümantasyon
+├── stitch-export/    # Google Stitch UI referans dosyaları (görsel referans)
+├── docker-compose.yml
+├── .env.example      # Ortam değişkeni şablonu
+└── README.md
+```

@@ -1,8 +1,12 @@
 # Tur İzim — Ürün Gereksinimleri Dokümanı (PRD)
 
-Versiyon: MVP (şehir bazlı, genel kullanım taslağı)  
-Okuyucu: Türkçe konuşan kurucu / ürün sahibi  
-Teknik adlar (tablo, API, kod): İngilizce
+| Alan | Değer |
+|------|-------|
+| Versiyon | MVP — final teslim |
+| Marka adı | tur.izim |
+| Son güncelleme | 2026-06-12 |
+| Okuyucu | Türkçe konuşan kurucu / ürün sahibi |
+| Teknik adlar | Tablo, API ve kod: İngilizce |
 
 ---
 

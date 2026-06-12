@@ -1,7 +1,30 @@
-# Yerel sırlar ve geçici dosyalar — asla commit etmeyin
+# ── Secrets & local config ──────────────────────────────────────────────
 .env
+*.env
 
-# Günlük / hata ayıklama çıktıları
+# ── Build artefacts ──────────────────────────────────────────────────────
+target/
+build/
+
+# ── Flutter / Dart toolchain ─────────────────────────────────────────────
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+
+# ── IDE / editor ─────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.code-workspace
+
+# ── Node (tooling only, not a Node project) ──────────────────────────────
+node_modules/
+
+# ── OS artefacts ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Logs ─────────────────────────────────────────────────────────────────
 *.log
 debug-*.log
 logs/
