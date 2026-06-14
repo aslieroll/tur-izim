@@ -2,6 +2,9 @@
 ///
 /// Özel base URL için:
 /// `flutter run -d chrome --dart-define=API_BASE_URL=http://localhost:8080`
+///
+/// Ödeme linkleri artık frontend'e geçirilmez; backend env değişkenleri
+/// (AGENCY_PRO_PAYMENT_LINK, AGENCY_GROWTH_PAYMENT_LINK) Railway'de ayarlanır.
 abstract final class ApiConfig {
   ApiConfig._();
 

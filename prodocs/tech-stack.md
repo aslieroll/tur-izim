@@ -53,7 +53,19 @@ Açık kaynak, üretimde kanıtlanmış, JSON sütun desteği var. Tur/başvuru/
 
 ---
 
-## 4. AI Servisi
+## 4. Ödeme Stratejisi
+
+| Yaklaşım | Açıklama |
+|----------|----------|
+| Harici checkout linki | Backend `AGENCY_PRO_PAYMENT_LINK` / `AGENCY_GROWTH_PAYMENT_LINK` env'den URL döner |
+| Kart işleme | Uygulama içi kart işleme **yoktur**; sağlayıcı sayfasına yönlendirilir |
+| Kart verisi | Hiçbir kart verisi backend'de saklanmaz; PCI-DSS kapsam dışı |
+| Manuel aktivasyon (beta) | Admin `POST /api/billing/admin/subscriptions/manual-activate` ile ACTIVE yapar |
+| Webhook (sonraki aşama) | iyzico / PayTR webhook entegrasyonu; `ACTIVE→PAST_DUE` otomatik geçiş |
+
+---
+
+## 5. AI Servisi
 
 | Bileşen | Değer |
 |---------|-------|
@@ -98,7 +110,8 @@ Tek API anahtarıyla birden fazla LLM'e (GPT-4o, Claude, Gemini) erişim sağlar
 
 | Bileşen | Gerekçe |
 |---------|---------|
-| Gerçek ödeme ağ geçidi | Mock depozito yeterli; Stripe/iyzico MVP sonrası |
+| Gerçek ödeme ağ geçidi | Harici checkout linki (beta); webhook otomasyonu MVP sonrası |
+| Kart veri depolama | Asla; uygulama kart verisi saklamaz, PCI-DSS kapsam dışı |
 | Flyway/Liquibase | `ddl-auto=update` MVP için kabul edilebilir; üretim öncesi geçilmeli |
 | Redis / önbellek | MVP ölçeği gerektirmiyor |
 | Message queue | MVP ölçeği gerektirmiyor |

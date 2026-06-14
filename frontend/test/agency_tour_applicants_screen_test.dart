@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,6 +41,7 @@ void main() {
             agencyDashboard: bootstrap.agencyDashboard,
             adminDashboard: bootstrap.adminDashboard,
             aiMatch: bootstrap.aiMatch,
+            billing: bootstrap.billing,
             child: AgencyTourApplicantsScreen(
               tourId: MockActorIds.tourKapadokya,
             ),
@@ -94,6 +95,7 @@ void main() {
             agencyDashboard: bootstrap.agencyDashboard,
             adminDashboard: bootstrap.adminDashboard,
             aiMatch: bootstrap.aiMatch,
+            billing: bootstrap.billing,
             child: AgencyTourApplicantsScreen(
               tourId: MockActorIds.tourAntalyaCoast,
             ),

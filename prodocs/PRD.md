@@ -1,8 +1,8 @@
-# Tur İzim — Ürün Gereksinimleri Dokümanı (PRD)
+﻿# Tur İzim — Ürün Gereksinimleri Dokümanı (PRD)
 
 | Alan | Değer |
 |------|-------|
-| Versiyon | MVP — final teslim |
+| Versiyon | Beta — subscription model aktif |
 | Marka adı | tur.izim |
 | Son güncelleme | 2026-06-12 |
 | Okuyucu | Türkçe konuşan kurucu / ürün sahibi |
@@ -19,6 +19,16 @@
 Süreç; **manuel başvuru**, **sıralama** (**Aday Uygunluk Endeksi**), **acentenin elle seçimi**, **taslak teslim bağlantısı**, **tek teknik revizyon hakkı**, **yayındaki bağlantının bildirilmesi** ve **mock depozito** ile yönetilir.
 
 **Ürün sınırları:** Tur İzim bir **seyahat acentesi yazılımı** gibi sıfırdan paket satmaz; uygulama içi **sosyal zaman tüneline**, **sohbete**, **otel/uçak pazarına**, **video akışı** veya **dosya yüklemeyle** teslime sahip **değildir**. Yayın doğrulama ve ihlaller **manuel** bildirilir; MVP’de gerçek para hareketi **yoktur**.
+
+**Gelir modeli:** Turİzim aylık abonelik ile **tur acentelerinden** gelir elde eder; creator ücretsizdir.
+
+| Plan | Fiyat | Aktif Tur Limiti | Ücretli Özellikler |
+|------|-------|-----------------|-------------------|
+| Ücretsiz | 0 ₺ | 1 | AI/başvuru yönetimi kapalı |
+| Agency Pro | 499 ₺/ay | 5 | AI Match, başvuru, creator seçimi |
+| Agency Growth | 999 ₺/ay | 20 | Pro + öncelikli destek |
+
+Ödeme harici sağlayıcı checkout linki üzerinden yapılır; uygulama kart verisi saklamaz.
 
 ---
 
@@ -186,3 +196,4 @@ Google **Stitch** yalnızca **tasarım referansı** için kullanılır; **backen
 | `api-contract.md`      | REST uçları (taslak)            |
 | `DesignSystem.md`        | Flutter arayüz ilkeleri         |
 | `cursor-prompts.md`    | Cursor için İngilizce şablonlar |
+

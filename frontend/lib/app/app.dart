@@ -73,6 +73,7 @@ class _TurIzimAppState extends State<TurIzimApp> {
             agencyDashboard: _mock.agencyDashboard,
             adminDashboard: _mock.adminDashboard,
             aiMatch: _mock.aiMatch,
+            billing: _mock.billing,
             child: MaterialApp.router(
               title: AppConstants.appName,
               debugShowCheckedModeBanner: false,

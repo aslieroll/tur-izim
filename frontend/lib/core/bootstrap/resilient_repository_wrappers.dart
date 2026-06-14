@@ -5,6 +5,9 @@ import 'package:tur_izim/core/errors/app_exception.dart';
 import 'package:tur_izim/features/agency_dashboard/domain/agency_board_snapshot.dart';
 import 'package:tur_izim/features/agency_dashboard/domain/agency_dashboard_repository.dart';
 import 'package:tur_izim/features/ai_match/domain/ai_match_repository.dart';
+import 'package:tur_izim/features/billing/domain/agency_plan.dart';
+import 'package:tur_izim/features/billing/domain/agency_subscription.dart';
+import 'package:tur_izim/features/billing/domain/billing_repository.dart';
 import 'package:tur_izim/features/applications/domain/applications_repository.dart';
 import 'package:tur_izim/features/assignments/domain/assignments_repository.dart';
 import 'package:tur_izim/features/creator_dashboard/domain/creator_dashboard_repository.dart';
@@ -384,5 +387,34 @@ final class ResilientAiMatchRepository implements AiMatchRepository {
       runWithApiFallback(
         tryApi: () => _api.evaluateMatch(tourId: tourId, creatorId: creatorId),
         fallback: () => _mock.evaluateMatch(tourId: tourId, creatorId: creatorId),
+      );
+}
+
+final class ResilientBillingRepository implements BillingRepository {
+  ResilientBillingRepository({
+    required BillingRepository api,
+    required BillingRepository mock,
+  })  : _api = api,
+        _mock = mock;
+
+  final BillingRepository _api;
+  final BillingRepository _mock;
+
+  @override
+  Future<AgencySubscription> getSubscription(String agencyId) => runWithApiFallback(
+        tryApi: () => _api.getSubscription(agencyId),
+        fallback: () => _mock.getSubscription(agencyId),
+      );
+
+  @override
+  Future<List<AgencyPlan>> getPlans() => runWithApiFallback(
+        tryApi: _api.getPlans,
+        fallback: _mock.getPlans,
+      );
+
+  @override
+  Future<String?> getCheckoutUrl(String agencyId, String planCode) => runWithApiFallback(
+        tryApi: () => _api.getCheckoutUrl(agencyId, planCode),
+        fallback: () => _mock.getCheckoutUrl(agencyId, planCode),
       );
 }

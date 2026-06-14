@@ -6,6 +6,110 @@ Bu dosya **ürün / mühendislik ilerlemesinin** kısa özetidir. Tarihçe için
 
 ---
 
+## 2026-06-14 — Initial Admin Bootstrap
+
+- **`AdminBootstrapService` eklendi:** `APP_ADMIN_BOOTSTRAP_ENABLED=true` + `APP_ADMIN_EMAIL` + `APP_ADMIN_PASSWORD` ile startup'ta tek ADMIN oluşturur; şifre BCrypt hash; şifre loglanmaz.
+- **`InitialAdminBootstrap` (`ApplicationRunner`):** `@Profile("!test")`, `@Order(0)`; genel kayıt API'si yok.
+- **`UserAccountRepository.existsByRole(ADMIN)`** sorgusu eklendi; çift admin ve mevcut e-posta üzerine yazma engellendi.
+- **Üretim blocker çözüldü:** `POST /api/billing/admin/subscriptions/manual-activate` artık bootstrap ile oluşturulan ADMIN JWT ile çalıştırılabilir.
+- **Testler:** `AdminBootstrapServiceTest` — disabled, create one, no duplicate, missing config, encoded password (7 test).
+- **Dokümantasyon:** `.env.example`, `README.md` (Initial Admin Bootstrap bölümü), bu giriş.
+
+---
+
+## 2026-06-14 — Üretim Güvenlik ve Dağıtım Denetimi
+
+- **Üretim güvenlik denetimi tamamlandı.**
+- **`APP_LEGACY_OPEN_API=false` dağıtım için zorunlu** — bu mod aktifken billing/agency/admin uçları rol bazlı korunur (plans → public, subscription → AGENCY/ADMIN, checkout → AGENCY, admin/** → ADMIN).
+- **Abonelik kapısı doğrulandı:** `/api/ai/match-score`, `/api/agency/tours/{id}/applications`, `/api/applications/{id}/select` aktif ücretli plan ister; FREE/PENDING/PAST_DUE/CANCELED → HTTP 402; ACTIVE Pro/Growth açar. (`AgencySubscriptionServiceTest` + `BillingSecurityIntegrationTest`)
+- **Plan limitleri doğrulandı:** FREE 1, Pro 5, Growth 20 — `TourService.create()` içinde kota uygulanır.
+- **Ödeme linkleri doğrulandı:** yalnızca backend env (`AGENCY_PRO_PAYMENT_LINK`, `AGENCY_GROWTH_PAYMENT_LINK`); frontend build'e ham link gömülmez; eksik link → 422; uygulama kart verisi saklamaz.
+- **Eski `AGENCY_PAYMENT_LINK` referansları temizlendi** (README env tabloları + güvenlik notları). `prodocs/Progress.md` tarihçesinde kalan değiniler tarihîdir.
+- **CORS doğrulandı:** `allowedOriginPatterns` + `FRONTEND_ORIGIN`; wildcard `*` yok; credentials açık ama localhost pattern üretim riski oluşturmaz.
+- **Auth blocker tespit edildi:** Uygulamada ADMIN kayıt/giriş ucu yok ve seed ADMIN üretmiyor. Manuel aktivasyon için DB'ye elle ADMIN hesabı veya doğrudan `agency_subscriptions` güncellemesi gerekir. README'de belgelendi.
+- **`APP_DEV_SEED=false` güvenli:** CREATOR ve AGENCY self-registration ucu mevcut olduğundan giriş mümkün; seed olmadan sadece demo veri kaybolur. (Yalnız ADMIN aksiyonu için yukarıdaki kısıt geçerli.)
+- **Kalan sınırlama: sağlayıcı webhook otomasyonu kasıtlı olarak ertelendi.**
+- **Doğrulama (2026-06-14):**
+  - Backend: `.\mvnw.cmd test` → BUILD SUCCESS — Tests run: 46, Failures: 0
+  - `flutter analyze` → No issues found
+  - `flutter test` → All tests passed! (53 tests)
+  - `flutter build web --release` → Built build\web
+
+---
+
+## 2026-06-14 — Çok Planlı Abonelik Modeli (FREE / Pro / Growth)
+
+- **`SubscriptionPlanCode` enum eklendi:** FREE, AGENCY_PRO, AGENCY_GROWTH.
+- **`AgencySubscription.planCode` güncellendi:** String → `SubscriptionPlanCode` enum.
+- **`AgencySubscriptionService` genişletildi:**
+  - `getCurrentPlanForAgency`, `getCurrentSubscriptionForAgency`, `hasActivePaidSubscription`
+  - `canUseAiMatch`, `canManageApplicants`, `canSelectCreator`
+  - `getActiveTourLimit` (FREE:1, PRO:5, GROWTH:20), `canCreateAnotherTour`
+  - `requireActivePaidSubscription` (eski `requireActiveSubscription` → yeni mesaj)
+  - `buildSubscriptionStatusResponse` (feature flags + tour limit dahil)
+- **`TourService.create()` tur kota kontrolü:** JWT varken plan limitini aşmaya çalışırsa HTTP 402.
+- **`TourRepository`:** `countByAgencyIdAndStatus` sorgusu eklendi.
+- **Billing API güncellendi:**
+  - `GET /api/billing/agency/plans` (herkese açık) → Free/Pro/Growth plan kartları
+  - `GET /api/billing/agency/subscription` → planCode + status + activeTourLimit + feature booleans
+  - `POST /api/billing/agency/checkout` → body `{planCode}` ile `AGENCY_PRO_PAYMENT_LINK` veya `AGENCY_GROWTH_PAYMENT_LINK` döner
+  - `POST /api/billing/admin/subscriptions/manual-activate` → ADMIN-only, planCode + providerSubscriptionId kabul eder
+- **SecurityConfig güncellendi:** `/api/billing/agency/plans` → permitAll; `/api/billing/admin/**` → ADMIN rolü.
+- **`application.yml`:** `AGENCY_PRO_PAYMENT_LINK` + `AGENCY_GROWTH_PAYMENT_LINK` env değişkenleri.
+- **Frontend modeller güncellendi:** `AgencySubscriptionPlanCode` enum; `isPaid` getter; `AgencyPlan` modeli; `BillingRepository.getPlans()` + `getCheckoutUrl(agencyId, planCode)`.
+- **`SubscriptionPlansSection` eklendi:** 3 plan kartı (Free/Pro/Growth); Mevcut Plan rozeti; Aboneliği Başlat CTA; mock modda checkout null döner.
+- **`AgencyBoardScreen`:** `subscription.isPaid` kontrolü; ücretli değilse banner + plan kartları.
+- **Creator tarafı korundu:** creator başvuru ve tur listeleme değişmedi.
+- **Backend birim testleri (18):** Plan limitleri, canUseAiMatch, pendingPro blocked vb.
+- **Güvenlik entegrasyon testleri (6):** manual-activate → 401 (anonim) + 403 (creator); subscription → 401/403; plans → 200.
+- **Gerçek ödeme sağlayıcı webhook otomasyonu kasıtlı olarak sonraki aşamaya bırakıldı.**
+- **Doğrulama (2026-06-14):**
+  - Backend: `.\mvnw.cmd test` → BUILD SUCCESS — Tests run: 46, Failures: 0
+  - `flutter analyze` → No issues found
+  - `flutter test` → All tests passed! (53 tests)
+  - `flutter build web --release` → Built build\web
+
+---
+
+## 2026-06-14 — Acente Abonelik Kapısı (Agency Pro Beta)
+
+- **Backend `AgencySubscription` entity eklendi:** `agency_subscriptions` tablosu; `SubscriptionStatus` enum (NONE, PENDING, ACTIVE, PAST_DUE, CANCELED); `AgencySubscriptionRepository` JPA; `AgencySubscriptionService`.
+- **Billing API eklendi:**
+  - `GET /api/billing/agency/subscription` → güncel abonelik durumu
+  - `POST /api/billing/agency/checkout` → `AGENCY_PAYMENT_LINK` env'den harici URL döner; aboneliği PENDING yapar
+  - `POST /api/billing/agency/manual-activate` → kontrollü beta aktivasyonu (ADMIN → ACTIVE)
+- **Abonelik kapısı:** `requireActiveSubscription()` metodu `POST /api/ai/match-score`, `GET /api/agency/tours/{id}/applications`, `POST /api/applications/{id}/select` uçlarına eklendi. JWT yoksa (legacy demo mod) bypass; ADMIN bypass; AGENCY + aktif değilse HTTP 402.
+- **Frontend `BillingRepository` eklendi:** interface + `ApiBillingRepository` + `MockBillingRepository` (demo modda ACTIVE döner) + `ResilientBillingRepository`. `TurIzimDependencies` ve `TurIzimMockBootstrap`'a eklendi.
+- **`AgencyProPackageCard` güncellendi:** `StatefulWidget`; CTA `POST /api/billing/agency/checkout` üzerinden `checkoutUrl` alır ve tarayıcıda açar. Uygulama içinde kart işleme yok.
+- **`AgencyBoardScreen` güncellendi:** `AgencyBoardSnapshot` + `AgencySubscription` birlikte yüklenir. Aktif abonelik yoksa uyarı banner'ı + Agency Pro kartı hero altında gösterilir. Tour listesi ve navigasyon etkilenmez.
+- **Creator tarafı korundu:** creator başvuru ve tur listeleme akışı değişmedi.
+- **Gerçek ödeme sağlayıcı webhook otomasyonu kasıtlı olarak MVP sonrasına bırakıldı.**
+- **Güvenlik notu:** `APP_LEGACY_OPEN_API=true` (demo) iken gating bypass edilir. Gerçek üretimde `false` + JWT zorunlu.
+- **Doğrulama (2026-06-14):**
+  - Backend: `.\mvnw.cmd test` → BUILD SUCCESS — Tests run: 22, Failures: 0
+  - `flutter analyze` → No issues found
+  - `flutter test` → All tests passed!
+  - `flutter build web --release` → √ Built build\web
+
+---
+
+## 2026-06-14 — Acente Pro Paket Monetizasyon Kartı
+
+- **`AgencyProPackageCard` eklendi:** Acente operasyon özeti ekranı (Özet sekmesi) altına "Paket & Abonelik" bölümü ve `AgencyProPackageCard` bileşeni eklendi.
+- **Harici ödeme linki stratejisi:** "Paketi Satın Al" CTA butonu `--dart-define=AGENCY_PAYMENT_LINK=<url>` ile verilen harici URL'yi tarayıcıda açar. Uygulama içinde kart işleme, webhook veya ödeme durumu takibi yapılmaz.
+- **Boş link koruması:** `AGENCY_PAYMENT_LINK` boşsa buton yerine "Ödeme linki henüz tanımlanmadı." mesajı gösterilir; mevcut demo akışı etkilenmez.
+- **`url_launcher` paketi eklendi:** `pubspec.yaml`'a `url_launcher: ^6.3.0` eklendi (harici URL açmak için standart Flutter paketi).
+- **`ApiConfig.agencyPaymentLink` sabit değişkeni eklendi:** `String.fromEnvironment('AGENCY_PAYMENT_LINK')` ile derleme zamanında alınır; yerel varsayılan boş.
+- **Gerçek ödeme entegrasyonu kasıtlı olarak MVP kapsamı dışında bırakıldı:** Kart işleme SDK'ı, webhook/callback, abonelik durumu yönetimi ve fatura sistemi MVP sonrası görev olarak kalır.
+- **Dokümantasyon:** `.env.example` + `README.md` (Gelir Modeli bölümü + ortam değişkeni tablosu) güncellendi.
+- **Ödeyici taraf:** Acente (creator değil).
+- **Doğrulama (2026-06-14):**
+  - `flutter analyze` → No issues found
+  - `flutter test` → All tests passed!
+  - `flutter build web --release --dart-define=API_BASE_URL=http://localhost:8080 --dart-define=AGENCY_PAYMENT_LINK=https://example.com/payment` → √ Built build\web
+
+---
+
 ## 2026-06-12 — Dağıtım Hazırlığı (Railway + Vercel)
 
 - **Backend Railway'e hazırlandı:**

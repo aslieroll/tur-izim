@@ -1,4 +1,4 @@
-# tur.izim
+﻿# tur.izim
 
 **Tur İzim**, yerel tur acentelerinin boş ulaşım dahil tur koltuklarını; üniversite öğrencisi genç UGC içerik üreticileri ve mikro-influencer adaylarıyla buluşturan **B2B/B2C güven ve operasyon platformudur**.
 
@@ -149,6 +149,11 @@ API adresi: `--dart-define=API_BASE_URL=http://localhost:8080`
 | `OPENROUTER_API_KEY` | OpenRouter API anahtarı (boşsa AI fallback özet) |
 | `OPENROUTER_MODEL` | Kullanılacak model (varsayılan: `openai/gpt-4o-mini`) |
 | `API_BASE_URL` | Flutter `--dart-define` ile geçirilen backend URL'si |
+| `AGENCY_PRO_PAYMENT_LINK` | Agency Pro harici checkout linki (backend env); boşsa checkout 422 döner |
+| `AGENCY_GROWTH_PAYMENT_LINK` | Agency Growth harici checkout linki (backend env); boşsa checkout 422 döner |
+| `APP_ADMIN_BOOTSTRAP_ENABLED` | İlk ADMIN bootstrap (varsayılan: `false`; üretimde tek seferlik `true`) |
+| `APP_ADMIN_EMAIL` | Bootstrap ADMIN e-postası (yalnızca Railway env) |
+| `APP_ADMIN_PASSWORD` | Bootstrap ADMIN şifresi (yalnızca Railway env; asla repoya yazmayın) |
 
 > Gerçek değerleri asla Git'e eklemeyin. `.env` dosyası `.gitignore` ile hariç tutulmuştur.
 
@@ -180,9 +185,14 @@ Depoda hazır: `backend/Dockerfile` (multi-stage, Java 17) ve `backend/railway.j
 | `JWT_SECRET` | güçlü rastgele değer | `APP_LEGACY_OPEN_API=false` ise zorunlu |
 | `OPENROUTER_API_KEY` | (opsiyonel) | Boşsa AI özeti deterministik fallback döner — demo için yeterli |
 | `OPENROUTER_MODEL` | `openai/gpt-4o-mini` | Varsayılan |
+| `AGENCY_PRO_PAYMENT_LINK` | sağlayıcı checkout URL | Agency Pro abonelik linki; yalnızca backend env, frontend'e geçmez |
+| `AGENCY_GROWTH_PAYMENT_LINK` | sağlayıcı checkout URL | Agency Growth abonelik linki; yalnızca backend env, frontend'e geçmez |
+| `APP_ADMIN_BOOTSTRAP_ENABLED` | `true` (ilk deploy) | İlk ADMIN hesabını startup'ta oluşturur; giriş sonrası `false` yapın |
+| `APP_ADMIN_EMAIL` | güçlü admin e-posta | Bootstrap için; genel kayıt API'si yoktur |
+| `APP_ADMIN_PASSWORD` | güçlü şifre | Bootstrap için; asla repoya yazmayın |
 | `PORT` | — | Railway otomatik verir; elle girmeyin |
 
-> **Demo vs üretim:** Canlı demo için `APP_DEV_SEED=true` + `APP_LEGACY_OPEN_API=true` kullanılabilir; bu modda frontend token göndermeden çalışır. Gerçek üretimde ikisi de `false` olmalı ve frontend JWT oturumu ile çalışır (bilinen sınırlama: admin için backend'de kullanıcı tanımı gerekir).
+> **Demo vs üretim:** Canlı demo için `APP_DEV_SEED=true` + `APP_LEGACY_OPEN_API=true` kullanılabilir; bu modda frontend token göndermeden çalışır. Gerçek üretimde ikisi de `false` olmalı ve frontend JWT oturumu ile çalışır.
 
 ### Frontend — Vercel (Flutter web)
 
@@ -209,6 +219,97 @@ Alternatif statik hostlar: `build/web` klasörü Netlify veya Firebase Hosting'e
 5. [ ] Flutter web build `API_BASE_URL=https://<backend>` ile alındı ve deploy edildi.
 6. [ ] Tarayıcıda: tur listesi → başvuru → acente başvuran listesi → AI Eşleşme Asistanı kartı görünüyor.
 7. [ ] `POST /api/ai/match-score` yanıt veriyor (OpenRouter anahtarı yoksa `fallbackUsed: true` — demo için normal).
+
+---
+
+## Güvenlik Sertleştirme Notları
+
+Gerçek üretim ortamında aşağıdakileri yapın:
+- `APP_LEGACY_OPEN_API=false` → JWT zorunlu; korumalı uçlara token'sız erişim kapanır.
+- `JWT_SECRET` → güçlü, rastgele en az 256-bit değer.
+- `APP_DEV_SEED=false` → demo veri yüklenmez (self-registration ile CREATOR/AGENCY giriş yapılabilir).
+- `AGENCY_PRO_PAYMENT_LINK` / `AGENCY_GROWTH_PAYMENT_LINK` → gerçek ödeme sağlayıcı checkout URL'leri (yalnızca backend env).
+- `/api/billing/admin/subscriptions/manual-activate` → yalnızca ADMIN JWT ile erişilebilir (`APP_LEGACY_OPEN_API=false` iken).
+- İlk ADMIN hesabı için bkz. **Initial Admin Bootstrap** bölümü (genel kayıt API'si yoktur).
+
+Tam iyzico/PayTR webhook otomasyonu kasıtlı olarak MVP sonrasına bırakılmıştır.
+
+---
+
+## Initial Admin Bootstrap
+
+Genel admin kayıt API'si **yoktur**; ilk üretim/beta ADMIN hesabı yalnızca startup bootstrap ile oluşturulur.
+
+### Ne zaman gerekli?
+
+- İlk Railway deploy'unda, `POST /api/billing/admin/subscriptions/manual-activate` için ADMIN JWT gerektiğinde.
+- Webhook otomasyonu kasıtlı olarak ertelendiği için kontrollü beta'da manuel abonelik aktivasyonu bu ADMIN hesabıyla yapılır.
+
+### İlk deploy adımları
+
+1. Railway env'de ayarlayın (gerçek değerleri **asla** repoya yazmayın):
+   ```
+   APP_ADMIN_BOOTSTRAP_ENABLED=true
+   APP_ADMIN_EMAIL=<güçlü-admin-e-posta>
+   APP_ADMIN_PASSWORD=<güçlü-şifre>
+   ```
+2. Backend'i deploy edin. Startup'ta sistemde ADMIN yoksa **tek bir** `UserRole.ADMIN` hesabı oluşturulur (şifre BCrypt ile hash'lenir).
+3. `POST /api/auth/login` ile ADMIN olarak giriş yapın; JWT alın.
+4. `POST /api/billing/admin/subscriptions/manual-activate` ile acente aboneliğini `ACTIVE` yapın.
+5. Giriş doğrulandıktan sonra Railway'de **`APP_ADMIN_BOOTSTRAP_ENABLED=false`** yapın ve yeniden deploy edin.
+
+### Güvenlik kuralları
+
+- Varsayılan: `APP_ADMIN_BOOTSTRAP_ENABLED=false` — bootstrap kapalıdır.
+- Zaten bir ADMIN varsa ikinci admin **oluşturulmaz**.
+- E-posta zaten kayıtlıysa mevcut kullanıcı **değiştirilmez**.
+- Şifre değerleri **asla loglanmaz** ve repoya **commit edilmez**.
+- Bootstrap sonrası env'deki `APP_ADMIN_PASSWORD` değerini Railway'den kaldırabilirsiniz (bootstrap kapalıyken kullanılmaz).
+
+---
+
+## Gelir Modeli
+
+Turİzim'de ödeyici **tur acentesidir**; creator ücretsiz kullanır.
+
+### Abonelik Planları
+
+| Plan | Fiyat | Aktif Tur | AI Asistan | Başvuru Yönetimi |
+|------|-------|-----------|------------|-----------------|
+| **Ücretsiz** | 0 ₺ | 1 | ✗ | ✗ |
+| **Agency Pro** | 499 ₺/ay | 5 | ✓ | ✓ |
+| **Agency Growth** | 999 ₺/ay | 20 | ✓ | ✓ + öncelikli destek |
+
+### Ödeme Akışı
+
+1. Acente "Aboneliği Başlat" butonuna tıklar.
+2. Frontend `POST /api/billing/agency/checkout` (body: `{"planCode":"AGENCY_PRO"}`) çağırır.
+3. Backend `AGENCY_PRO_PAYMENT_LINK` veya `AGENCY_GROWTH_PAYMENT_LINK` env'den URL döner; aboneliği `PENDING` yapar.
+4. Frontend URL'yi yeni sekmede açar. **Uygulama içinde kart işleme yapılmaz, kart verisi saklanmaz.**
+5. Beta döneminde admin `POST /api/billing/admin/subscriptions/manual-activate` (ADMIN JWT zorunlu) ile `ACTIVE` yapar.
+
+### Abonelik Kapısı
+
+Aktif ücretli plan yoksa (FREE / PENDING / PAST_DUE / CANCELED):
+- Acente panelinde uyarı banner'ı + plan karşılaştırma bölümü gösterilir.
+- `/api/ai/match-score`, `/api/agency/tours/{id}/applications`, `/api/applications/{id}/select` → **HTTP 402**.
+- Creator tarafı ve tur listesi etkilenmez.
+
+### Üretim Gereksinimleri
+
+```bash
+# Backend Railway env değişkenleri
+APP_LEGACY_OPEN_API=false        # JWT zorunlu
+JWT_SECRET=<en az 256-bit rastgele>
+FRONTEND_ORIGIN=https://<vercel-domain>
+AGENCY_PRO_PAYMENT_LINK=https://<provider>/checkout/pro
+AGENCY_GROWTH_PAYMENT_LINK=https://<provider>/checkout/growth
+
+# Frontend Vercel build (ödeme linkleri frontend'e geçirilmez)
+flutter build web --release --dart-define=API_BASE_URL=https://<railway-backend>
+```
+
+**MVP sonrası:** iyzico/PayTR webhook otomasyonu, `ACTIVE`→`PAST_DUE` otomatik geçiş, fatura yönetimi.
 
 ---
 

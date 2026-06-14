@@ -7,6 +7,8 @@ import 'package:tur_izim/core/constants/app_constants.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
 import 'package:tur_izim/core/errors/user_error_message.dart';
 import 'package:tur_izim/features/agency_dashboard/domain/agency_board_snapshot.dart';
+import 'package:tur_izim/features/agency_dashboard/presentation/agency_pro_package_card.dart';
+import 'package:tur_izim/features/billing/domain/agency_subscription.dart';
 import 'package:tur_izim/shared/models/tour_scope.dart';
 import 'package:tur_izim/shared/models/tour_summary.dart';
 import 'package:tur_izim/shared/models/tour_status.dart';
@@ -31,8 +33,10 @@ class AgencyBoardScreen extends StatefulWidget {
   State<AgencyBoardScreen> createState() => _AgencyBoardScreenState();
 }
 
+typedef _BoardData = (AgencyBoardSnapshot, AgencySubscription);
+
 class _AgencyBoardScreenState extends State<AgencyBoardScreen> {
-  Future<AgencyBoardSnapshot>? _loadFuture;
+  Future<_BoardData>? _loadFuture;
 
   @override
   void didChangeDependencies() {
@@ -40,11 +44,15 @@ class _AgencyBoardScreenState extends State<AgencyBoardScreen> {
     _loadFuture ??= _createLoadFuture();
   }
 
-  Future<AgencyBoardSnapshot> _createLoadFuture() {
+  Future<_BoardData> _createLoadFuture() async {
     final deps = TurIzimDependencies.of(context);
     final session = TurIzimScope.of(context);
     final agencyId = session.activeAgencyId!;
-    return deps.agencyDashboard.loadAgencyBoard(agencyId);
+    final results = await Future.wait([
+      deps.agencyDashboard.loadAgencyBoard(agencyId),
+      deps.billing.getSubscription(agencyId),
+    ]);
+    return (results[0] as AgencyBoardSnapshot, results[1] as AgencySubscription);
   }
 
   void _retry() {
@@ -84,7 +92,7 @@ class _AgencyBoardScreenState extends State<AgencyBoardScreen> {
           ),
         ],
       ),
-      body: FutureBuilder<AgencyBoardSnapshot>(
+      body: FutureBuilder<_BoardData>(
         future: _loadFuture,
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.waiting && !snap.hasData) {
@@ -118,7 +126,7 @@ class _AgencyBoardScreenState extends State<AgencyBoardScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final board = snap.data!;
+          final (board, subscription) = snap.data!;
           final tours = board.tours;
           final awaiting = board.pendingApplicantCount;
           final activePublishedCount = tours
@@ -143,6 +151,11 @@ class _AgencyBoardScreenState extends State<AgencyBoardScreen> {
                 registeredTourCount: tours.length,
                 pendingApplicantCount: awaiting,
               ),
+              if (!subscription.isPaid) ...[
+                const SizedBox(height: 20),
+                const _SubscriptionRequiredBanner(),
+                SubscriptionPlansSection(subscription: subscription),
+              ],
               const SizedBox(height: 28),
               TurIzimSectionHeader(
                 overline: 'Acente operasyonu',
@@ -166,6 +179,48 @@ class _AgencyBoardScreenState extends State<AgencyBoardScreen> {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _SubscriptionRequiredBanner extends StatelessWidget {
+  const _SubscriptionRequiredBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: TurIzimPalette.warningAmber.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(TurIzimDesignTokens.radiusMedium),
+        border: Border.all(
+          color: TurIzimPalette.warningAmber.withValues(alpha: 0.35),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          children: [
+            Icon(
+              Icons.lock_outline_rounded,
+              size: 20,
+              color: TurIzimPalette.warningAmber,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Bu özellik Agency Pro aboneliği gerektirir. '
+                'Başvuru yönetimi ve AI Eşleşme Asistanı için '
+                'aşağıdaki paketi edinin.',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: TurIzimPalette.deepNavy.withValues(alpha: 0.80),
+                  height: 1.45,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

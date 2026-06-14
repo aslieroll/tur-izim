@@ -38,6 +38,7 @@ void main() {
             agencyDashboard: bootstrap.agencyDashboard,
             adminDashboard: bootstrap.adminDashboard,
             aiMatch: bootstrap.aiMatch,
+            billing: bootstrap.billing,
             child: const CreatorMyApplicationsScreen(),
           ),
         ),

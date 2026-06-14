@@ -161,6 +161,23 @@ Bir creator veya acente olarak, giriş yapabilmek ve rolüme göre doğru ekranl
 
 ---
 
+## Sonraki Adım — Webhook Otomasyonu (Henüz Başlanmadı)
+
+Hedef: Ödeme sağlayıcısından gelen webhook ile abonelik durumunu otomatik güncelle.
+
+| Görev | Açıklama |
+|-------|----------|
+| Webhook endpoint | `POST /api/billing/webhooks/<provider>` |
+| İmza doğrulama | Provider secret ile HMAC kontrolü |
+| `ACTIVE` geçişi | `payment_intent.succeeded` → abonelik ACTIVE |
+| `PAST_DUE` geçişi | `invoice.payment_failed` → PAST_DUE |
+| Yenileme | `invoice.paid` → `currentPeriodEnd` güncelleme |
+| Test | Webhook test aracı (Stripe CLI veya provider sandbox) |
+
+> Bu adım tamamlanana kadar beta aktivasyon manuel: `POST /api/billing/admin/subscriptions/manual-activate` (ADMIN JWT).
+
+---
+
 ## Risk ve Bağımlılıklar
 
 | Risk | Önlem |

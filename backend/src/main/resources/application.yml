@@ -29,6 +29,17 @@ app:
   # Virgülle birden fazla origin verilebilir; boşsa yalnızca localhost geliştirme origin'leri açık.
   cors:
     frontend-origin: ${FRONTEND_ORIGIN:}
+  # Harici ödeme linkleri (harici checkout; uygulama içinde kart işleme yok).
+  # Boşsa /api/billing/agency/checkout 422 döner; frontend güvenli mesaj gösterir.
+  billing:
+    agency-pro-payment-link: ${AGENCY_PRO_PAYMENT_LINK:}
+    agency-growth-payment-link: ${AGENCY_GROWTH_PAYMENT_LINK:}
+  # İlk üretim/beta ADMIN hesabı (genel API yok; yalnızca startup bootstrap).
+  # Bir kez deploy sonrası false yapın; şifre asla repoya yazılmaz.
+  admin-bootstrap:
+    enabled: ${APP_ADMIN_BOOTSTRAP_ENABLED:false}
+    email: ${APP_ADMIN_EMAIL:}
+    password: ${APP_ADMIN_PASSWORD:}
   # AI Match Assistant: anahtar boşsa LLM atlanır ve deterministik fallback özet döner.
   ai:
     openrouter:

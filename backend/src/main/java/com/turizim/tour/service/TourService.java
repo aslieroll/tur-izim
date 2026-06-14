@@ -2,6 +2,7 @@ package com.turizim.tour.service;
 
 import com.turizim.agency.Agency;
 import com.turizim.agency.AgencyRepository;
+import com.turizim.billing.AgencySubscriptionService;
 import com.turizim.common.exception.BusinessRuleException;
 import com.turizim.domain.enums.TourStatus;
 import com.turizim.domain.enums.UserRole;
@@ -25,14 +26,17 @@ public class TourService {
     private final TourRepository tourRepository;
     private final AgencyRepository agencyRepository;
     private final TourCreatorEligibilityService tourCreatorEligibilityService;
+    private final AgencySubscriptionService subscriptionService;
 
     public TourService(
             TourRepository tourRepository,
             AgencyRepository agencyRepository,
-            TourCreatorEligibilityService tourCreatorEligibilityService) {
+            TourCreatorEligibilityService tourCreatorEligibilityService,
+            AgencySubscriptionService subscriptionService) {
         this.tourRepository = tourRepository;
         this.agencyRepository = agencyRepository;
         this.tourCreatorEligibilityService = tourCreatorEligibilityService;
+        this.subscriptionService = subscriptionService;
     }
 
     @Transactional(readOnly = true)
@@ -57,6 +61,20 @@ public class TourService {
     public TourSummaryResponse create(CreateTourRequest request) {
         SecurityContextSupport.currentUser()
                 .ifPresent(actor -> enforceAgencyMatchesCreateRequest(actor, request.agencyId()));
+
+        // Plan kota kontrolü: JWT varsa (non-legacy) uygula.
+        SecurityContextSupport.currentUser().ifPresent(actor -> {
+            if (actor.getAgencyId() != null
+                    && !subscriptionService.canCreateAnotherTour(actor.getAgencyId())) {
+                int limit = subscriptionService.getActiveTourLimit(actor.getAgencyId());
+                throw new BusinessRuleException(
+                        HttpStatus.PAYMENT_REQUIRED.value(),
+                        "Aktif tur limitine ulaştınız ("
+                                + limit
+                                + "). Daha fazla tur oluşturmak için aboneliğinizi yükseltin.");
+            }
+        });
+
         Agency agency = agencyRepository
                 .findById(request.agencyId())
                 .orElseThrow(() -> new BusinessRuleException(HttpStatus.BAD_REQUEST.value(), "Acente bulunamadı."));

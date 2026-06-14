@@ -93,6 +93,14 @@ public class SecurityConfig {
                                     .hasAnyRole("AGENCY", "ADMIN")
                                     .requestMatchers("/api/assignments/**")
                                     .hasAnyRole("CREATOR", "AGENCY")
+                                    .requestMatchers(HttpMethod.GET, "/api/billing/agency/plans")
+                                    .permitAll()
+                                    .requestMatchers(HttpMethod.GET, "/api/billing/agency/subscription")
+                                    .hasAnyRole("AGENCY", "ADMIN")
+                                    .requestMatchers(HttpMethod.POST, "/api/billing/agency/checkout")
+                                    .hasRole("AGENCY")
+                                    .requestMatchers("/api/billing/admin/**")
+                                    .hasRole("ADMIN")
                                     .anyRequest()
                                     .authenticated());
         }

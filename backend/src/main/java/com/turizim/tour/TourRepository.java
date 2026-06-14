@@ -22,4 +22,8 @@ public interface TourRepository extends JpaRepository<Tour, UUID> {
     @EntityGraph(attributePaths = "agency")
     @Query("SELECT t FROM Tour t WHERE t.agency.id = :agencyId ORDER BY t.startDate DESC")
     List<Tour> findByAgencyIdWithAgency(@Param("agencyId") UUID agencyId);
+
+    @Query("SELECT COUNT(t) FROM Tour t WHERE t.agency.id = :agencyId AND t.status = :status")
+    long countByAgencyIdAndStatus(
+            @Param("agencyId") UUID agencyId, @Param("status") TourStatus status);
 }
