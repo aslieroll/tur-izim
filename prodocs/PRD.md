@@ -4,7 +4,9 @@
 |------|-------|
 | Versiyon | Beta — subscription model aktif |
 | Marka adı | tur.izim |
-| Son güncelleme | 2026-06-12 |
+| Son güncelleme | 2026-06-14 |
+| Canlı frontend | https://tur-izim-live.vercel.app |
+| Canlı backend | https://tur-izim-production.up.railway.app |
 | Okuyucu | Türkçe konuşan kurucu / ürün sahibi |
 | Teknik adlar | Tablo, API ve kod: İngilizce |
 

@@ -2,7 +2,21 @@
 
 **Tur İzim**, yerel tur acentelerinin boş ulaşım dahil tur koltuklarını; üniversite öğrencisi genç UGC içerik üreticileri ve mikro-influencer adaylarıyla buluşturan **B2B/B2C güven ve operasyon platformudur**.
 
-> Tur İzim bir seyahat acentesi değildir. Sosyal medya platformu değildir. Otel veya uçak bileti satışı yapmaz.
+> Tur İzim bir seyahat acentesi değildir. Sosyal medya platformu değildir. Otel veya uçak bileti satışı yapmaz. Uygulama içinde sosyal feed, sohbet veya kart bilgisi saklama **yoktur**.
+
+---
+
+## Canlı Ortam (Production)
+
+| Kaynak | URL |
+|--------|-----|
+| **Frontend** | https://tur-izim-live.vercel.app |
+| **Backend** | https://tur-izim-production.up.railway.app |
+| **Health** | https://tur-izim-production.up.railway.app/api/health (`status: UP`) |
+| **Abonelik planları** | https://tur-izim-production.up.railway.app/api/billing/agency/plans |
+
+Hızlı doğrulama: `.\scripts\smoke-test-live.ps1`  
+Teslim kontrol listesi: `docs/DELIVERY_CHECKLIST.md`
 
 ---
 
@@ -34,7 +48,8 @@
 - Sosyal medya feed'i
 - Uygulama içi chat / mesajlaşma
 - Otel veya uçak bileti rezervasyonu
-- Gerçek ödeme entegrasyonu
+- Uygulama içi kart toplama veya ödeme SDK entegrasyonu
+- Gerçek ödeme webhook otomasyonu (harici checkout redirect MVP'de yeterli)
 - Otomatik eşleştirme / random assignment
 - Video upload veya uygulama içi streaming
 - Otomatik sosyal medya izleme
@@ -42,16 +57,30 @@
 
 ---
 
-## AI Kullanımı
+## AI Eşleşme Asistanı (AI Match Assistant)
+
+Acente panelinde, başvuru inceleme sırasında kullanılan **karar destek** özelliğidir:
+
+- Endpoint: `POST /api/ai/match-score`
+- Girdi: tur + creator profil özeti
+- Çıktı: uyum skoru, risk seviyesi, kısa Türkçe açıklama
+- **Otomatik seçim yapmaz**; acente creator'ı yine **manuel** seçer
+- Aktif ücretli plan (Agency Pro / Growth) gerektirir; FREE planda **HTTP 402**
+- `OPENROUTER_API_KEY` boşsa backend deterministik fallback döner (`fallbackUsed: true`)
+
+---
+
+## AI Kullanımı (Geliştirme)
 
 Tur İzim MVP'sinde AI şu şekilde kullanılmıştır:
 
 - **Ürün geliştirme desteği** — PRD, iş kuralları, kullanıcı akışları ve API sözleşmesi taslaklarının oluşturulmasında OpenRouter üzerinden LLM asistanı kullanıldı
 - **Kod iskelet ve review** — Flutter widget iskeletleri ve Spring Boot controller/service desenleri için yardımcı araç
 - **AUE skoru** — Kural tabanlı formül (AI değil); `suitability-score.md` bakınız
+- **AI Match Assistant** — Acente başvuru inceleme kartında açıklayıcı özet (karar verici değil)
 
 Planlanan (MVP sonrası):
-- Creator başvuru kalitesi hakkında açıklayıcı AI önerileri (karar verici değil, karar destekleyici)
+- Creator başvuru kalitesi hakkında ek açıklayıcı AI önerileri
 
 ---
 
@@ -179,20 +208,20 @@ Depoda hazır: `backend/Dockerfile` (multi-stage, Java 17) ve `backend/railway.j
 | `SPRING_DATASOURCE_URL` | `jdbc:postgresql://<host>:<port>/<db>` | Railway PostgreSQL bilgilerinden **JDBC formatında** yazın (Railway'in verdiği `postgresql://` URL'sini `jdbc:postgresql://` yapın, kullanıcı/şifreyi ayırın) |
 | `SPRING_DATASOURCE_USERNAME` | Railway PG kullanıcı | |
 | `SPRING_DATASOURCE_PASSWORD` | Railway PG şifre | Asla repoya yazmayın |
-| `FRONTEND_ORIGIN` | `https://<app>.vercel.app` | CORS; virgülle birden fazla origin olabilir |
-| `APP_DEV_SEED` | `true` | Boş DB'ye demo acente/creator/tur ekler; gerçek üretimde `false` |
-| `APP_LEGACY_OPEN_API` | `true` | Demo: API token'sız erişilir. Gerçek üretimde `false` (JWT zorunlu) |
+| `FRONTEND_ORIGIN` | `https://tur-izim-live.vercel.app` | CORS; virgülle birden fazla origin olabilir |
+| `APP_DEV_SEED` | `false` | Üretimde demo veri yüklenmez; yerel demo için `true` |
+| `APP_LEGACY_OPEN_API` | `false` | Üretimde JWT zorunlu; yerel demo için geçici `true` |
 | `JWT_SECRET` | güçlü rastgele değer | `APP_LEGACY_OPEN_API=false` ise zorunlu |
 | `OPENROUTER_API_KEY` | (opsiyonel) | Boşsa AI özeti deterministik fallback döner — demo için yeterli |
 | `OPENROUTER_MODEL` | `openai/gpt-4o-mini` | Varsayılan |
 | `AGENCY_PRO_PAYMENT_LINK` | sağlayıcı checkout URL | Agency Pro abonelik linki; yalnızca backend env, frontend'e geçmez |
 | `AGENCY_GROWTH_PAYMENT_LINK` | sağlayıcı checkout URL | Agency Growth abonelik linki; yalnızca backend env, frontend'e geçmez |
-| `APP_ADMIN_BOOTSTRAP_ENABLED` | `true` (ilk deploy) | İlk ADMIN hesabını startup'ta oluşturur; giriş sonrası `false` yapın |
+| `APP_ADMIN_BOOTSTRAP_ENABLED` | `false` (üretim) | İlk deploy'da tek seferlik `true`; ADMIN oluşturulduktan sonra **kapatın** |
 | `APP_ADMIN_EMAIL` | güçlü admin e-posta | Bootstrap için; genel kayıt API'si yoktur |
 | `APP_ADMIN_PASSWORD` | güçlü şifre | Bootstrap için; asla repoya yazmayın |
 | `PORT` | — | Railway otomatik verir; elle girmeyin |
 
-> **Demo vs üretim:** Canlı demo için `APP_DEV_SEED=true` + `APP_LEGACY_OPEN_API=true` kullanılabilir; bu modda frontend token göndermeden çalışır. Gerçek üretimde ikisi de `false` olmalı ve frontend JWT oturumu ile çalışır.
+> **Demo vs üretim:** Yerel veya geçici demo için `APP_DEV_SEED=true` + `APP_LEGACY_OPEN_API=true` kullanılabilir. **Canlı teslim ortamında** (`tur-izim-live.vercel.app`) ikisi de `false` olmalı; frontend JWT oturumu ile çalışır, korumalı uçlara token'sız erişim 401 döner.
 
 ### Frontend — Vercel (Flutter web)
 
@@ -221,27 +250,39 @@ Depoda hazır: `frontend/vercel.json` (SPA rewrite), `frontend/package.json`, `f
 
 > Deploy sonrası backend'de `FRONTEND_ORIGIN` değişkenine Vercel domain'ini eklemeyi unutmayın; aksi halde tarayıcı CORS hatası verir.
 
-### Canlı Demo Kontrol Listesi
+### Canlı Ortam Kontrol Listesi
 
-1. [ ] Railway PostgreSQL çalışıyor; backend healthcheck (`/api/health`) yeşil.
-2. [ ] Backend log'unda seed mesajı var (demo acente + 2 creator + 3 tur).
-3. [ ] `https://<backend>/api/tours` JSON liste dönüyor.
-4. [ ] `FRONTEND_ORIGIN` Vercel domain'i ile ayarlı.
-5. [ ] Flutter web build `API_BASE_URL=https://<backend>` ile alındı ve deploy edildi.
-6. [ ] Tarayıcıda: tur listesi → başvuru → acente başvuran listesi → AI Eşleşme Asistanı kartı görünüyor.
-7. [ ] `POST /api/ai/match-score` yanıt veriyor (OpenRouter anahtarı yoksa `fallbackUsed: true` — demo için normal).
+1. [ ] `.\scripts\smoke-test-live.ps1` → tüm kontroller PASS
+2. [ ] Railway PostgreSQL çalışıyor; `GET /api/health` → `status: ok`
+3. [ ] `GET /api/billing/agency/plans` → FREE, AGENCY_PRO, AGENCY_GROWTH
+4. [ ] `FRONTEND_ORIGIN=https://tur-izim-live.vercel.app` (CORS hatası yok)
+5. [ ] `APP_LEGACY_OPEN_API=false`, `APP_DEV_SEED=false`, `APP_ADMIN_BOOTSTRAP_ENABLED=false`
+6. [ ] Vercel build `API_BASE_URL=https://tur-izim-production.up.railway.app`
+7. [ ] Tarayıcı: public tur listesi; JWT olmadan korumalı creator ekranları → giriş isteği (401 crash yok)
+8. [ ] Agency girişi: plan kartları + harici checkout; FREE planda kilitli özellikler → 402
+
+Ayrıntılı liste: `docs/DELIVERY_CHECKLIST.md`
 
 ---
 
-## Güvenlik Sertleştirme Notları
+## Güvenlik Sertleştirme Notları (Canlı Teslim)
 
-Gerçek üretim ortamında aşağıdakileri yapın:
-- `APP_LEGACY_OPEN_API=false` → JWT zorunlu; korumalı uçlara token'sız erişim kapanır.
-- `JWT_SECRET` → güçlü, rastgele en az 256-bit değer.
-- `APP_DEV_SEED=false` → demo veri yüklenmez (self-registration ile CREATOR/AGENCY giriş yapılabilir).
-- `AGENCY_PRO_PAYMENT_LINK` / `AGENCY_GROWTH_PAYMENT_LINK` → gerçek ödeme sağlayıcı checkout URL'leri (yalnızca backend env).
-- `/api/billing/admin/subscriptions/manual-activate` → yalnızca ADMIN JWT ile erişilebilir (`APP_LEGACY_OPEN_API=false` iken).
-- İlk ADMIN hesabı için bkz. **Initial Admin Bootstrap** bölümü (genel kayıt API'si yoktur).
+Canlı ortam (`tur-izim-production` / `tur-izim-live`) için zorunlu ayarlar:
+
+| Ayar | Üretim değeri |
+|------|---------------|
+| `APP_LEGACY_OPEN_API` | `false` — JWT zorunlu; korumalı uçlar token'sız kapalı |
+| `APP_DEV_SEED` | `false` — demo seed yüklenmez |
+| `APP_ADMIN_BOOTSTRAP_ENABLED` | `false` — ilk ADMIN oluşturulduktan sonra kapatılmalı |
+| `FRONTEND_ORIGIN` | `https://tur-izim-live.vercel.app` |
+| `JWT_SECRET` | Güçlü rastgele değer (repoda yok) |
+
+Ek notlar:
+
+- `AGENCY_PRO_PAYMENT_LINK` / `AGENCY_GROWTH_PAYMENT_LINK` yalnızca backend env'de; kart verisi uygulamada **saklanmaz**
+- `/api/billing/admin/subscriptions/manual-activate` yalnızca ADMIN JWT ile
+- Kabul edilebilir yanıtlar: **401** (oturumsuz), **402** (ücretli plan kapısı), **403** (yanlış rol)
+- Kabul edilemez: CORS hatası, `Failed to fetch`, `localhost:8080` üretimde, Uncaught Error, **500**
 
 Tam iyzico/PayTR webhook otomasyonu kasıtlı olarak MVP sonrasına bırakılmıştır.
 
@@ -309,15 +350,17 @@ Aktif ücretli plan yoksa (FREE / PENDING / PAST_DUE / CANCELED):
 ### Üretim Gereksinimleri
 
 ```bash
-# Backend Railway env değişkenleri
-APP_LEGACY_OPEN_API=false        # JWT zorunlu
+# Backend Railway env (canlı teslim)
+APP_LEGACY_OPEN_API=false
+APP_DEV_SEED=false
+APP_ADMIN_BOOTSTRAP_ENABLED=false
 JWT_SECRET=<en az 256-bit rastgele>
-FRONTEND_ORIGIN=https://<vercel-domain>
+FRONTEND_ORIGIN=https://tur-izim-live.vercel.app
 AGENCY_PRO_PAYMENT_LINK=https://<provider>/checkout/pro
 AGENCY_GROWTH_PAYMENT_LINK=https://<provider>/checkout/growth
 
-# Frontend Vercel build (ödeme linkleri frontend'e geçirilmez)
-flutter build web --release --dart-define=API_BASE_URL=https://<railway-backend>
+# Frontend Vercel (ödeme linkleri frontend'e geçirilmez)
+API_BASE_URL=https://tur-izim-production.up.railway.app
 ```
 
 **MVP sonrası:** iyzico/PayTR webhook otomasyonu, `ACTIVE`→`PAST_DUE` otomatik geçiş, fatura yönetimi.
@@ -352,6 +395,8 @@ tur-izim/
 ├── backend/          # Java Spring Boot REST API (PostgreSQL)
 ├── frontend/         # Flutter / Dart, mobil öncelikli uygulama
 ├── prodocs/          # Ürün ve teknik dokümantasyon
+├── docs/             # Teslim kontrol listesi (DELIVERY_CHECKLIST.md)
+├── scripts/          # Canlı smoke test (smoke-test-live.ps1)
 ├── stitch-export/    # Google Stitch UI referans dosyaları (görsel referans)
 ├── docker-compose.yml
 ├── .env.example      # Ortam değişkeni şablonu

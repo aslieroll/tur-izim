@@ -3,6 +3,10 @@
 Bu dosya Tur İzim MVP için geçerli **teknik bileşenleri**, seçim gerekçelerini ve AI kullanımını özetler.  
 Ayrıntılı iş kuralları ve kapsam: `PRD.md`, `business-rules.md`.
 
+**Canlı ortam:** Frontend https://tur-izim-live.vercel.app · Backend https://tur-izim-production.up.railway.app
+
+**Ürün sınırı:** Yalnızca tur operasyonları — sosyal feed, chat, otel/uçak ve uygulama içi kart saklama yoktur.
+
 ---
 
 ## 1. Frontend

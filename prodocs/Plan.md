@@ -4,6 +4,8 @@ Bu belge Tur İzim MVP'sinin fazlarını, **kullanıcı hikayelerini** ve teknik
 Tek iş gerçeği: `PRD.md`, `business-rules.md`, `user-flows.md`.  
 Uygulama durumu: `Progress.md`.
 
+**Canlı teslim:** https://tur-izim-live.vercel.app (frontend) · https://tur-izim-production.up.railway.app (backend) · Kontrol listesi: `docs/DELIVERY_CHECKLIST.md`
+
 ---
 
 ## Faz 0 — Dokümantasyon ve Paydaş Hizası ✅
