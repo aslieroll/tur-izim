@@ -1,20 +1,19 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../features/auth/data/session_auth_repository.dart';
 
-/// Exposes the mocked [`SessionAuthRepository`] to descendant widgets.
-class TurIzimScope extends InheritedWidget {
-  const TurIzimScope({required this.session, required super.child, super.key});
-
-  final SessionAuthRepository session;
+/// [SessionAuthRepository] değişince (JWT / demo) alt ağaç yenilenir.
+class TurIzimScope extends InheritedNotifier<SessionAuthRepository> {
+  // ignore: prefer_const_constructors_in_immutables — [SessionAuthRepository] const değil
+  TurIzimScope({
+    super.key,
+    required SessionAuthRepository session,
+    required super.child,
+  }) : super(notifier: session);
 
   static SessionAuthRepository of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<TurIzimScope>();
     assert(scope != null, 'TurIzimScope not found');
-    return scope!.session;
+    return scope!.notifier!;
   }
-
-  @override
-  bool updateShouldNotify(TurIzimScope oldWidget) =>
-      oldWidget.session != session;
 }

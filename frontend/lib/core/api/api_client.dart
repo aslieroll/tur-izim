@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'api_config.dart';
 import 'api_exception.dart';
 
-/// Tur İzim REST kökü ile konuşan ince HTTP sarmalayıcı (MVP; auth yok).
+/// Tur İzim REST kökü ile konuşan ince HTTP sarmalayıcı (isteğe bağlı `Authorization: Bearer`).
 abstract interface class TurIzimApiClient {
   Future<void> close();
 
@@ -24,11 +24,14 @@ final class HttpTurIzimApiClient implements TurIzimApiClient {
   HttpTurIzimApiClient({
     http.Client? httpClient,
     Duration timeout = const Duration(seconds: 20),
+    String? Function()? accessToken,
   })  : _client = httpClient ?? http.Client(),
-        _timeout = timeout;
+        _timeout = timeout,
+        _accessToken = accessToken;
 
   final http.Client _client;
   final Duration _timeout;
+  final String? Function()? _accessToken;
 
   @override
   Future<void> close() async {
@@ -97,10 +100,17 @@ final class HttpTurIzimApiClient implements TurIzimApiClient {
     }
   }
 
-  Map<String, String> get _headers => {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      };
+  Map<String, String> get _headers {
+    final h = <String, String>{
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+    final t = _accessToken?.call();
+    if (t != null && t.isNotEmpty) {
+      h['Authorization'] = 'Bearer $t';
+    }
+    return h;
+  }
 
   Future<http.Response> _get(String path) async {
     final uri = ApiConfig.uri(path);

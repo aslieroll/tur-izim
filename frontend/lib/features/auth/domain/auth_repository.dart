@@ -1,14 +1,26 @@
 import '../../../shared/models/session_snapshot.dart';
 import '../../../shared/models/user_role.dart';
+import 'auth_dtos.dart';
 
-/// Session contract; production auth will satisfy the same shape via API tokens.
+/// Session + kimlik doğrulama sözleşmesi.
 abstract class AuthRepository {
-  /// Current mocked role after [selectRole], or `null` when signed out.
   UserRole? get currentRole;
+
+  /// Yerel olarak saklanmış ve doğrulanmış JWT oturumu.
+  bool get isJwtAuthenticated;
 
   Future<SessionSnapshot?> readSnapshot();
 
   Future<void> selectRole(UserRole role);
 
   Future<void> clearSession();
+
+  Future<void> signInWithPassword({
+    required String email,
+    required String password,
+  });
+
+  Future<void> registerCreatorAccount(RegisterCreatorRequest data);
+
+  Future<void> registerAgencyAccount(RegisterAgencyRequest data);
 }

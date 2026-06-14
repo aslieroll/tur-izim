@@ -10,6 +10,9 @@ import '../features/assignments/presentation/creator_assignment_hub_screen.dart'
 import '../features/assignments/presentation/creator_deposit_ack_screen.dart';
 import '../features/assignments/presentation/creator_my_assignments_screen.dart';
 import '../features/auth/data/session_auth_repository.dart';
+import '../features/auth/presentation/login_screen.dart';
+import '../features/auth/presentation/register_agency_screen.dart';
+import '../features/auth/presentation/register_creator_screen.dart';
 import '../features/auth/presentation/welcome_screen.dart';
 import '../features/publications/presentation/creator_submit_publication_screen.dart';
 import '../features/tours/presentation/creator_open_tours_screen.dart';
@@ -21,6 +24,10 @@ abstract final class AppRoutes {
   AppRoutes._();
 
   static const String welcome = '/';
+  static const String login = '/login';
+  static const String registerCreator = '/register/creator';
+  static const String registerAgency = '/register/agency';
+
   static const String creatorHome = '/creator';
   static const String agencyHome = '/agency';
   static const String adminHome = '/admin';
@@ -59,12 +66,34 @@ GoRouter buildAppRouter(SessionAuthRepository session) {
       final path = state.matchedLocation;
       final role = session.currentRole;
 
-      if (path == AppRoutes.welcome) {
-        return null;
+      if (path == AppRoutes.welcome && role != null) {
+        return switch (role) {
+          UserRole.creator => AppRoutes.creatorHome,
+          UserRole.agency => AppRoutes.agencyHome,
+          UserRole.admin => AppRoutes.adminHome,
+        };
       }
 
+      final isPreAuthShell = path == AppRoutes.welcome ||
+          path == AppRoutes.login ||
+          path == AppRoutes.registerCreator ||
+          path == AppRoutes.registerAgency;
+
       if (role == null) {
+        if (isPreAuthShell) {
+          return null;
+        }
         return AppRoutes.welcome;
+      }
+
+      if ((path == AppRoutes.login ||
+              path == AppRoutes.registerCreator ||
+              path == AppRoutes.registerAgency)) {
+        return switch (role) {
+          UserRole.creator => AppRoutes.creatorHome,
+          UserRole.agency => AppRoutes.agencyHome,
+          UserRole.admin => AppRoutes.adminHome,
+        };
       }
 
       if (path.startsWith(AppRoutes.creatorHome) && role != UserRole.creator) {
@@ -83,6 +112,18 @@ GoRouter buildAppRouter(SessionAuthRepository session) {
       GoRoute(
         path: AppRoutes.welcome,
         builder: (context, _) => const WelcomeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.login,
+        builder: (context, _) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.registerCreator,
+        builder: (context, _) => const RegisterCreatorScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.registerAgency,
+        builder: (context, _) => const RegisterAgencyScreen(),
       ),
       GoRoute(
         path: '/creator/tours/:tourId/basvur',
