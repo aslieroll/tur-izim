@@ -1,6 +1,0 @@
-# Yalnızca build/web yüklenir; Flutter kaynakları ve araç çıktıları hariç.
-*
-!build
-build/*
-!build/web
-!vercel.json
