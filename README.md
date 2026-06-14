@@ -196,17 +196,28 @@ Depoda hazır: `backend/Dockerfile` (multi-stage, Java 17) ve `backend/railway.j
 
 ### Frontend — Vercel (Flutter web)
 
-Vercel build ortamında Flutter yüklü olmadığı için **önerilen yol: yerelde build + hazır çıktıyı deploy**. Depoda hazır: `frontend/vercel.json` (SPA rewrite + `build/web` çıktı dizini) ve `frontend/.vercelignore`.
+Vercel UI'da uzun Flutter komutu 256 karakter sınırına takılır; `frontend/vercel-build.sh` + `npm run vercel-build` kullanın.
+
+**Vercel proje ayarları:**
+
+| Alan | Değer |
+|------|-------|
+| Root Directory | `frontend` |
+| Framework Preset | Other |
+| Build Command | `npm run vercel-build` |
+| Output Directory | `build/web` |
+| Environment Variable | `API_BASE_URL=https://tur-izim-production.up.railway.app` |
+
+Build sırasında script Flutter stable'ı `$HOME/flutter` altına kurar, `flutter pub get` ve `flutter build web --release` çalıştırır. `API_BASE_URL` env yoksa yukarıdaki Railway URL varsayılan olarak kullanılır.
+
+Yerel doğrulama:
 
 ```bash
 cd frontend
-flutter build web --release --dart-define=API_BASE_URL=https://<railway-backend-domain>
-npx vercel deploy --prod
+flutter build web --release --dart-define=API_BASE_URL=https://tur-izim-production.up.railway.app
 ```
 
-`vercel` CLI ilk çalıştırmada proje bağlama soruları sorar; `vercel.json` build komutu çalıştırmaz, yalnızca `build/web` içeriğini yayınlar.
-
-Alternatif statik hostlar: `build/web` klasörü Netlify veya Firebase Hosting'e de aynen yüklenebilir.
+Depoda hazır: `frontend/vercel.json` (SPA rewrite), `frontend/package.json`, `frontend/vercel-build.sh`.
 
 > Deploy sonrası backend'de `FRONTEND_ORIGIN` değişkenine Vercel domain'ini eklemeyi unutmayın; aksi halde tarayıcı CORS hatası verir.
 
