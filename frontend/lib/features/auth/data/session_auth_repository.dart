@@ -49,10 +49,14 @@ final class SessionAuthRepository extends ChangeNotifier
       _isJwtSession &&
       (_tokenHolder.value?.isNotEmpty ?? false);
 
+  /// Korumalı creator uçları (başvurular, atamalar, profil özeti) için JWT zorunlu.
+  bool get canAccessProtectedCreatorEndpoints =>
+      isJwtAuthenticated && activeCreatorId != null;
+
   @override
   UserRole? get currentRole => _role;
 
-  /// Önce dart-define, sonra JWT profili, sonra API seed, son mock sabit.
+  /// JWT oturumundaki creator profil kimliği; oturum yoksa `null` (hardcode demo yok).
   String? get activeCreatorId =>
       _role == UserRole.creator ? _resolvedCreatorId() : null;
 
@@ -67,7 +71,7 @@ final class SessionAuthRepository extends ChangeNotifier
     if (isJwtAuthenticated && _jwtCreatorProfileId != null) {
       return _jwtCreatorProfileId;
     }
-    return _demoCreatorIdFromApi ?? MockActorIds.creatorAlice;
+    return null;
   }
 
   String? _resolvedAgencyId() {
@@ -140,6 +144,12 @@ final class SessionAuthRepository extends ChangeNotifier
 
   /// Demo girişi öncesi yalnızca JWT kaydını temizler (rol atanmadan önce).
   Future<void> _clearJwtForDemoSwitch() async {
+    final hasStoredJwt =
+        _isJwtSession || (_tokenHolder.value?.isNotEmpty ?? false);
+    if (!hasStoredJwt) {
+      _clearJwtProfileFields();
+      return;
+    }
     await _clearJwtArtifacts();
   }
 
@@ -243,5 +253,20 @@ final class SessionAuthRepository extends ChangeNotifier
       UserRole.agency => 'mock-user-agency',
       UserRole.creator => 'mock-user-creator',
     };
+  }
+
+  /// Widget / entegrasyon testleri için JWT creator oturumu simülasyonu.
+  @visibleForTesting
+  void simulateAuthenticatedCreator({
+    required String creatorProfileId,
+    String userId = 'test-user-id',
+    String token = 'test-jwt-token',
+  }) {
+    _tokenHolder.value = token;
+    _role = UserRole.creator;
+    _userId = userId;
+    _jwtCreatorProfileId = creatorProfileId;
+    _isJwtSession = true;
+    notifyListeners();
   }
 }

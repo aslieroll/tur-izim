@@ -3,7 +3,12 @@ import 'package:tur_izim/core/errors/app_exception.dart';
 
 /// Snackbar / gövde için güvenli metin (stack trace yok).
 String userFacingErrorMessage(Object? error) {
-  if (error is ApiException) return error.userMessage;
+  if (error is ApiException) {
+    if (error.isAuthRequired) {
+      return 'Devam etmek için giriş yapın.';
+    }
+    return error.userMessage;
+  }
   if (error is AppException) return error.message;
   return error?.toString().contains('Exception') == false &&
           error?.toString().isNotEmpty == true

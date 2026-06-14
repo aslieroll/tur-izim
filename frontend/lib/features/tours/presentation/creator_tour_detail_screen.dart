@@ -46,8 +46,11 @@ class _CreatorTourDetailScreenState extends State<CreatorTourDetailScreen> {
   Future<({TourDetail? detail, bool applied, bool eligible})> _load() async {
     final deps = TurIzimDependencies.of(context);
     final session = TurIzimScope.of(context);
-    final creatorId = session.activeCreatorId!;
     final tour = await deps.tours.fetchTourDetail(widget.tourId);
+    if (!session.canAccessProtectedCreatorEndpoints) {
+      return (detail: tour, applied: false, eligible: false);
+    }
+    final creatorId = session.activeCreatorId!;
     final applied = tour == null
         ? false
         : await deps.tours.hasCreatorApplied(
@@ -82,8 +85,12 @@ class _CreatorTourDetailScreenState extends State<CreatorTourDetailScreen> {
           }
 
           final agencyLine = agencyDisplayLineWithCityTurkish(tour);
-          final canOpenForm =
-              tour.isOpenForApplications && !applied && eligible;
+          final session = TurIzimScope.of(context);
+          final needsLogin = !session.canAccessProtectedCreatorEndpoints;
+          final canOpenForm = !needsLogin &&
+              tour.isOpenForApplications &&
+              !applied &&
+              eligible;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(
@@ -118,6 +125,7 @@ class _CreatorTourDetailScreenState extends State<CreatorTourDetailScreen> {
                 _ApplicationCtaCard(
                   applied: applied,
                   eligible: eligible,
+                  needsLogin: needsLogin,
                   isInternational: tour.tourScope == TourScope.international,
                   isOpenForApplications: tour.isOpenForApplications,
                   canOpenForm: canOpenForm,
@@ -405,6 +413,7 @@ class _ApplicationCtaCard extends StatelessWidget {
   const _ApplicationCtaCard({
     required this.applied,
     required this.eligible,
+    required this.needsLogin,
     required this.isInternational,
     required this.isOpenForApplications,
     required this.canOpenForm,
@@ -413,6 +422,7 @@ class _ApplicationCtaCard extends StatelessWidget {
 
   final bool applied;
   final bool eligible;
+  final bool needsLogin;
   final bool isInternational;
   final bool isOpenForApplications;
   final bool canOpenForm;
@@ -444,17 +454,27 @@ class _ApplicationCtaCard extends StatelessWidget {
             ),
           ],
           const SizedBox(height: 16),
-          TurIzimPrimaryButton(
-            label: 'Başvuruya Geç',
-            icon: Icons.arrow_forward_rounded,
-            onPressed: canOpenForm ? onApply : null,
-          ),
+          if (needsLogin)
+            TurIzimPrimaryButton(
+              label: 'Giriş yap',
+              icon: Icons.login_rounded,
+              onPressed: () => context.push(AppRoutes.login),
+            )
+          else
+            TurIzimPrimaryButton(
+              label: 'Başvuruya Geç',
+              icon: Icons.arrow_forward_rounded,
+              onPressed: canOpenForm ? onApply : null,
+            ),
         ],
       ),
     );
   }
 
   String? _blockedMessage() {
+    if (needsLogin) {
+      return 'Başvuru göndermek için üretici hesabınızla giriş yapın.';
+    }
     if (applied) {
       return 'Bu ilana zaten başvurdunuz; tekrar başvuru gönderilemez.';
     }

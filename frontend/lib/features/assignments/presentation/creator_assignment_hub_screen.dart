@@ -6,6 +6,7 @@ import 'package:tur_izim/app/tur_izim_scope.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
 import 'package:tur_izim/core/errors/app_exception.dart';
 import 'package:tur_izim/core/errors/user_error_message.dart';
+import 'package:tur_izim/features/auth/presentation/creator_protected_body.dart';
 import 'package:tur_izim/shared/models/application_commitment.dart';
 import 'package:tur_izim/shared/models/assignment_detail.dart';
 import 'package:tur_izim/shared/models/assignment_status.dart';
@@ -43,7 +44,10 @@ class _CreatorAssignmentHubScreenState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bundle ??= _load();
+    final session = TurIzimScope.of(context);
+    if (_bundle == null && session.canAccessProtectedCreatorEndpoints) {
+      _bundle = _load();
+    }
   }
 
   Future<({AssignmentDetail detail, List<AssignmentTimelineStep> steps})>
@@ -115,10 +119,11 @@ class _CreatorAssignmentHubScreenState
           IconButton(icon: const Icon(Icons.refresh), onPressed: _refresh),
         ],
       ),
-      body:
-          FutureBuilder<
-            ({AssignmentDetail detail, List<AssignmentTimelineStep> steps})
-          >(
+      body: CreatorProtectedBody(
+        builder: (context, creatorId) =>
+            FutureBuilder<
+              ({AssignmentDetail detail, List<AssignmentTimelineStep> steps})
+            >(
             future: _bundle,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -336,6 +341,7 @@ class _CreatorAssignmentHubScreenState
               );
             },
           ),
+      ),
     );
   }
 }

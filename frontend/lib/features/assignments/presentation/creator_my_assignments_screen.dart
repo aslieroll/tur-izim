@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:tur_izim/app/router.dart';
 import 'package:tur_izim/app/tur_izim_scope.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
+import 'package:tur_izim/core/errors/user_error_message.dart';
+import 'package:tur_izim/features/auth/presentation/creator_protected_body.dart';
 import 'package:tur_izim/shared/models/assignment_status.dart';
 import 'package:tur_izim/shared/models/assignment_summary.dart';
 import 'package:tur_izim/shared/models/mock_deposit_status.dart';
@@ -42,7 +44,10 @@ class _CreatorMyAssignmentsScreenState extends State<CreatorMyAssignmentsScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bundleFuture ??= _loadBundle(context);
+    final session = TurIzimScope.of(context);
+    if (_bundleFuture == null && session.canAccessProtectedCreatorEndpoints) {
+      _bundleFuture = _loadBundle(context);
+    }
   }
 
   Future<_AssignmentsPageBundle> _loadBundle(BuildContext context) async {
@@ -97,7 +102,8 @@ class _CreatorMyAssignmentsScreenState extends State<CreatorMyAssignmentsScreen>
           ),
         ],
       ),
-      body: FutureBuilder<_AssignmentsPageBundle>(
+      body: CreatorProtectedBody(
+        builder: (context, creatorId) => FutureBuilder<_AssignmentsPageBundle>(
         future: _bundleFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
@@ -112,7 +118,7 @@ class _CreatorMyAssignmentsScreenState extends State<CreatorMyAssignmentsScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Görevler yüklenirken bir sorun oluştu.',
+                      userFacingErrorMessage(snapshot.error),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: TurIzimPalette.deepNavy,
@@ -178,6 +184,7 @@ class _CreatorMyAssignmentsScreenState extends State<CreatorMyAssignmentsScreen>
             ),
           );
         },
+      ),
       ),
     );
   }

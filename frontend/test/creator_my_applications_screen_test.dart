@@ -7,7 +7,6 @@ import 'package:tur_izim/core/api/api_client.dart';
 import 'package:tur_izim/core/bootstrap/tur_izim_mock_bootstrap.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
 import 'package:tur_izim/features/applications/presentation/creator_my_applications_screen.dart';
-import 'package:tur_izim/shared/models/user_role.dart';
 
 import 'test_session_auth.dart';
 
@@ -17,8 +16,7 @@ void main() {
   });
 
   testWidgets('Başvurularım ekranında AUE satırı görünür', (tester) async {
-    final session = createTestSessionAuthRepository();
-    await session.selectRole(UserRole.creator);
+    final session = createTestSessionAuthRepository(withCreatorJwt: true);
     final api = HttpTurIzimApiClient();
     final bootstrap = TurIzimMockBootstrap.mockOnly();
 

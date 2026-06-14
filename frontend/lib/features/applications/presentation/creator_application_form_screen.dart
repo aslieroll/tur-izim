@@ -7,6 +7,7 @@ import 'package:tur_izim/core/api/api_exception.dart';
 import 'package:tur_izim/core/constants/app_constants.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
 import 'package:tur_izim/core/errors/app_exception.dart';
+import 'package:tur_izim/features/auth/presentation/auth_required_panel.dart';
 import 'package:tur_izim/shared/models/application_commitment.dart';
 import 'package:tur_izim/shared/models/tour_detail.dart';
 import 'package:tur_izim/shared/models/tour_scope.dart';
@@ -55,13 +56,19 @@ class _CreatorApplicationFormScreenState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bundle ??= _loadBundle();
+    final session = TurIzimScope.of(context);
+    if (_bundle == null && session.canAccessProtectedCreatorEndpoints) {
+      _bundle = _loadBundle();
+    }
   }
 
   Future<({TourDetail? tour, bool duplicate, bool eligible})>
   _loadBundle() async {
     final deps = TurIzimDependencies.of(context);
     final session = TurIzimScope.of(context);
+    if (!session.canAccessProtectedCreatorEndpoints) {
+      return (tour: null, duplicate: false, eligible: false);
+    }
     final creatorId = session.activeCreatorId!;
     final tour = await deps.tours.fetchTourDetail(widget.tourId);
     if (tour == null) {
@@ -115,6 +122,16 @@ class _CreatorApplicationFormScreenState
 
   @override
   Widget build(BuildContext context) {
+    final session = TurIzimScope.of(context);
+    if (!session.canAccessProtectedCreatorEndpoints) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Tur başvurusu')),
+        body: const AuthRequiredPanel(
+          message: 'Başvuru göndermek için üretici hesabınızla giriş yapın.',
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Tur başvurusu')),
       body: FutureBuilder<({TourDetail? tour, bool duplicate, bool eligible})>(

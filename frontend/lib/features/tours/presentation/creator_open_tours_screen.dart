@@ -21,6 +21,50 @@ import 'package:tur_izim/shared/widgets/tur_izim_status_pill.dart';
 import 'package:tur_izim/shared/widgets/tur_izim_surface_card.dart';
 import 'package:tur_izim/shared/widgets/tour_visual_header.dart';
 
+class _CreatorLoginHintBanner extends StatelessWidget {
+  const _CreatorLoginHintBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: TurIzimPalette.softLavender.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(TurIzimDesignTokens.radiusMedium),
+        border: Border.all(
+          color: TurIzimPalette.royalIndigo.withValues(alpha: 0.18),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(
+              Icons.info_outline_rounded,
+              color: TurIzimPalette.royalIndigo,
+              size: 20,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Başvuru ve görevleriniz için giriş yapın veya üretici hesabı oluşturun.',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: TurIzimPalette.slateText,
+                      height: 1.4,
+                    ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.push(AppRoutes.login),
+              child: const Text('Giriş yap'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class CreatorOpenToursScreen extends StatelessWidget {
   const CreatorOpenToursScreen({super.key});
 
@@ -52,10 +96,15 @@ class CreatorOpenToursScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: FutureBuilder<({List<TourSummary> tours, CreatorHomePeek peek})>(
+      body: FutureBuilder<({List<TourSummary> tours, CreatorHomePeek? peek})>(
         future: () async {
+          if (!session.canAccessProtectedCreatorEndpoints) {
+            final tours = await deps.tours.fetchPublishedTours();
+            return (tours: tours, peek: null);
+          }
           final creatorId = session.activeCreatorId!;
-          final tours = await deps.tours.fetchPublishedToursForCreator(creatorId);
+          final tours =
+              await deps.tours.fetchPublishedToursForCreator(creatorId);
           final peek = await deps.creatorDashboard.loadHomePeek(creatorId);
           return (tours: tours, peek: peek);
         }(),
@@ -64,21 +113,23 @@ class CreatorOpenToursScreen extends StatelessWidget {
               !snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (snapshot.hasError || snapshot.data == null) {
+          if (snapshot.hasError) {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: Text(
-                  snapshot.hasError
-                      ? userFacingErrorMessage(snapshot.error)
-                      : 'Turlar yüklenemedi.',
+                  userFacingErrorMessage(snapshot.error),
                   textAlign: TextAlign.center,
                 ),
               ),
             );
           }
+          if (snapshot.data == null) {
+            return const Center(child: Text('Turlar yüklenemedi.'));
+          }
           final tours = snapshot.data!.tours;
           final peek = snapshot.data!.peek;
+          final homePeek = peek;
 
           return ListView(
             padding: const EdgeInsets.fromLTRB(
@@ -90,7 +141,12 @@ class CreatorOpenToursScreen extends StatelessWidget {
             children: [
               _CreatorToursHero(openTourCount: tours.length),
               const SizedBox(height: 16),
-              if (peek.studentProfilePreviewLine != null)
+              if (!session.canAccessProtectedCreatorEndpoints)
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 12),
+                  child: _CreatorLoginHintBanner(),
+                ),
+              if (homePeek != null && homePeek.studentProfilePreviewLine != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: TurIzimSurfaceCard(
@@ -107,7 +163,7 @@ class CreatorOpenToursScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          peek.creatorDisplayName,
+                          homePeek.creatorDisplayName,
                           style: Theme.of(context).textTheme.labelLarge?.copyWith(
                                 color: TurIzimPalette.deepNavy,
                                 fontWeight: FontWeight.w700,
@@ -115,7 +171,7 @@ class CreatorOpenToursScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          peek.studentProfilePreviewLine!,
+                          homePeek.studentProfilePreviewLine!,
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 height: 1.4,
                               ),

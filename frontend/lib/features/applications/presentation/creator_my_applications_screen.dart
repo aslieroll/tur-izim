@@ -3,8 +3,12 @@ import 'package:go_router/go_router.dart';
 
 import 'package:tur_izim/app/router.dart';
 import 'package:tur_izim/app/tur_izim_scope.dart';
+import 'package:tur_izim/core/api/api_exception.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
 import 'package:tur_izim/core/errors/app_exception.dart';
+import 'package:tur_izim/core/errors/user_error_message.dart';
+import 'package:tur_izim/features/auth/presentation/auth_required_panel.dart';
+import 'package:tur_izim/features/auth/presentation/creator_protected_body.dart';
 import 'package:tur_izim/shared/models/application_status.dart';
 import 'package:tur_izim/shared/models/application_summary.dart';
 import 'package:tur_izim/shared/presentation/status_label_turkish.dart';
@@ -38,7 +42,12 @@ class _CreatorMyApplicationsScreenState
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _reload());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final session = TurIzimScope.of(context);
+      if (session.canAccessProtectedCreatorEndpoints) {
+        _reload();
+      }
+    });
   }
 
   Future<void> _withdraw(ApplicationSummary app) async {
@@ -199,15 +208,37 @@ class _CreatorMyApplicationsScreenState
           ),
         ],
       ),
-      body: FutureBuilder<List<ApplicationSummary>>(
+      body: CreatorProtectedBody(
+        builder: (context, creatorId) => FutureBuilder<List<ApplicationSummary>>(
         future: _future,
         builder: (context, snap) {
           if (_future == null ||
-              snap.connectionState == ConnectionState.waiting ||
-              snap.data == null) {
+              snap.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          final rows = snap.data!;
+          if (snap.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(TurIzimDesignTokens.pageMargin),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      userFacingErrorMessage(snap.error),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    if (snap.error is ApiException &&
+                        (snap.error as ApiException).isAuthRequired) ...[
+                      const SizedBox(height: 16),
+                      const AuthRequiredPanel(),
+                    ],
+                  ],
+                ),
+              ),
+            );
+          }
+          final rows = snap.data ?? [];
           if (rows.isEmpty) {
             return RefreshIndicator(
               onRefresh: _reload,
@@ -297,6 +328,7 @@ class _CreatorMyApplicationsScreenState
             ),
           );
         },
+      ),
       ),
     );
   }

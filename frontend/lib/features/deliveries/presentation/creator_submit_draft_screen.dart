@@ -5,6 +5,7 @@ import 'package:tur_izim/app/router.dart';
 import 'package:tur_izim/app/tur_izim_scope.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
 import 'package:tur_izim/core/errors/app_exception.dart';
+import 'package:tur_izim/features/auth/presentation/auth_required_panel.dart';
 import 'package:tur_izim/shared/theme/tur_izim_design_tokens.dart';
 import 'package:tur_izim/shared/widgets/external_link_input.dart';
 import 'package:tur_izim/shared/widgets/tur_izim_info_banner.dart';
@@ -85,6 +86,23 @@ class _CreatorSubmitDraftScreenState extends State<CreatorSubmitDraftScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final session = TurIzimScope.of(context);
+    if (!session.canAccessProtectedCreatorEndpoints) {
+      return Scaffold(
+        backgroundColor: TurIzimPalette.warmWhite,
+        appBar: AppBar(
+          title: const Text('İçerik Teslimi'),
+          backgroundColor: TurIzimPalette.warmWhite,
+          foregroundColor: TurIzimPalette.deepNavy,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: const AuthRequiredPanel(
+          message: 'Taslak bağlantısı göndermek için üretici hesabınızla giriş yapın.',
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: TurIzimPalette.warmWhite,
       appBar: AppBar(

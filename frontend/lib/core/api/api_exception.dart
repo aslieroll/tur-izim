@@ -30,6 +30,10 @@ final class ApiException implements Exception {
       statusCode == 503 ||
       statusCode == 504;
 
+  bool get isUnauthorized => statusCode == 401;
+
+  bool get isAuthRequired => isUnauthorized || statusCode == 403;
+
   @override
   String toString() => 'ApiException($statusCode, $code: $userMessage)';
 }

@@ -6,6 +6,7 @@ import 'package:tur_izim/app/tur_izim_scope.dart';
 import 'package:tur_izim/core/constants/app_constants.dart';
 import 'package:tur_izim/core/di/tur_izim_dependencies.dart';
 import 'package:tur_izim/core/errors/app_exception.dart';
+import 'package:tur_izim/features/auth/presentation/creator_protected_body.dart';
 import 'package:tur_izim/shared/models/application_commitment.dart';
 import 'package:tur_izim/shared/models/assignment_detail.dart';
 import 'package:tur_izim/shared/presentation/status_label_turkish.dart';
@@ -44,7 +45,10 @@ class _CreatorDepositAckScreenState extends State<CreatorDepositAckScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _detailFuture ??= _loadDetail();
+    final session = TurIzimScope.of(context);
+    if (_detailFuture == null && session.canAccessProtectedCreatorEndpoints) {
+      _detailFuture = _loadDetail();
+    }
   }
 
   Future<AssignmentDetail?> _loadDetail() {
@@ -96,7 +100,8 @@ class _CreatorDepositAckScreenState extends State<CreatorDepositAckScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Depozito Onayı')),
-      body: FutureBuilder<AssignmentDetail?>(
+      body: CreatorProtectedBody(
+        builder: (context, creatorId) => FutureBuilder<AssignmentDetail?>(
         future: _detailFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
@@ -130,6 +135,7 @@ class _CreatorDepositAckScreenState extends State<CreatorDepositAckScreen> {
             ],
           );
         },
+      ),
       ),
     );
   }
